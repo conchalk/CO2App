@@ -1,0 +1,535 @@
+{
+  "meta": {
+    "schemaVersion": 2,
+    "region": "GR",
+    "defaultYear": 2024,
+    "lastUpdated": "2025-12-27",
+    "notes": "Final draft for CO2app PWA model. Grid CI (Greece) centralized at 0.25 kgCO2/kWh. Occupants affect only DHW.",
+    "modelVersion": "final_draft"
+  },
+  "base": {
+    "heatingDemandKWhApartment": {
+      "value": {
+        "modern": 2000,
+        "partial": 5000,
+        "none": 9000
+      },
+      "unit": "kWh_heat_per_year"
+    },
+    "homeOtherElectricityAnchorsKWhPerYear": {
+      "value": {
+        "min": 2200,
+        "typical": 3100,
+        "max": 4900
+      },
+      "unit": "kWh_electricity_per_year"
+    },
+    "dhwKWhPerPersonPerYear": {
+      "value": 650,
+      "unit": "kWh_electricity_per_person_per_year"
+    },
+    "dhwBackupKWhPerPersonPerYear": {
+      "value": 120,
+      "unit": "kWh_electricity_per_person_per_year"
+    },
+    "goodsKgCO2PerYear_unit": {
+      "value": 1000,
+      "unit": "kgCO2_per_year"
+    },
+    "digitalKgCO2PerYear_unit": {
+      "value": 120,
+      "unit": "kgCO2_per_year"
+    },
+    "socialShareKgCO2PerYear": {
+      "value": 1200,
+      "unit": "kgCO2_per_year"
+    },
+    "dietKgCO2PerYear_unit": {
+      "value": 1400,
+      "unit": "kgCO2e_per_year",
+      "notes": "Baseline annual food footprint; multiplied by diet factor."
+    }
+  },
+  "targets": {
+    "euTargetTonsPerYear": {
+      "value": 2.3,
+      "unit": "tCO2e_per_year"
+    }
+  },
+  "parameters": {
+    "gridCI_kgCO2_per_kWh": {
+      "value": 0.25,
+      "unit": "kgCO2_per_kWh"
+    },
+    "evConsumption_kWh_per_km": {
+      "value": 0.16,
+      "unit": "kWh_per_vehicle_km"
+    },
+    "homeUseLevelMapping": {
+      "type": "piecewiseLinear",
+      "points": [
+        {
+          "x": 0,
+          "anchor": "min"
+        },
+        {
+          "x": 50,
+          "anchor": "typical"
+        },
+        {
+          "x": 100,
+          "anchor": "max"
+        }
+      ]
+    },
+    "digitalLevelMapping": {
+      "type": "piecewiseLinear",
+      "points": [
+        {
+          "x": 0,
+          "anchor": "low"
+        },
+        {
+          "x": 50,
+          "anchor": "medium"
+        },
+        {
+          "x": 100,
+          "anchor": "high"
+        }
+      ]
+    }
+  },
+  "constants": {
+    "weeklyToTonsFactor": {
+      "value": 0.052,
+      "unit": "(weeks_per_year)/(kg_per_ton)"
+    },
+    "flightKgPerKmPerPassenger": {
+      "value": 0.2,
+      "unit": "kgCO2e_per_passenger_km"
+    },
+    "flightTripDistanceKmDomestic": {
+      "value": 450,
+      "unit": "km_per_trip"
+    },
+    "flightTripDistanceKmEurope": {
+      "value": 1600,
+      "unit": "km_per_trip"
+    }
+  },
+  "factors": {
+    "homeType": {
+      "apartment": {
+        "value": 1.0,
+        "unit": "dimensionless"
+      },
+      "detached": {
+        "value": 1.7,
+        "unit": "dimensionless"
+      }
+    },
+    "homeCondition": {
+      "modern": {
+        "value": 1.0,
+        "unit": "dimensionless"
+      },
+      "partial": {
+        "value": 1.0,
+        "unit": "dimensionless"
+      },
+      "none": {
+        "value": 1.0,
+        "unit": "dimensionless"
+      }
+    },
+    "heatingType": {
+      "heat_pump": {
+        "value": 0.0725,
+        "unit": "tCO2_per_MWh_heat"
+      },
+      "natural_gas": {
+        "value": 0.202,
+        "unit": "tCO2_per_MWh_heat"
+      },
+      "heating_oil": {
+        "value": 0.265,
+        "unit": "tCO2_per_MWh_heat"
+      },
+      "wood": {
+        "value": 0.035,
+        "unit": "tCO2_per_MWh_heat"
+      },
+      "electric_resistance": {
+        "value": 0.25,
+        "unit": "tCO2_per_MWh_heat"
+      },
+      "air_conditioning": {
+        "value": 0.0825,
+        "unit": "tCO2_per_MWh_heat"
+      }
+    },
+    "carType": {
+      "petrol": {
+        "value": 0.18,
+        "unit": "kgCO2e_per_vehicle_km"
+      },
+      "diesel": {
+        "value": 0.155,
+        "unit": "kgCO2e_per_vehicle_km"
+      },
+      "electric": {
+        "type": "derived",
+        "derivedFrom": [
+          "parameters.gridCI_kgCO2_per_kWh",
+          "parameters.evConsumption_kWh_per_km"
+        ],
+        "formula": "kgCO2_per_km = gridCI_kgCO2_per_kWh * evConsumption_kWh_per_km",
+        "baselineValue": 0.04,
+        "unit": "kgCO2e_per_vehicle_km"
+      },
+      "motorcycle": {
+        "value": 0.09,
+        "unit": "kgCO2e_per_vehicle_km"
+      },
+      "bicycle_walking": {
+        "value": 0.0,
+        "unit": "kgCO2e_per_vehicle_km"
+      }
+    },
+    "goodsProfile": {
+      "minimalist": 0.4,
+      "balanced": 0.85,
+      "active": 1.6
+    },
+    "digitalLevel": {
+      "low": 0.4,
+      "medium": 1.0,
+      "high": 1.8
+    },
+    "diet": {
+      "vegan": {
+        "value": 0.5,
+        "unit": "dimensionless"
+      },
+      "vegetarian": {
+        "value": 0.65,
+        "unit": "dimensionless"
+      },
+      "mediterranean": {
+        "value": 0.85,
+        "unit": "dimensionless"
+      },
+      "standard": {
+        "value": 1.0,
+        "unit": "dimensionless"
+      },
+      "high_meat": {
+        "value": 1.14,
+        "unit": "dimensionless"
+      }
+    },
+    "publicTransport": {
+      "bus": {
+        "value": 0.081,
+        "unit": "kgCO2e_per_passenger_km"
+      },
+      "train": {
+        "value": 0.04,
+        "unit": "kgCO2e_per_passenger_km"
+      }
+    }
+  },
+  "ui": {
+    "homeType": {
+      "type": "select",
+      "order": [
+        "apartment",
+        "detached"
+      ],
+      "labels": {
+        "el": {
+          "apartment": "Διαμέρισμα",
+          "detached": "Μονοκατοικία"
+        },
+        "en": {
+          "apartment": "Apartment",
+          "detached": "Detached house"
+        }
+      },
+      "default": "apartment"
+    },
+    "homeCondition": {
+      "type": "select",
+      "order": [
+        "modern",
+        "partial",
+        "none"
+      ],
+      "labels": {
+        "el": {
+          "modern": "Καλή μόνωση",
+          "partial": "Μερική μόνωση",
+          "none": "Χωρίς μόνωση"
+        },
+        "en": {
+          "modern": "Modern insulation",
+          "partial": "Partly insulated",
+          "none": "No insulation"
+        }
+      },
+      "default": "partial"
+    },
+    "heatingType": {
+      "type": "select",
+      "order": [
+        "heat_pump",
+        "natural_gas",
+        "heating_oil",
+        "wood",
+        "electric_resistance",
+        "air_conditioning"
+      ],
+      "labels": {
+        "el": {
+          "heat_pump": "Αντλία θερμότητας",
+          "natural_gas": "Φυσικό αέριο",
+          "heating_oil": "Πετρέλαιο",
+          "wood": "Ξύλο/πέλετ",
+          "electric_resistance": "Ηλεκτρική αντίσταση",
+          "air_conditioning": "Κλιματιστικό"
+        },
+        "en": {
+          "heat_pump": "Heat pump",
+          "natural_gas": "Natural gas",
+          "heating_oil": "Oil",
+          "wood": "Wood",
+          "electric_resistance": "Electric resistance",
+          "air_conditioning": "Air conditioning"
+        }
+      },
+      "default": "heating_oil"
+    },
+    "occupants": {
+      "type": "select",
+      "order": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5plus"
+      ],
+      "labels": {
+        "el": {
+          "1": "1 άτομο",
+          "2": "2 άτομα",
+          "3": "3 άτομα",
+          "4": "4 άτομα",
+          "5plus": "5+ άτομα"
+        },
+        "en": {
+          "1": "1 person",
+          "2": "2 people",
+          "3": "3 people",
+          "4": "4 people",
+          "5plus": "5+ people"
+        }
+      },
+      "default": "1"
+    },
+    "solarDHW": {
+      "type": "select",
+      "order": [
+        "yes",
+        "no"
+      ],
+      "labels": {
+        "el": {
+          "yes": "Υπάρχει ηλιακός θερμοσίφωνας",
+          "no": "Δεν υπάρχει ηλιακός θερμοσίφωνας"
+        },
+        "en": {
+          "yes": "Solar water heater",
+          "no": "No solar water heater"
+        }
+      },
+      "default": "yes"
+    },
+    "homeUseLevel": {
+      "type": "range",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "labels": {
+        "el": {
+          "title": "Χρήση ηλεκτρικής ενέργειας & ψύξη (εκτός θέρμανσης)",
+          "min": "Συντηρητική",
+          "mid": "Κανονική",
+          "max": "Υψηλή"
+        },
+        "en": {
+          "title": "Electricity use & cooling (excluding heating)",
+          "min": "Conservative",
+          "mid": "Typical",
+          "max": "High"
+        }
+      }
+    },
+    "carType": {
+      "type": "select",
+      "order": [
+        "petrol",
+        "diesel",
+        "electric",
+        "motorcycle",
+        "bicycle_walking"
+      ],
+      "labels": {
+        "el": {
+          "petrol": "Βενζίνη",
+          "diesel": "Πετρέλαιο",
+          "electric": "Ηλεκτρικό",
+          "motorcycle": "Μοτοσυκλέτα",
+          "bicycle_walking": "Ποδήλατο/Πεζή"
+        },
+        "en": {
+          "petrol": "Petrol",
+          "diesel": "Diesel",
+          "electric": "Electric",
+          "motorcycle": "Motorcycle",
+          "bicycle_walking": "Bicycle/Walking"
+        }
+      },
+      "default": "petrol"
+    },
+    "flightsDomestic": {
+      "type": "number",
+      "default": 0,
+      "labels": {
+        "el": {
+          "title": "Πτήσεις εντός Ελλάδας (ανά έτος)"
+        },
+        "en": {
+          "title": "Domestic flights (Greece) per year"
+        }
+      }
+    },
+    "flightsEurope": {
+      "type": "number",
+      "default": 0,
+      "labels": {
+        "el": {
+          "title": "Πτήσεις εντός Ευρώπης (ανά έτος)"
+        },
+        "en": {
+          "title": "Intra-Europe flights per year"
+        }
+      }
+    },
+    "goodsProfile": {
+      "type": "select",
+      "order": [
+        "minimalist",
+        "balanced",
+        "active"
+      ],
+      "labels": {
+        "el": {
+          "minimalist": "Μινιμαλιστής",
+          "balanced": "Ισορροπημένος",
+          "active": "Ενεργός καταναλωτής"
+        },
+        "en": {
+          "minimalist": "Minimalist",
+          "balanced": "Balanced",
+          "active": "Active consumer"
+        }
+      },
+      "default": "balanced"
+    },
+    "digitalLevel": {
+      "type": "range",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "labels": {
+        "el": {
+          "title": "Ψηφιακή κατανάλωση (internet/cloud)",
+          "min": "Χαμηλή",
+          "mid": "Μέση",
+          "max": "Υψηλή"
+        },
+        "en": {
+          "title": "Digital consumption (internet/cloud)",
+          "min": "Low",
+          "mid": "Medium",
+          "max": "High"
+        }
+      }
+    },
+    "publicTransport": {
+      "type": "select",
+      "options": [
+        "bus",
+        "train"
+      ],
+      "default": "bus",
+      "label": {
+        "el": "Δημόσια μέσα",
+        "en": "Public transport"
+      }
+    },
+    "publicPct": {
+      "type": "range",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0,
+      "label": {
+        "el": "Ποσοστό διαδρομών με δημόσια μέσα",
+        "en": "Share of trips by public transport"
+      }
+    },
+    "diet": {
+      "type": "select",
+      "options": [
+        "vegan",
+        "vegetarian",
+        "mediterranean",
+        "standard",
+        "high_meat"
+      ],
+      "default": "standard",
+      "label": {
+        "el": "Διατροφή",
+        "en": "Diet"
+      }
+    },
+    "flightTripsDomestic": {
+      "type": "number",
+      "default": 0,
+      "labels": {
+        "el": {
+          "title": "Πτήσεις εντός Ελλάδας (ανά έτος)"
+        },
+        "en": {
+          "title": "Domestic flights (Greece) per year"
+        }
+      }
+    },
+    "flightTripsEurope": {
+      "type": "number",
+      "default": 0,
+      "labels": {
+        "el": {
+          "title": "Πτήσεις εντός Ευρώπης (ανά έτος)"
+        },
+        "en": {
+          "title": "Intra-Europe flights per year"
+        }
+      }
+    }
+  }
+}

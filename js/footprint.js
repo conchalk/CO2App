@@ -2,22 +2,9 @@ let model = null;
 
 function val(x){
   if (x === null || x === undefined) return 0;
-  if (typeof x === 'number') return x;
-  if (typeof x === 'object' && 'value' in x) return Number(x.value);
+  if (typeof x === "number") return x;
+  if (typeof x === "object" && "value" in x) return Number(x.value) || 0;
   return Number(x) || 0;
-}
-
-function getUILabel(dim){
-  const lang = getLang();
-  if (model && model.ui && model.ui[dim]) return model.ui[dim].labels[lang];
-  return (model && model.legacy && model.legacy.labels && model.legacy.labels[lang]) ? model.legacy.labels[lang][dim] : null;
-}
-
-function getUIOrder(dim){
-  if (model && model.ui && model.ui[dim]) return model.ui[dim].order;
-  const lang = getLang();
-  const legacy = (model && model.legacy && model.legacy.labels && model.legacy.labels[lang]) ? model.legacy.labels[lang][dim] : [];
-  return Array.isArray(legacy) ? legacy.map((_,i)=>String(i)) : [];
 }
 
 function T(){
@@ -25,181 +12,263 @@ function T(){
   return {
     el: {
       title: "Υπολογισμός Αποτυπώματος CO₂",
-      subtitle: "Τα αποτελέσματα είναι προσεγγιστικά, αναλυτικά στοιχεία για το μοντέλο δες στην Τεκμηρίωση",
+      subtitle: "Τα αποτελέσματα είναι προσεγγιστικά.",
       home: "Κατοικία",
       transport: "Μεταφορές",
-      lifestyle: "Διατροφή και Lifestyle",
-      homeType: "Τύπος κατοικίας",
-      homeCond: "Κατάσταση / μόνωση",
-      heating: "Τύπος θέρμανσης",
-      homeUse: "Πώς κρίνετε τη χρήση ηλεκτρικής ενέργειας που κάνετε στο σπίτι;",
-      weeklyKm: "Απόσταση με μετακινήσεις (km/εβδομάδα)",
-      carType: "Κύρια επιλογή μετακίνησης",
-      publicType: "Δημόσια μέσα",
-      publicPct: "Ποσοστό χρήσης δημόσιων μέσων",
-      alone: "Ταξιδεύω μόνος/η",
-      goods: "Κατανάλωση προϊόντων",
-      goodsHint: "Αφορά καταναλωτικά προϊόντα (π.χ. ρούχα, ηλεκτρονικά, lifestyle).",
-      foodLevel: "Σπατάλη τροφίμων",
-      diet: "Τύπος διατροφής",
-      flights: "Αεροπορικά ταξίδια",
-      flightHint: "Ταξίδια μέσης απόστασης (εντός Ευρώπης).",
-      total: "Σύνολο",
-      calc: "Υπολόγισε",
-      dash: "Διαγράμματα"
+      lifestyle: "Lifestyle",
+      labels: {
+        homeType: "Τύπος κατοικίας",
+        homeCond: "Μόνωση / κατάσταση",
+        heating: "Θέρμανση",
+        occupants: "Άτομα στο σπίτι",
+        solarDHW: "Ζεστό νερό χρήσης (DHW)",
+        homeUse: "Ηλεκτρική ενέργεια & ψύξη (εκτός θέρμανσης)",
+        weeklyKm: "Μετακινήσεις με ΙΧ (km/εβδομάδα)",
+        carType: "Κύρια επιλογή μετακίνησης",
+        flightsDomestic: "Πτήσεις εντός Ελλάδας (ανά έτος)",
+        flightsEurope: "Πτήσεις εντός Ευρώπης (ανά έτος)",
+        flightHint: "Οι αποστάσεις είναι τυπικές (μοντελοποίηση).",
+        diet: "Διατροφή",
+        dietHint: "Επιλογή τύπου διατροφής (ενδεικτικές τιμές).",
+        goodsProfile: "Κατανάλωση προϊόντων",
+        goodsHint: "Ρούχα, ηλεκτρονικά, αγορές & lifestyle.",
+        digitalLevel: "Ψηφιακή κατανάλωση (internet/cloud)",
+        socialShare: "Κοινόχρηστες υπηρεσίες & υποδομές (σταθερό)",
+        total: "Σύνολο",
+        calc: "Υπολόγισε",
+        dash: "Διαγράμματα",
+        homeUseMin: "Συντηρητική",
+        homeUseMid: "Κανονική",
+        homeUseMax: "Υψηλή",
+        digitalMin: "Χαμηλή",
+        digitalMid: "Μέση",
+        digitalMax: "Υψηλή"
+      },
+      units: {
+        socialShare: "kg CO₂/έτος"
+      }
     },
     en: {
       title: "Carbon Footprint Calculator",
-      subtitle: "Approximate results (relative model using multiplicative factors).",
+      subtitle: "Results are approximate.",
       home: "Home",
       transport: "Transport",
-      lifestyle: "Diet & Lifestyle",
-      homeType: "Home type",
-      homeCond: "Condition / insulation",
-      heating: "Heating type",
-      homeUse: "How would you rate your household electricity use?",
-      weeklyKm: "Distance travelled (km/week)",
-      carType: "Main travel mode",
-      publicType: "Public transport",
-      publicPct: "Share of public transport",
-      alone: "I travel alone",
-      goods: "Goods consumption",
-      goodsHint: "Consumer goods (e.g., clothes, electronics, lifestyle items).",
-      foodLevel: "Food waste",
-      diet: "Diet type",
-      flights: "Flights",
-      flightHint: "Medium-distance trips (within Europe).",
-      total: "Total",
-      calc: "Calculate",
-      dash: "Dashboard"
+      lifestyle: "Lifestyle",
+      labels: {
+        homeType: "Home type",
+        homeCond: "Insulation / condition",
+        heating: "Heating",
+        occupants: "Occupants",
+        solarDHW: "Domestic hot water (DHW)",
+        homeUse: "Electricity & cooling (excluding heating)",
+        weeklyKm: "Car travel (km/week)",
+        carType: "Main travel mode",
+        flightsDomestic: "Domestic flights (Greece) per year",
+        flightsEurope: "Intra-Europe flights per year",
+        flightHint: "Typical distances are used (model).",
+        diet: "Diet",
+        dietHint: "Choose a diet profile (approximate factors).",
+        goodsProfile: "Goods consumption",
+        goodsHint: "Clothes, electronics, shopping & lifestyle.",
+        digitalLevel: "Digital consumption (internet/cloud)",
+        socialShare: "Public services & infrastructure (fixed)",
+        total: "Total",
+        calc: "Calculate",
+        dash: "Dashboard",
+        homeUseMin: "Conservative",
+        homeUseMid: "Typical",
+        homeUseMax: "High",
+        digitalMin: "Low",
+        digitalMid: "Medium",
+        digitalMax: "High"
+      },
+      units: {
+        socialShare: "kg CO₂/year"
+      }
     }
   }[lang];
 }
 
+function getUILabel(dim){
+  const lang = getLang();
+  return (model && model.ui && model.ui[dim] && model.ui[dim].labels) ? model.ui[dim].labels[lang] : null;
+}
+
+function getUIOrder(dim){
+  return (model && model.ui && model.ui[dim] && Array.isArray(model.ui[dim].order)) ? model.ui[dim].order : [];
+}
+
 function populateSelect(sel, dim){
+  if (!sel) return;
   sel.innerHTML = "";
   const order = getUIOrder(dim);
-  const labels = getUILabel(dim);
-
-  order.forEach((id, i)=>{
+  const labels = getUILabel(dim) || {};
+  order.forEach(id=>{
     const opt = document.createElement("option");
     opt.value = String(id);
-    if (labels && typeof labels === 'object' && !Array.isArray(labels)){
-      opt.textContent = labels[id] ?? String(id);
-    } else if (Array.isArray(labels)){
-      opt.textContent = labels[i] ?? String(id);
-    } else {
-      opt.textContent = String(id);
-    }
+    opt.textContent = (labels && typeof labels === "object") ? (labels[id] ?? String(id)) : String(id);
     sel.appendChild(opt);
   });
 }
 
 function getNumber(id){
-  const v = Number(document.getElementById(id).value);
-  return Number.isFinite(v) ? v : 0;
+  const el = document.getElementById(id);
+  if (!el) return 0;
+  const n = Number(el.value);
+  return Number.isFinite(n) ? n : 0;
 }
 
-// === FIX: Updated compute function to handle String IDs correctly ===
-function compute(){
-  if (!model) return { totalTons:0, homeValues:[0,0], transportValues:[0,0], lifestyleValues:[0,0,0] };
+function getSelectValue(id){
+  const el = document.getElementById(id);
+  return el ? String(el.value) : "";
+}
 
-  const f = (model.factors || {});
-  const b = (model.base || {});
-  const c = (model.constants || {});
+function occupantsToNumber(v){
+  if (v === "5plus") return 5;
+  const n = Number(v);
+  return Number.isFinite(n) && n > 0 ? n : 1;
+}
+
+function piecewiseSliderToAnchor(slider0to100, anchors){
+  // anchors: {min, typical, max} or {low, medium, high}
+  const x = Math.max(0, Math.min(100, Number(slider0to100)));
+  const a0 = anchors.min ?? anchors.low ?? 0;
+  const a1 = anchors.typical ?? anchors.medium ?? 0;
+  const a2 = anchors.max ?? anchors.high ?? 0;
+
+  if (x <= 50){
+    const t = x / 50;
+    return a0 + (a1 - a0) * t;
+  } else {
+    const t = (x - 50) / 50;
+    return a1 + (a2 - a1) * t;
+  }
+}
+
+function compute(){
+  if (!model) {
+    return {
+      totalTons: 0,
+      homeValues: [0,0,0],        // heating, dhw, other electricity
+      transportValues: [0,0,0,0], // car, public, flights GR, flights EU
+      lifestyleValues: [0,0,0,0], // diet, goods, digital, social share
+      homeTons: 0, transportTons: 0, lifestyleTons: 0
+    };
+  }
+
+  const b = model.base || {};
+  const f = model.factors || {};
+  const c = model.constants || {};
+  const p = model.parameters || {};
+
+  const gridCI = val(p.gridCI_kgCO2_per_kWh); // kg/kWh
 
   // --- HOME ---
-  const homeTypeId = document.getElementById("homeType").value; // string key
-  const homeCondId = document.getElementById("homeCond").value; // string key
-  const heatingId = document.getElementById("heatingType").value; // string key
-  const homeUseFactor = getNumber("homeUse");
+  const homeType = getSelectValue("homeType");          // apartment/detached
+  const homeCond = getSelectValue("homeCond");          // modern/partial/none
+  const heatingType = getSelectValue("heatingType");    // heat_pump, ...
+  const occ = occupantsToNumber(getSelectValue("occupants"));
+  const solar = (getSelectValue("solarDHW") === "yes");
+  const homeUseLevel = getNumber("homeUseLevel");       // 0..100
 
-  // Fetch factors using string keys
-  const fHomeType = val(f.homeType?.[homeTypeId] ?? 1);
-  const fHomeCond = val(f.homeCondition?.[homeCondId] ?? 1);
-  const fHeating = val(f.heatingType?.[heatingId] ?? 0);
+  const aptDemandMap = (b.heatingDemandKWhApartment && b.heatingDemandKWhApartment.value) ? b.heatingDemandKWhApartment.value : {};
+  const aptKWh = Number(aptDemandMap[homeCond] ?? 0);
 
-  const heatingKg = val(b.heatingKgPerYear) * fHomeType * fHomeCond * fHeating;
-  const useKg = val(b.homeUseKgPerYear) * homeUseFactor;
+  const homeTypeMult = val(f.homeType?.[homeType] ?? 1);
+  const heatKWh = aptKWh * homeTypeMult;
 
-  const homeValues = [heatingKg/1000, useKg/1000];
-  const homeTons = homeValues[0] + homeValues[1];
+  const heatIntensity_t_per_MWh = val(f.heatingType?.[heatingType] ?? 0); // t/MWh
+  const heatingTons = (heatKWh / 1000) * heatIntensity_t_per_MWh;
+
+  const dhwPerPerson = solar ? val(b.dhwBackupKWhPerPersonPerYear) : val(b.dhwKWhPerPersonPerYear);
+  const dhwKWh = occ * dhwPerPerson;
+  const dhwTons = (dhwKWh * gridCI) / 1000;
+
+  const anchors = (b.homeOtherElectricityAnchorsKWhPerYear && b.homeOtherElectricityAnchorsKWhPerYear.value) ? b.homeOtherElectricityAnchorsKWhPerYear.value : {min:0,typical:0,max:0};
+  const otherKWh = piecewiseSliderToAnchor(homeUseLevel, anchors);
+  const otherElecTons = (otherKWh * gridCI) / 1000;
+
+  const homeValues = [heatingTons, dhwTons, otherElecTons];
+  const homeTons = heatingTons + dhwTons + otherElecTons;
 
   // --- TRANSPORT ---
   const weeklyKm = getNumber("weeklyKm");
+  const carType = getSelectValue("carType");
 
-  // Car Type is a string key now (e.g. 'petrol', 'diesel')
-  const carId = document.getElementById("carType").value; 
-  const fCar = val(f.carType?.[carId] ?? 0);
+  // Split weekly distance into car vs public transport
+  const publicPct = Math.max(0, Math.min(100, getNumber("publicPct")));
+  const kmPublic = weeklyKm * (publicPct / 100);
+  const kmCar = weeklyKm - kmPublic;
 
-  // Public Transport Type
-  const publicId = document.getElementById("publicType").value;
-  const fPublic = val(f.publicTransport?.[publicId] ?? 0);
+  // Car kg/km (EV derived from gridCI)
+  let carKgPerKm = val(f.carType?.[carType] ?? 0);
+  if (carType === "electric"){
+    const ev_kWh_km = val(p.evConsumption_kWh_per_km);
+    carKgPerKm = gridCI * ev_kWh_km;
+  }
+  const carTons = kmCar * val(c.weeklyToTonsFactor) * carKgPerKm;
 
-  const pPublic = getNumber("publicPct") / 100;
+  // Public transport kg/passenger-km
+  const publicType = getSelectValue("publicTransport"); // bus/train
+  const publicKgPerKm = val(f.publicTransport?.[publicType] ?? 0);
+  const publicTons = kmPublic * val(c.weeklyToTonsFactor) * publicKgPerKm;
 
-  // Fix Checkbox ID mismatch (travelsAlone vs alone)
-  const aloneEl = document.getElementById("travelsAlone") || document.getElementById("alone");
-  const travelsAlone = aloneEl ? aloneEl.checked : false;
-  const carPoolFactor = travelsAlone ? 1.0 : val(c.carPoolFactor);
+  // Flights split (Domestic GR vs Europe)
+  const tripsDom = getNumber("flightTripsDomestic");
+  const tripsEU = getNumber("flightTripsEurope");
 
-  const carTons =
-    weeklyKm * val(c.weeklyToTonsFactor) *
-    (1 - pPublic) *
-    carPoolFactor *
-    fCar;
+  const kgPerKm = val(c.flightKgPerKmPerPassenger);
+  const distDom = val(c.flightTripDistanceKmDomestic);
+  const distEU = val(c.flightTripDistanceKmEurope);
 
-  const publicTons =
-    weeklyKm * val(c.weeklyToTonsFactor) *
-    (pPublic) *
-    fPublic;
+  const flightsDomTons = (tripsDom * distDom * kgPerKm) / 1000;
+  const flightsEUTons = (tripsEU * distEU * kgPerKm) / 1000;
 
-  const transportValues = [carTons, publicTons];
-  const transportTons = carTons + publicTons;
+  const transportValues = [carTons, publicTons, flightsDomTons, flightsEUTons];
+  const transportTons = carTons + publicTons + flightsDomTons + flightsEUTons;
 
   // --- LIFESTYLE ---
-  const goodsId = document.getElementById("goodsLevel").value;
-  const fGoods = val(f.goodsLevel?.[goodsId] ?? 1);
+  const diet = getSelectValue("diet");
+  const dietUnitKg = val(b.dietKgCO2PerYear_unit);
+  const dietFactor = Number(f.diet?.[diet] ?? 0);
+  const dietTons = (dietUnitKg * dietFactor) / 1000;
 
-  const foodId = document.getElementById("foodLevel").value;
-  const fFood = val(f.foodLevel?.[foodId] ?? 1);
+  const goodsProfile = getSelectValue("goodsProfile");
+  const goodsUnitKg = val(b.goodsKgCO2PerYear_unit);
+  const goodsFactor = Number(f.goodsProfile?.[goodsProfile] ?? 0);
+  const goodsTons = (goodsUnitKg * goodsFactor) / 1000;
 
-  const dietId = document.getElementById("diet").value;
-  const fDiet = val(f.diet?.[dietId] ?? 1);
+  const digitalLevel = getNumber("digitalLevel");
+  const digitalUnitKg = val(b.digitalKgCO2PerYear_unit);
+  const digitalAnchors = { low: Number(f.digitalLevel?.low ?? 0), medium: Number(f.digitalLevel?.medium ?? 0), high: Number(f.digitalLevel?.high ?? 0) };
+  const digitalFactor = piecewiseSliderToAnchor(digitalLevel, digitalAnchors);
+  const digitalTons = (digitalUnitKg * digitalFactor) / 1000;
 
-  const trips = getNumber("flightTrips");
+  const socialKg = val(b.socialShareKgCO2PerYear);
+  const socialTons = socialKg / 1000;
 
-  const goodsTons = (val(b.goodsKgPerYear) * fGoods) / 1000;
-  const foodTons = (val(b.foodKgPerYear) * fFood * fDiet) / 1000;
-
-  const kgPerTrip = val(c.flightKgPerKmPerPassenger) * val(c.flightTripDistanceKm);
-  const flightsTons = (trips * kgPerTrip) / 1000; 
-
-  const lifestyleValues = [foodTons, goodsTons, flightsTons]; // Order: Diet, Goods, Flights
-  const lifestyleTons = foodTons + goodsTons + flightsTons;
+  const lifestyleValues = [dietTons, goodsTons, digitalTons, socialTons];
+  const lifestyleTons = dietTons + goodsTons + digitalTons + socialTons;
 
   const totalTons = homeTons + transportTons + lifestyleTons;
 
   return {
     totalTons,
-    homeTons,
-    transportTons,
-    lifestyleTons,
     homeValues,
     transportValues,
-    lifestyleValues
+    lifestyleValues,
+    homeTons,
+    transportTons,
+    lifestyleTons
   };
 }
 
-// === FIX: Save keys that match dashboard.js ===
 function saveForDashboard(res){
   localStorage.setItem("CO2_HOME_VALUES", JSON.stringify(res.homeValues));
   localStorage.setItem("CO2_TRANSPORT_VALUES", JSON.stringify(res.transportValues));
   localStorage.setItem("CO2_LIFE_VALUES", JSON.stringify(res.lifestyleValues));
-
   localStorage.setItem("USER_TOTAL", String(res.totalTons));
 
-  // Default target if missing
   const target = model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.3;
   localStorage.setItem("EU_TARGET", String(target));
 }
@@ -207,268 +276,199 @@ function saveForDashboard(res){
 document.addEventListener("DOMContentLoaded", async ()=>{
   initLangButtons();
 
-  const resp = await fetch("../assets/footprintModel.json", {cache:"no-store"});
+  // No fallback: must exist
+  const resp = await fetch(`../assets/footprintModel_final_draft.json?v=${Date.now()}`, { cache: "no-store" });
+  if (!resp.ok) {
+    alert("Λείπει το footprintModel_final_draft.json από τον φάκελο assets.");
+    return;
+  }
   model = await resp.json();
 
-  const lang = getLang();
   const t = T();
 
   // Titles
-  const titleEl = document.getElementById("title");
-  if(titleEl) titleEl.textContent = t.title;
-  const subEl = document.getElementById("subtitle");
-  if(subEl) subEl.textContent = t.subtitle;
+  const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+  setText("title", t.title);
+  setText("subtitle", t.subtitle);
+  setText("homeTitle", t.home);
+  setText("trTitle", t.transport);
+  setText("lifeTitle", t.lifestyle);
+  setText("lblTotal", t.labels.total);
 
-  const hTitle = document.getElementById("homeTitle"); if(hTitle) hTitle.textContent = t.home;
-  const tTitle = document.getElementById("trTitle"); if(tTitle) tTitle.textContent = t.transport;
-  const lTitle = document.getElementById("lifeTitle"); if(lTitle) lTitle.textContent = t.lifestyle;
+  // Chips
+  setText("navHome", t.home);
+  setText("navTransport", t.transport);
+  setText("navLifestyle", t.lifestyle);
 
-  // Section navigation chips
+  const goTo = (id)=>{ const el = document.getElementById(id); if (el) el.scrollIntoView({behavior:"smooth", block:"start"}); };
   const navHome = document.getElementById("navHome");
   const navTransport = document.getElementById("navTransport");
   const navLifestyle = document.getElementById("navLifestyle");
-  if (navHome) navHome.textContent = t.home;
-  if (navTransport) navTransport.textContent = t.transport;
-  if (navLifestyle) navLifestyle.textContent = t.lifestyle;
-
-  function goTo(id){
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.scrollIntoView({behavior:"smooth", block:"start"});
-  }
   if (navHome) navHome.addEventListener("click", ()=>goTo("cardHome"));
   if (navTransport) navTransport.addEventListener("click", ()=>goTo("cardTransport"));
   if (navLifestyle) navLifestyle.addEventListener("click", ()=>goTo("cardLifestyle"));
 
-  // === Mobile: split sections into steps (Home → Transport → Lifestyle → Summary) ===
-  const isMobile = window.matchMedia("(max-width: 760px)").matches;
-  const stepper = document.getElementById("mobileStepper");
-  let currentStep = 0;
-  const steps = ["cardHome", "cardTransport", "cardLifestyle", "cardSummary"];
-
-  function setStep(i){
-    currentStep = Math.max(0, Math.min(steps.length - 1, i));
-    steps.forEach((id, idx)=>{
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (isMobile){
-        el.style.display = (idx === currentStep) ? "block" : "none";
-      } else {
-        el.style.display = ""; // normal
-      }
-    });
-
-    const intro = document.getElementById("cardIntro");
-    if (intro && isMobile){
-      intro.style.display = (currentStep === 0) ? "block" : "none";
-    }
-
-    const navCard = document.getElementById("cardNav");
-    if (navCard && isMobile){
-      // show stepper, hide chips row (chips still exist but stepper is clearer)
-      if (stepper) stepper.style.display = "flex";
-    } else {
-      if (stepper) stepper.style.display = "none";
-    }
-
-    // Update header info for stepper using latest computed values
-    updateTotal();
-    window.scrollTo({top:0, behavior:"smooth"});
-  }
-
-  // Expose for updateTotal()
-  window.updateStepperInfo = function(res){
-    if (!isMobile) return;
-    const titleEl = document.getElementById("stepTitle");
-    const kpiEl = document.getElementById("stepKpi");
-    const t = T();
-    const stepNames = [t.home, t.transport, t.lifestyle, (getLang()==="en" ? "Total & charts" : "Σύνολο & διαγράμματα")];
-    const stepKpis = [res.homeTons, res.transportTons, res.lifestyleTons, res.totalTons];
-    if (titleEl) titleEl.textContent = stepNames[currentStep] || "";
-    if (kpiEl) kpiEl.textContent = `${fmt(stepKpis[currentStep] || 0, 2)} t CO₂/yr`;
-  };
-
-  if (isMobile){
-    // Hide chip row layout differences handled by stepper
-    const prevBtn = document.getElementById("stepPrev");
-    const nextBtn = document.getElementById("stepNext");
-    if (prevBtn) prevBtn.addEventListener("click", ()=>setStep(currentStep - 1));
-    if (nextBtn) nextBtn.addEventListener("click", ()=>setStep(currentStep + 1));
-    setStep(0);
-  } else {
-    // Ensure normal view on desktop
-    steps.forEach(id=>{
-      const el = document.getElementById(id);
-      if (el) el.style.display = "";
-    });
-    if (stepper) stepper.style.display = "none";
-  }
-
-
   // Labels
-  const lblIds = {
-    "lblHomeType": t.homeType, "lblHomeCond": t.homeCond, "lblHeating": t.heating, "lblHomeUse": t.homeUse,
-    "lblWeeklyKm": t.weeklyKm, "lblCarType": t.carType, "lblPublicType": t.publicType, "lblPublicPct": t.publicPct,
-    "lblAlone": t.alone, "lblGoods": t.goods, "lblFoodLevel": t.foodLevel, "lblDiet": t.diet, "lblFlights": t.flights,
-    "lblTotal": t.total
-  };
+  setText("lblHomeType", t.labels.homeType);
+  setText("lblHomeCond", t.labels.homeCond);
+  setText("lblHeating", t.labels.heating);
+  setText("lblOccupants", t.labels.occupants);
+  setText("lblSolarDHW", t.labels.solarDHW);
+  setText("lblHomeUse", t.labels.homeUse);
 
-  for(const [id, txt] of Object.entries(lblIds)){
-    const el = document.getElementById(id);
-    if(el) el.textContent = txt;
-  }
+  setText("lblWeeklyKm", t.labels.weeklyKm);
+  setText("lblCarType", t.labels.carType);
+  setText("lblPublicTransport", t.labels.publicTransport);
+  setText("lblPublicPct", t.labels.publicPct);
+  setText("lblFlightsDomestic", t.labels.flightsDomestic);
+  setText("lblFlightsEurope", t.labels.flightsEurope);
+  setText("flightHint", t.labels.flightHint);
 
-  const gh = document.getElementById("goodsHint"); if (gh) gh.textContent = t.goodsHint;
-  const fh = document.getElementById("flightHint"); if (fh) fh.textContent = t.flightHint;
+  setText("lblDiet", t.labels.diet);
+  setText("dietHint", t.labels.dietHint);
+  setText("lblGoodsProfile", t.labels.goodsProfile);
+  setText("goodsHint", t.labels.goodsHint);
+  setText("lblDigitalLevel", t.labels.digitalLevel);
+  setText("lblSocialShare", t.labels.socialShare);
 
-  const btnCalc = document.getElementById("btnCalc"); if(btnCalc) btnCalc.textContent = t.calc;
-  const btnDash = document.getElementById("btnDash"); if(btnDash) btnDash.textContent = t.dash;
+  setText("homeUseMin", t.labels.homeUseMin);
+  setText("homeUseMid", t.labels.homeUseMid);
+  setText("homeUseMax", t.labels.homeUseMax);
+
+  setText("digitalMin", t.labels.digitalMin);
+  setText("digitalMid", t.labels.digitalMid);
+  setText("digitalMax", t.labels.digitalMax);
+
+  // Social share value (fixed)
+  const socialKg = val(model.base?.socialShareKgCO2PerYear);
+  setText("socialShareVal", `${Math.round(socialKg)} ${t.units.socialShare}`);
 
   // Populate selects
   populateSelect(document.getElementById("homeType"), "homeType");
   populateSelect(document.getElementById("homeCond"), "homeCondition");
   populateSelect(document.getElementById("heatingType"), "heatingType");
+  populateSelect(document.getElementById("occupants"), "occupants");
+  populateSelect(document.getElementById("solarDHW"), "solarDHW");
   populateSelect(document.getElementById("carType"), "carType");
-  populateSelect(document.getElementById("publicType"), "publicTransport");
-  populateSelect(document.getElementById("goodsLevel"), "goodsLevel");
-  populateSelect(document.getElementById("foodLevel"), "foodLevel");
+  populateSelect(document.getElementById("goodsProfile"), "goodsProfile");
+  populateSelect(document.getElementById("publicTransport"), "publicTransport");
   populateSelect(document.getElementById("diet"), "diet");
 
-  // === Default (most common) selections ===
-  const setIfExists = (id, value) => {
+  // Defaults (from ui if present)
+  const setDefault = (id, dim)=>{
     const el = document.getElementById(id);
     if (!el) return;
-    // Only set if option exists (for selects) or if empty/zero (for inputs)
-    if (el.tagName === "SELECT"){
-      if ([...el.options].some(o => o.value === String(value))) el.value = String(value);
-    } else if (el.type === "checkbox"){
-      el.checked = Boolean(value);
-    } else {
-      el.value = String(value);
-    }
+    const def = model.ui?.[dim]?.default;
+    if (def !== undefined && [...el.options].some(o=>o.value===String(def))) el.value = String(def);
   };
+  setDefault("homeType","homeType");
+  setDefault("homeCond","homeCondition");
+  setDefault("heatingType","heatingType");
+  setDefault("occupants","occupants");
+  setDefault("solarDHW","solarDHW");
+  setDefault("carType","carType");
+  setDefault("publicTransport","publicTransport");
+  setDefault("diet","diet");
+  setDefault("goodsProfile","goodsProfile");
 
-  setIfExists("homeType", "apartment");
-  setIfExists("homeCond", "medium");
-  setIfExists("heatingType", "heating_oil");
-  setIfExists("homeUse", 1.0);
+  // Range defaults from ui
+  const homeUse = document.getElementById("homeUseLevel");
+  if (homeUse) homeUse.value = String(model.ui?.homeUseLevel?.default ?? 50);
 
-  setIfExists("weeklyKm", 40);
-  setIfExists("carType", "petrol");
-  setIfExists("publicPct", 50);
-  // Checkbox (supports both ids)
-  const aloneEl = document.getElementById("alone") || document.getElementById("travelsAlone");
-  if (aloneEl) aloneEl.checked = true;
-  setIfExists("publicType", "bus");
-
-  setIfExists("diet", "mediterranean");
-  setIfExists("foodLevel", "medium");
-  setIfExists("goodsLevel", "normal");
-  setIfExists("flightTrips", 1);
-
-
-  // Range display logic
-  const homeUse = document.getElementById("homeUse");
-  const publicPct = document.getElementById("publicPct");
-
-  function homeUseQual(v){
-    const lang = getLang();
-    const x = Number(v);
-    const el = ["Πολύ συνετή", "Συνετή", "Κανονική", "Υπερβολική", "Κατάχρηση"];
-    const en = ["Very frugal", "Frugal", "Normal", "High", "Excessive"];
-    const levels = (lang === "en") ? en : el;
-    let idx = 2;
-    if (x <= 0.70) idx = 0;
-    else if (x <= 0.90) idx = 1;
-    else if (x <= 1.10) idx = 2;
-    else if (x <= 1.30) idx = 3;
-    else idx = 4;
-    return levels[idx];
-  }
+  const digital = document.getElementById("digitalLevel");
+  if (digital) digital.value = String(model.ui?.digitalLevel?.default ?? 50);
 
   function updateRanges(){
     const hv = document.getElementById("homeUseVal");
-    if (hv) {
-      hv.textContent = `${fmt(homeUse.value,2)}×`;
-      hv.style.display = "block"; // Ensure it shows
+    if (hv && homeUse) hv.textContent = String(homeUse.value);
+
+    const dv = document.getElementById("digitalVal");
+    const pv = document.getElementById("publicPctVal");
+
+    function updateRangeBadges(){
+      const hu = document.getElementById("homeUseLevel");
+      const di = document.getElementById("digitalLevel");
+      const pu = document.getElementById("publicPct");
+      if (hv && hu) hv.textContent = `${Math.round(Number(hu.value)||0)}%`; 
+      if (dv && di) dv.textContent = `${Math.round(Number(di.value)||0)}%`; 
+      if (pv && pu) pv.textContent = `${Math.round(Number(pu.value)||0)}%`; 
+    }
+
+    ["homeUseLevel","digitalLevel","publicPct"].forEach(id=>{
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("input", ()=>{ updateRangeBadges(); updateTotal(); });
+      el.addEventListener("change", ()=>{ updateRangeBadges(); updateTotal(); });
+    });
+
+    // Defaults for ranges if present in model.ui
+    const setRangeDefault = (id, dim)=>{
+      const el = document.getElementById(id);
+      const def = model.ui?.[dim]?.default;
+      if (el && def !== undefined) el.value = String(def);
+    };
+    setRangeDefault("homeUseLevel","homeUseLevel");
+    setRangeDefault("digitalLevel","digitalLevel");
+    setRangeDefault("publicPct","publicPct");
+
+    updateRangeBadges();
+    if (dv && digital) dv.textContent = String(digital.value);
+
+    const dl = document.getElementById("digitalLabel");
+    if (dl && digital){
+      const x = Number(digital.value);
+      dl.textContent = (x < 33) ? t.labels.digitalMin : (x > 66) ? t.labels.digitalMax : t.labels.digitalMid;
     }
     const hl = document.getElementById("homeUseLabel");
-    if (hl) hl.textContent = homeUseQual(homeUse.value);
-
-    const pp = document.getElementById("publicPctVal");
-    if(pp) pp.textContent = `${publicPct.value}%`;
-  }
-
-  homeUse.addEventListener("input", updateRanges);
-  publicPct.addEventListener("input", updateRanges);
-  updateRanges();
-
-  function updateTotal(){
-    try {
-      const res = compute();
-
-      // Total KPI
-      const tv = document.getElementById("totalVal");
-      if(tv) tv.textContent = fmt(res.totalTons, 2);
-
-      // EU target reduction hint
-      const target = (model && model.targets) ? val(model.targets.euTargetTonsPerYear) : 2.3;
-      const rp = document.getElementById("reducePct");
-      if (rp){
-        const lang = getLang();
-        if (res.totalTons > 0 && res.totalTons > target){
-          const pct = Math.max(0, (1 - (target / res.totalTons)) * 100);
-          rp.textContent = (lang === "en")
-            ? `Needed reduction to reach EU target (${fmt(target,2)} t/yr): ${fmt(pct,0)}%`
-            : `Απαιτούμενη μείωση για τον στόχο ΕΕ (${fmt(target,2)} t/έτος): ${fmt(pct,0)}%`;
-        } else if (res.totalTons > 0){
-          rp.textContent = (lang === "en")
-            ? `You are at or below the EU target (${fmt(target,2)} t/yr).`
-            : `Είσαι εντός στόχου ΕΕ (${fmt(target,2)} t/έτος).`;
-        } else {
-          rp.textContent = "";
-        }
-      }
-
-      // Desktop: show KPI under the section chips
-      if (!window.matchMedia("(max-width: 760px)").matches){
-        const lang = getLang();
-        const t = T();
-        const nH = document.getElementById("navHome");
-        const nT = document.getElementById("navTransport");
-        const nL = document.getElementById("navLifestyle");
-        if (nH) nH.innerHTML = `<div class="chipTitle">${t.home}</div><div class="chipKpi">${fmt(res.homeTons,2)} t</div>`;
-        if (nT) nT.innerHTML = `<div class="chipTitle">${t.transport}</div><div class="chipKpi">${fmt(res.transportTons,2)} t</div>`;
-        if (nL) nL.innerHTML = `<div class="chipTitle">${t.lifestyle}</div><div class="chipKpi">${fmt(res.lifestyleTons,2)} t</div>`;
-      }
-
-      // Mobile stepper KPI line (if enabled)
-      if (typeof updateStepperInfo === "function"){
-        updateStepperInfo(res);
-      }
-
-    } catch(e) {
-      console.error("Calculation error:", e);
+    if (hl && homeUse){
+      const x = Number(homeUse.value);
+      hl.textContent = (x < 33) ? t.labels.homeUseMin : (x > 66) ? t.labels.homeUseMax : t.labels.homeUseMid;
     }
   }
 
-  // Live update events
-  document.querySelectorAll("select,input").forEach(el=>{
+  if (homeUse) homeUse.addEventListener("input", ()=>{ updateRanges(); updateTotal(); });
+  if (digital) digital.addEventListener("input", ()=>{ updateRanges(); updateTotal(); });
+  updateRanges();
+
+  const btnCalc = document.getElementById("btnCalc");
+  const btnDash = document.getElementById("btnDash");
+  if (btnCalc) btnCalc.textContent = t.labels.calc;
+  if (btnDash) btnDash.textContent = t.labels.dash;
+
+  function updateTotal(){
+    const res = compute();
+    const tv = document.getElementById("totalVal");
+    if (tv) tv.textContent = fmt(res.totalTons, 2);
+
+    const target = model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.3;
+    const rp = document.getElementById("reducePct");
+    if (rp){
+      const lang = getLang();
+      if (res.totalTons > target){
+        const pct = Math.max(0, (1 - (target / res.totalTons)) * 100);
+        rp.textContent = (lang === "en")
+          ? `Needed reduction to reach EU target (${fmt(target,2)} t/yr): ${fmt(pct,0)}%`
+          : `Απαιτούμενη μείωση για τον στόχο ΕΕ (${fmt(target,2)} t/έτος): ${fmt(pct,0)}%`;
+      } else {
+        rp.textContent = (lang === "en")
+          ? `You are at or below the EU target (${fmt(target,2)} t/yr).`
+          : `Είσαι εντός στόχου ΕΕ (${fmt(target,2)} t/έτος).`;
+      }
+    }
+  }
+
+  // Live updates
+  document.querySelectorAll("select,input[type='number']").forEach(el=>{
     el.addEventListener("input", updateTotal);
     el.addEventListener("change", updateTotal);
   });
 
-  // Initial calculation to prevent "—" on load
-  setTimeout(updateTotal, 500);
+  if (btnCalc) btnCalc.addEventListener("click", updateTotal);
+  if (btnDash) btnDash.addEventListener("click", ()=>{
+    const res = compute();
+    saveForDashboard(res);
+    go("./dashboard.html");
+  });
 
-  if(btnCalc) btnCalc.addEventListener("click", updateTotal);
-
-  if(btnDash) {
-    btnDash.addEventListener("click", ()=>{
-      const res = compute();
-      saveForDashboard(res);
-      // Assuming footprint.html is in /pages/, dashboard is also in /pages/
-      go("./dashboard.html");
-    });
-  }
+  updateTotal();
 });
