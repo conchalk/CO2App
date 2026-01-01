@@ -225,17 +225,22 @@ function compute(){
   // --- LIFESTYLE ---
   const diet = getSelectValue("diet");
   const dietUnitKg = val(b.dietKgCO2PerYear_unit);
-  const dietFactor = Number(f.diet?.[diet] ?? 0);
+  // factors in JSON are objects with {value: ...}
+  const dietFactor = val(f.diet?.[diet] ?? 0);
   const dietTons = (dietUnitKg * dietFactor) / 1000;
 
   const goodsProfile = getSelectValue("goodsProfile");
   const goodsUnitKg = val(b.goodsKgCO2PerYear_unit);
-  const goodsFactor = Number(f.goodsProfile?.[goodsProfile] ?? 0);
+  const goodsFactor = val(f.goodsProfile?.[goodsProfile] ?? 0);
   const goodsTons = (goodsUnitKg * goodsFactor) / 1000;
 
   const digitalLevel = getNumber("digitalLevel");
   const digitalUnitKg = val(b.digitalKgCO2PerYear_unit);
-  const digitalAnchors = { low: Number(f.digitalLevel?.low ?? 0), medium: Number(f.digitalLevel?.medium ?? 0), high: Number(f.digitalLevel?.high ?? 0) };
+  const digitalAnchors = {
+    low: val(f.digitalLevel?.low ?? 0),
+    medium: val(f.digitalLevel?.medium ?? 0),
+    high: val(f.digitalLevel?.high ?? 0)
+  };
   const digitalFactor = piecewiseSliderToAnchor(digitalLevel, digitalAnchors);
   const digitalTons = (digitalUnitKg * digitalFactor) / 1000;
 
