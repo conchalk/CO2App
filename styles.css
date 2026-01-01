@@ -465,8 +465,27 @@ select, input[type="number"], input[type="range"]{
 /* Two items on the same line (stacks on small screens) */
 .row2{display:flex; gap:12px; align-items:flex-end;}
 .row2 > *{flex:1;}
+/* Prevent selects/inputs from forcing overflow in flex rows */
+.row2 .field{min-width:0;}
+
+/* Category card header with KPI */
+.cardHeader{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 10px 0;}
+.catKpi{background:rgba(255,255,255,.55); border:1px solid rgba(0,0,0,.08); border-radius:999px; padding:6px 10px; font-weight:700; white-space:nowrap;}
+
+/* Horizontal carousel (mobile) */
+.cardsCarousel{display:block;}
+@media (max-width: 700px){
+  .cardsCarousel{display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:4px;}
+  .cardsCarousel > .card{flex:0 0 92%; scroll-snap-align:start;}
+  /* Hide desktop top navigation buttons on phones, keep stepper */
+  .footNavRow{display:none !important;}
+  #mobileStepper{display:flex !important;}
+}
 .checkLine{display:flex; align-items:center; gap:10px; font-weight:700; padding:10px 12px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff;}
 .checkLine input{width:auto;}
+/* Compact inline checkbox row (used in transport: "Μετακινούμαι μόνος") */
+.checkRow{display:flex; align-items:center; gap:8px; font-weight:700; padding:8px 10px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff; white-space:nowrap;}
+.checkRow input{width:auto;}
 .fixedLine{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 12px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff;}
 @media (max-width: 600px){
   .row2{flex-direction:column; align-items:stretch;}

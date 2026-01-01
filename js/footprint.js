@@ -225,7 +225,7 @@ function compute(){
   // --- LIFESTYLE ---
   const diet = getSelectValue("diet");
   const dietUnitKg = val(b.dietKgCO2PerYear_unit);
-  // factors in JSON are objects with {value: ...}
+  // factors are stored as { value: number }
   const dietFactor = val(f.diet?.[diet] ?? 0);
   const dietTons = (dietUnitKg * dietFactor) / 1000;
 
@@ -307,6 +307,59 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   if (navHome) navHome.addEventListener("click", ()=>goTo("cardHome"));
   if (navTransport) navTransport.addEventListener("click", ()=>goTo("cardTransport"));
   if (navLifestyle) navLifestyle.addEventListener("click", ()=>goTo("cardLifestyle"));
+
+  // --- Mobile carousel stepper (left/right buttons between cards) ---
+  const carousel = document.getElementById("cardsCarousel");
+  const stepper = document.getElementById("mobileStepper");
+  const stepPrev = document.getElementById("stepPrev");
+  const stepNext = document.getElementById("stepNext");
+  const stepTitle = document.getElementById("stepTitle");
+  const stepKpi = document.getElementById("stepKpi");
+
+  const sections = [
+    { id: "cardHome", titleEl: "homeTitle", label: () => t.home, kpi: (res)=>res.homeTons },
+    { id: "cardTransport", titleEl: "trTitle", label: () => t.transport, kpi: (res)=>res.transportTons },
+    { id: "cardLifestyle", titleEl: "lifeTitle", label: () => t.lifestyle, kpi: (res)=>res.lifestyleTons }
+  ];
+
+  let currentIdx = 0;
+
+  function scrollToSection(idx){
+    currentIdx = Math.max(0, Math.min(sections.length-1, idx));
+    const el = document.getElementById(sections[currentIdx].id);
+    if (el){
+      // For the horizontal carousel this will scroll sideways; otherwise it scrolls vertically.
+      el.scrollIntoView({behavior:"smooth", block:"nearest", inline:"start"});
+    }
+  }
+
+  // Exposed for updateTotal()
+  window.updateStepperUI = (res)=>{
+    if (!stepper) return;
+    if (stepTitle) stepTitle.textContent = sections[currentIdx].label();
+    if (stepKpi) stepKpi.textContent = `${fmt(sections[currentIdx].kpi(res), 2)} t CO₂/yr`;
+    if (stepPrev) stepPrev.disabled = (currentIdx === 0);
+    if (stepNext) stepNext.disabled = (currentIdx === sections.length-1);
+  };
+
+  if (stepPrev) stepPrev.addEventListener("click", ()=>{ scrollToSection(currentIdx-1); updateTotal(); });
+  if (stepNext) stepNext.addEventListener("click", ()=>{ scrollToSection(currentIdx+1); updateTotal(); });
+
+  if (carousel){
+    carousel.addEventListener("scroll", ()=>{
+      // Find the card whose left edge is closest to the carousel's left edge.
+      const box = carousel.getBoundingClientRect();
+      let best = 0, bestDist = Infinity;
+      sections.forEach((s, i)=>{
+        const el = document.getElementById(s.id);
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const dist = Math.abs(r.left - box.left);
+        if (dist < bestDist){ bestDist = dist; best = i; }
+      });
+      if (best !== currentIdx){ currentIdx = best; updateTotal(); }
+    }, {passive:true});
+  }
 
   // Labels
   setText("lblHomeType", t.labels.homeType);
@@ -422,6 +475,17 @@ document.addEventListener("DOMContentLoaded", async ()=>{
     const res = compute();
     const tv = document.getElementById("totalVal");
     if (tv) tv.textContent = fmt(res.totalTons, 2);
+
+    // Category KPIs (shown inside each card header)
+    const hk = document.getElementById("homeKpi");
+    const tk = document.getElementById("trKpi");
+    const lk = document.getElementById("lifeKpi");
+    if (hk) hk.textContent = fmt(res.homeTons, 2);
+    if (tk) tk.textContent = fmt(res.transportTons, 2);
+    if (lk) lk.textContent = fmt(res.lifestyleTons, 2);
+
+    // Mobile stepper KPI
+    if (typeof updateStepperUI === "function") updateStepperUI(res);
 
     const target = model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.3;
     const rp = document.getElementById("reducePct");

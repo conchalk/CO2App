@@ -40,8 +40,14 @@
   </div>
 </div>
 
+<!-- Carousel wrapper (mobile: horizontal swipe between category cards) -->
+<div class="cardsCarousel" id="cardsCarousel">
+
 <div class="card" id="cardHome">
-<h3 id="homeTitle" style="margin:0 0 10px 0;"></h3>
+<div class="cardHeader">
+  <h3 id="homeTitle" style="margin:0;"></h3>
+  <div class="catKpi"><span id="homeKpi">—</span><span class="small"> t</span></div>
+</div>
 <div class="formGrid">
 <div class="field">
 <label for="homeType" id="lblHomeType"></label>
@@ -78,7 +84,10 @@
 </div>
 </div>
 <div class="card" id="cardTransport">
-<h3 id="trTitle" style="margin:0 0 10px 0;"></h3>
+<div class="cardHeader">
+  <h3 id="trTitle" style="margin:0;"></h3>
+  <div class="catKpi"><span id="trKpi">—</span><span class="small"> t</span></div>
+</div>
 
 <div class="formGrid">
   <div class="field" style="grid-column: 1 / -1;">
@@ -128,7 +137,10 @@
 </div>
 
 <div class="card" id="cardLifestyle">
-<h3 id="lifeTitle" style="margin:0 0 10px 0;"></h3>
+<div class="cardHeader">
+  <h3 id="lifeTitle" style="margin:0;"></h3>
+  <div class="catKpi"><span id="lifeKpi">—</span><span class="small"> t</span></div>
+</div>
 <div class="formGrid">
 <div class="field">
   <label for="diet" id="lblDiet"></label>
@@ -157,8 +169,10 @@
   </div>
 </div>
 </div>
+
+</div><!-- /cardsCarousel -->
 </div>
-<div class="card" id="cardSummary" style="margin-top:14px;">
+<div class="card" id="cardSummary" style="margin-top:22px;">
 <div class="kpiRow" style="margin-bottom:0;">
 <div class="kpi user">
 <div class="kpiLabel" id="lblTotal"></div>
