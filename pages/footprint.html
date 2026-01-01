@@ -21,7 +21,7 @@
 </div>
 
 <header class="topbar">
-  <button class="burger" id="burgerBtn" aria-label="Menu">☰</button>
+  <button aria-label="Menu" class="iconBtn" id="menuBtn"><span class="hamburger"><span></span></span></button>
   <div class="topbarTitles">
     <div class="pageTitle" id="title"></div>
     <div class="pageSubtitle" id="subtitle"></div>
@@ -68,7 +68,7 @@
 
       <div class="field" style="grid-column: 1 / -1;">
         <label for="homeUseLevel" id="lblHomeUse"></label>
-        <input id="homeUseLevel" type="range" min="0" max="100" step="1">
+        <input id="homeUseLevel" type="range" min="0" max="100" step="1" value="50">
         <div class="rangeRow">
           <div class="small" id="homeUseMin"></div>
           <div class="small" id="homeUseMid"></div>
@@ -152,7 +152,7 @@
 
       <div class="field" style="grid-column: 1 / -1;">
         <label for="digitalLevel" id="lblDigitalLevel"></label>
-        <input id="digitalLevel" type="range" min="0" max="100" step="1">
+        <input id="digitalLevel" type="range" min="0" max="100" step="1" value="50">
         <div class="rangeRow">
           <div class="small" id="digitalMin"></div>
           <div class="small" id="digitalMid"></div>
