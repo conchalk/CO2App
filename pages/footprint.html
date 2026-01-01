@@ -79,31 +79,54 @@
 </div>
 <div class="card" id="cardTransport">
 <h3 id="trTitle" style="margin:0 0 10px 0;"></h3>
-<div class="formGrid"><div class="field" style="grid-column: 1 / -1;">
-<label for="weeklyKm" id="lblWeeklyKm"></label>
-<input id="weeklyKm" type="number" min="0" step="1" value="40"/>
-</div>
-<div class="field" style="grid-column: 1 / -1;">
-<label for="publicPct" id="lblPublicPct"></label>
-<div class="rangeRow">
-  <input id="publicPct" type="range" min="0" max="100" step="1" value="0"/>
-  <div class="rangeValue" id="publicPctVal">0%</div>
-</div>
-</div></div></div><div class="field"><label for="carType" id="lblCarType"></label><div class="row2"><select id="carType"></select><label class="checkLine"><input id="alone" type="checkbox"/><span id="lblAlone"></span></label></div></div><div class="field"><label for="publicType" id="lblPublicTransport"></label><select id="publicType"></select></div>
-<div class="field" style="grid-column: 1 / -1;">
-  <div class="row2">
-    <div class="field" style="flex:1; margin:0;">
-      <label for="flightTripsDomestic" id="lblFlightsDomestic"></label>
-      <input id="flightTripsDomestic" type="number" min="0" step="1" value="0"/>
+
+<div class="formGrid">
+  <div class="field" style="grid-column: 1 / -1;">
+    <label for="weeklyKm" id="lblWeeklyKm"></label>
+    <input id="weeklyKm" type="number" min="0" step="1" value="40"/>
+  </div>
+
+  <div class="field" style="grid-column: 1 / -1;">
+    <label for="publicPct" id="lblPublicPct"></label>
+    <div class="rangeRow">
+      <input id="publicPct" type="range" min="0" max="100" step="1" value="0"/>
+      <div class="rangeValue" id="publicPctVal">0%</div>
     </div>
-    <div class="field" style="flex:1; margin:0;">
-      <label for="flightTripsEurope" id="lblFlightsEurope"></label>
-      <input id="flightTripsEurope" type="number" min="0" step="1" value="0"/>
+  </div>
+
+  <div class="field" style="grid-column: 1 / -1;">
+    <div class="row2" style="align-items:flex-end;">
+      <div class="field" style="flex:1; margin:0;">
+        <label for="carType" id="lblCarType"></label>
+        <select id="carType"></select>
+      </div>
+      <label class="checkRow" style="flex:0 0 auto; margin:0; padding-bottom:6px;">
+        <input id="alone" type="checkbox"/>
+        <span id="lblAlone"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="field" style="grid-column: 1 / -1;">
+    <label for="publicType" id="lblPublicTransport"></label>
+    <select id="publicType"></select>
+  </div>
+
+  <div class="field" style="grid-column: 1 / -1;">
+    <div class="row2" style="align-items:flex-end;">
+      <div class="field" style="flex:1; margin:0;">
+        <label for="flightTripsDomestic" id="lblFlightsDomestic"></label>
+        <input id="flightTripsDomestic" type="number" min="0" step="1" value="0"/>
+      </div>
+      <div class="field" style="flex:1; margin:0;">
+        <label for="flightTripsEurope" id="lblFlightsEurope"></label>
+        <input id="flightTripsEurope" type="number" min="0" step="1" value="0"/>
+      </div>
     </div>
   </div>
 </div>
 </div>
-</div>
+
 <div class="card" id="cardLifestyle">
 <h3 id="lifeTitle" style="margin:0 0 10px 0;"></h3>
 <div class="formGrid">
@@ -135,7 +158,7 @@
 </div>
 </div>
 </div>
-<div class="card" id="cardSummary">
+<div class="card" id="cardSummary" style="margin-top:14px;">
 <div class="kpiRow" style="margin-bottom:0;">
 <div class="kpi user">
 <div class="kpiLabel" id="lblTotal"></div>
@@ -143,7 +166,8 @@
 </div>
 <div class="small" id="reducePct" style="text-align:center; margin-top:6px;"></div>
 </div>
-  <div class="bottomRow" style="margin-top:10px;">
+  <div class="bottomRow" style="margin-top:18px; gap:10px;">
+  <button class="pillBtn" id="btnCalc" type="button"></button>
   <button class="pillBtn" id="btnDash"></button>
   </div>
 </div>
