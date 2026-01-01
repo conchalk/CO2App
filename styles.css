@@ -464,7 +464,8 @@ select, input[type="number"], input[type="range"]{
 
 /* Two items on the same line (stacks on small screens) */
 .row2{display:flex; gap:12px; align-items:flex-end;}
-.row2 > *{flex:1;}
+.row2 > .field{flex:1;}
+.row2 > .checkRow{min-width:0; flex:0 0 auto;}
 /* Prevent selects/inputs from forcing overflow in flex rows */
 .row2 .field{min-width:0;}
 
@@ -475,11 +476,13 @@ select, input[type="number"], input[type="range"]{
 /* Horizontal carousel (mobile) */
 .cardsCarousel{display:block;}
 @media (max-width: 700px){
-  .cardsCarousel{display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:4px;}
-  .cardsCarousel > .card{flex:0 0 92%; scroll-snap-align:start;}
+  .cardsCarousel{display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:14px; -webkit-overflow-scrolling:touch; padding:0 14px 4px;}
+  .cardsCarousel > .card{flex:0 0 calc(100% - 28px); max-width:calc(100% - 28px); scroll-snap-align:start;}
   /* Hide desktop top navigation buttons on phones, keep stepper */
   .footNavRow{display:none !important;}
   #mobileStepper{display:flex !important;}
+  .row2{flex-wrap:wrap;}
+  .row2 > .checkRow{width:100%; justify-content:flex-start; padding-bottom:0;}
 }
 .checkLine{display:flex; align-items:center; gap:10px; font-weight:700; padding:10px 12px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff;}
 .checkLine input{width:auto;}
