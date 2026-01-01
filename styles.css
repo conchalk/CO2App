@@ -45,16 +45,17 @@ a{color:inherit}
   min-height:100%;
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:stretch;
   padding: 18px 14px 22px;
   gap: 14px;
 }
 
 .topbar{
   width:100%;
-  max-width: 520px;
+  max-width: 980px;
+  margin: 0 auto;
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
   padding: 6px 4px;
 }
@@ -67,14 +68,15 @@ a{color:inherit}
   border-radius: 14px;
   box-shadow: var(--btnShadow);
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
   cursor:pointer;
 }
 
 .card{
   width:100%;
-  max-width: 520px;
+  max-width: 980px;
+  margin: 0 auto;
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -84,7 +86,7 @@ a{color:inherit}
 .centerCard{
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:stretch;
   gap:14px;
 }
 
@@ -96,14 +98,14 @@ a{color:inherit}
   padding: 14px;
   display:flex;
   justify-content:center;
-  align-items:center;
+  align-items:stretch;
 }
 
 .logoBox img{width:100%; height:auto; display:block}
 
 .bigBtn{
   width: 92%;
-  max-width: 520px;
+  max-width: 980px;
   border:none;
   background: #f2f2f2;
   color: var(--text);
@@ -120,7 +122,8 @@ a{color:inherit}
 
 .bottomRow{
   width:100%;
-  max-width:520px;
+  max-width: 980px;
+  margin: 0 auto;
   display:flex;
   justify-content:center;
   gap: 10px;
@@ -148,7 +151,8 @@ a{color:inherit}
 
 .statsBar{
   width:100%;
-  max-width:520px;
+  max-width: 980px;
+  margin: 0 auto;
   display:flex;
   justify-content:center;
   gap: 10px;
@@ -181,7 +185,8 @@ a{color:inherit}
 
 .choicesRow{
   width:100%;
-  max-width:520px;
+  max-width: 980px;
+  margin: 0 auto;
   display:flex;
   justify-content:center;
   gap: 14px;
@@ -216,7 +221,7 @@ a{color:inherit}
   inset:0;
   background: rgba(0,0,0,.25);
   display:none;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
   padding: 18px;
 }
@@ -267,7 +272,7 @@ select, input[type="number"], input[type="range"]{
 
 .rangeRow{
   display:flex;
-  align-items:center;
+  align-items:stretch;
   gap: 10px;
 }
 
@@ -326,7 +331,7 @@ select, input[type="number"], input[type="range"]{
   flex-direction:column;
   gap: 6px;
 }
-.legendItem{display:flex; align-items:center; gap:8px; font-size:.98rem}
+.legendItem{display:flex; align-items:stretch; gap:8px; font-size:.98rem}
 .swatch{width:14px; height:14px; border-radius:4px;}
 
 
@@ -394,7 +399,7 @@ select, input[type="number"], input[type="range"]{
 
 .drawerHeader{
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
   gap: 10px;
 }
@@ -413,7 +418,7 @@ select, input[type="number"], input[type="range"]{
 
 .drawerItem{
   display:flex;
-  align-items:center;
+  align-items:stretch;
   gap: 10px;
   padding: 10px 12px;
   border-radius: 14px;
@@ -437,7 +442,7 @@ select, input[type="number"], input[type="range"]{
   border-radius: 10px;
   background: rgba(47,74,49,.10);
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
   font-weight: 900;
   color: var(--accent);
@@ -470,8 +475,8 @@ select, input[type="number"], input[type="range"]{
 .row2 .field{min-width:0;}
 
 /* Category card header with KPI */
-.cardHeader{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 10px 0;}
-.catKpi{background:rgba(255,255,255,.55); border:1px solid rgba(0,0,0,.08); border-radius:999px; padding:6px 10px; font-weight:700; white-space:nowrap;}
+.cardHeader{display:flex; align-items:stretch; justify-content:space-between; gap:12px; margin:0 0 10px 0;}
+.catKpi{background:#fff; border:1px solid rgba(49,78,78,.18); border-bottom:4px solid var(--accent); box-shadow: var(--shadow); border-radius:999px; padding:8px 12px; font-weight:800; font-size:1.05rem; white-space:nowrap;}
 
 /* Horizontal carousel (mobile) */
 .cardsCarousel{display:block;}
@@ -484,12 +489,12 @@ select, input[type="number"], input[type="range"]{
   .row2{flex-wrap:wrap;}
   .row2 > .checkRow{width:100%; justify-content:flex-start; padding-bottom:0;}
 }
-.checkLine{display:flex; align-items:center; gap:10px; font-weight:700; padding:10px 12px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff;}
+.checkLine{display:flex; align-items:stretch; gap:10px; font-weight:700; padding:10px 12px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff;}
 .checkLine input{width:auto;}
 /* Compact inline checkbox row (used in transport: "Μετακινούμαι μόνος") */
-.checkRow{display:flex; align-items:center; gap:8px; font-weight:700; padding:8px 10px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff; white-space:nowrap;}
+.checkRow{display:flex; align-items:stretch; gap:8px; font-weight:700; padding:8px 10px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff; white-space:nowrap;}
 .checkRow input{width:auto;}
-.fixedLine{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 12px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff;}
+.fixedLine{display:flex; justify-content:space-between; align-items:stretch; gap:10px; padding:10px 12px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff;}
 @media (max-width: 600px){
   .row2{flex-direction:column; align-items:stretch;}
   .checkLine{padding:10px 12px;}
@@ -539,7 +544,7 @@ body.homeNoDrawer #drawerBackdrop{
   padding: 18px;
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:stretch;
   gap: 14px;
   text-align:center;
 }
@@ -572,7 +577,7 @@ body.homeNoDrawer #drawerBackdrop{
   font-size: 1.25rem;
   font-weight: 700;
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
   gap: 10px;
 }
@@ -604,7 +609,7 @@ body.homeNoDrawer #drawerBackdrop{
 }
 .homeChip{
   display:inline-flex;
-  align-items:center;
+  align-items:stretch;
   gap:8px;
   border: 1px solid rgba(0,0,0,.12);
   background: rgba(255,255,255,.75);
@@ -625,7 +630,7 @@ body.homeNoDrawer #drawerBackdrop{
   height:22px;
   border-radius: 10px;
   display:inline-flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
   font-weight: 900;
   background: rgba(0,0,0,.06);
@@ -663,7 +668,8 @@ h1, h2, h3, .homePrimaryTitle, .homePrimarySub, .homeChip, .statsBar{
 /* Footprint horizontal section chips (desktop) */
 .footNavRow{
   width:100%;
-  max-width: 520px;
+  max-width: 980px;
+  margin: 0 auto;
   display:flex;
   gap:10px;
   flex-wrap:wrap;
@@ -768,7 +774,7 @@ select option{
 .chartWrap{
   display:flex;
   justify-content:center;
-  align-items:center;
+  align-items:stretch;
   padding: 6px 0 2px;
   width: 100%;
   height: 280px;
@@ -822,7 +828,7 @@ select option{
 /* Constrain main blocks so centering actually works on wide screens */
 .card, .panel, .topbar, .footNavRow, .homePrimary, .quizShell, .homeCard{
   width: 100%;
-  max-width: 520px;
+  max-width: 980px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -889,7 +895,7 @@ select option{
 
 .choiceBtn.choiceWide{
   width: 100%;
-  max-width: 520px;
+  max-width: 980px;
   height: auto;
   padding: 14px 16px;
   white-space: normal;
@@ -1008,9 +1014,10 @@ select option{
 /* Quiz navigation (review) */
 .quizNavTop{
   width:100%;
-  max-width:520px;
+  max-width: 980px;
+  margin: 0 auto;
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
   gap: 12px;
   margin-left:auto;
@@ -1045,7 +1052,7 @@ select option{
 /* Inline explanation card (turns into bottom sheet on mobile) */
 .answerCard{
   width:100%;
-  max-width:520px;
+  max-width: 980px;
   margin-left:auto;
   margin-right:auto;
   background: rgba(255,255,255,.95);
@@ -1055,7 +1062,7 @@ select option{
 }
 .answerHead{
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:space-between;
   gap: 10px;
   margin-bottom: 8px;
@@ -1123,7 +1130,7 @@ select option{
 /* === Drawer footer language row (fix mobile layout on all pages) === */
 .drawerFooter{
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:space-between;
   gap:10px;
 }
@@ -1131,7 +1138,7 @@ select option{
 .drawerLang{
   display:flex;
   gap:10px;
-  align-items:center;
+  align-items:stretch;
 }
 .drawerLang .pillBtn{
   min-width: 64px;
