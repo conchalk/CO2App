@@ -237,6 +237,10 @@
       "train": {
         "value": 0.04,
         "unit": "kgCO2e_per_passenger_km"
+      },
+      "metro": {
+        "value": 0.04,
+        "unit": "kgCO2e_per_passenger_km"
       }
     }
   },
@@ -268,9 +272,9 @@
       ],
       "labels": {
         "el": {
-          "modern": "Καλή μόνωση",
-          "partial": "Μερική μόνωση",
-          "none": "Χωρίς μόνωση"
+          "modern": "Σύγχρονη κατασκευή με θερμοπρόσοψη, θερμομονωτικά κουφώματα",
+          "partial": "Κατασκευής μετά το 1980 με διπλά τζάμια, μόνωση οροφής",
+          "none": "Κατασκευής πριν το 1980, χωρίς μόνωση"
         },
         "en": {
           "modern": "Modern insulation",
@@ -356,25 +360,27 @@
       "default": "yes"
     },
     "homeUseLevel": {
-      "type": "range",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "default": 50,
+      "type": "select",
+      "default": "typical",
       "labels": {
         "el": {
-          "title": "Χρήση ηλεκτρικής ενέργειας & ψύξη (εκτός θέρμανσης)",
-          "min": "Συντηρητική",
-          "mid": "Κανονική",
-          "max": "Υψηλή"
+          "title": "Χρήση ηλεκτρικής ενέργειας (εκτός θέρμανσης)",
+          "min": "Συντηρητική, χωρίς σπατάλες, ελάχιστο A/C ψύξης",
+          "typical": "Τυπική, κανονική χρήση + λίγο A/C ψύξης, κυρίως μεσημεριανές ώρες",
+          "max": "Σπάταλη, υπερβολική χρήση A/C για ψύξη και άσκοπη λειτουργία συσκευών"
         },
         "en": {
-          "title": "Electricity use & cooling (excluding heating)",
-          "min": "Conservative",
-          "mid": "Typical",
-          "max": "High"
+          "title": "Electricity use (excluding heating)",
+          "min": "Conservative, minimal waste, minimal A/C",
+          "typical": "Typical use + some A/C (mostly midday)",
+          "max": "Wasteful, heavy A/C and unnecessary device use"
         }
-      }
+      },
+      "order": [
+        "min",
+        "typical",
+        "max"
+      ]
     },
     "carType": {
       "type": "select",
@@ -471,15 +477,21 @@
     },
     "publicTransport": {
       "type": "select",
-      "options": [
+      "order": [
         "bus",
-        "train"
+        "metro"
       ],
-      "default": "bus",
-      "label": {
-        "el": "Δημόσια μέσα",
-        "en": "Public transport"
-      }
+      "labels": {
+        "el": {
+          "bus": "Λεωφορείο",
+          "metro": "Μετρό"
+        },
+        "en": {
+          "bus": "Bus",
+          "metro": "Metro/Subway"
+        }
+      },
+      "default": "bus"
     },
     "publicPct": {
       "type": "range",
@@ -494,18 +506,30 @@
     },
     "diet": {
       "type": "select",
-      "options": [
+      "order": [
         "vegan",
         "vegetarian",
         "mediterranean",
         "standard",
         "high_meat"
       ],
-      "default": "standard",
-      "label": {
-        "el": "Διατροφή",
-        "en": "Diet"
-      }
+      "labels": {
+        "el": {
+          "vegan": "Vegan",
+          "vegetarian": "Χορτοφαγική",
+          "mediterranean": "Μεσογειακή",
+          "standard": "Τυπική",
+          "high_meat": "Πολύ κρέας"
+        },
+        "en": {
+          "vegan": "Vegan",
+          "vegetarian": "Vegetarian",
+          "mediterranean": "Mediterranean",
+          "standard": "Standard",
+          "high_meat": "High meat"
+        }
+      },
+      "default": "standard"
     },
     "flightTripsDomestic": {
       "type": "number",

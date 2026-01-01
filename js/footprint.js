@@ -21,26 +21,21 @@ function T(){
         homeCond: "Μόνωση / κατάσταση",
         heating: "Θέρμανση",
         occupants: "Άτομα στο σπίτι",
-        solarDHW: "Ζεστό νερό χρήσης (DHW)",
-        homeUse: "Ηλεκτρική ενέργεια & ψύξη (εκτός θέρμανσης)",
-        weeklyKm: "Μετακινήσεις με ΙΧ (km/εβδομάδα)",
+        solarDHW: "Ηλιακός θερμοσίφωνας",
+        homeUse: "Χρήση ηλεκτρικής ενέργειας (εκτός θέρμανσης)",
+        weeklyKm: "Απόσταση μετακίνησης (km/εβδομάδα)",
         carType: "Κύρια επιλογή μετακίνησης",
+        publicTransport: "Δημόσια μέσα",
+        publicPct: "Ποσοστό μετακίνησης με δημόσια μέσα",
+        alone: "Μετακινούμαι μόνος",
         flightsDomestic: "Πτήσεις εντός Ελλάδας (ανά έτος)",
-        flightsEurope: "Πτήσεις εντός Ευρώπης (ανά έτος)",
-        flightHint: "Οι αποστάσεις είναι τυπικές (μοντελοποίηση).",
-        diet: "Διατροφή",
-        dietHint: "Επιλογή τύπου διατροφής (ενδεικτικές τιμές).",
-        goodsProfile: "Κατανάλωση προϊόντων",
+        flightsEurope: "Πτήσεις εντός Ευρώπης (ανά έτος)",        diet: "Διατροφή",        goodsProfile: "Κατανάλωση προϊόντων",
         goodsHint: "Ρούχα, ηλεκτρονικά, αγορές & lifestyle.",
         digitalLevel: "Ψηφιακή κατανάλωση (internet/cloud)",
         socialShare: "Κοινόχρηστες υπηρεσίες & υποδομές (σταθερό)",
         total: "Σύνολο",
         calc: "Υπολόγισε",
-        dash: "Διαγράμματα",
-        homeUseMin: "Συντηρητική",
-        homeUseMid: "Κανονική",
-        homeUseMax: "Υψηλή",
-        digitalMin: "Χαμηλή",
+        dash: "Διαγράμματα",        digitalMin: "Χαμηλή",
         digitalMid: "Μέση",
         digitalMax: "Υψηλή"
       },
@@ -59,26 +54,21 @@ function T(){
         homeCond: "Insulation / condition",
         heating: "Heating",
         occupants: "Occupants",
-        solarDHW: "Domestic hot water (DHW)",
-        homeUse: "Electricity & cooling (excluding heating)",
+        solarDHW: "Solar water heater",
+        homeUse: "Electricity use (excluding heating)",
         weeklyKm: "Car travel (km/week)",
         carType: "Main travel mode",
+        publicTransport: "Public transport",
+        publicPct: "Share of trips by public transport",
+        alone: "I travel alone",
         flightsDomestic: "Domestic flights (Greece) per year",
-        flightsEurope: "Intra-Europe flights per year",
-        flightHint: "Typical distances are used (model).",
-        diet: "Diet",
-        dietHint: "Choose a diet profile (approximate factors).",
-        goodsProfile: "Goods consumption",
+        flightsEurope: "Intra-Europe flights per year",        diet: "Diet",        goodsProfile: "Goods consumption",
         goodsHint: "Clothes, electronics, shopping & lifestyle.",
         digitalLevel: "Digital consumption (internet/cloud)",
         socialShare: "Public services & infrastructure (fixed)",
         total: "Total",
         calc: "Calculate",
-        dash: "Dashboard",
-        homeUseMin: "Conservative",
-        homeUseMid: "Typical",
-        homeUseMax: "High",
-        digitalMin: "Low",
+        dash: "Dashboard",        digitalMin: "Low",
         digitalMid: "Medium",
         digitalMax: "High"
       },
@@ -168,8 +158,8 @@ function compute(){
   const homeCond = getSelectValue("homeCond");          // modern/partial/none
   const heatingType = getSelectValue("heatingType");    // heat_pump, ...
   const occ = occupantsToNumber(getSelectValue("occupants"));
-  const solar = (getSelectValue("solarDHW") === "yes");
-  const homeUseLevel = getNumber("homeUseLevel");       // 0..100
+  const solar = !!document.getElementById("solarDHW")?.checked;
+  const homeUseLevel = getSelectValue("homeUseLevel"); // min/typical/max
 
   const aptDemandMap = (b.heatingDemandKWhApartment && b.heatingDemandKWhApartment.value) ? b.heatingDemandKWhApartment.value : {};
   const aptKWh = Number(aptDemandMap[homeCond] ?? 0);
@@ -185,7 +175,9 @@ function compute(){
   const dhwTons = (dhwKWh * gridCI) / 1000;
 
   const anchors = (b.homeOtherElectricityAnchorsKWhPerYear && b.homeOtherElectricityAnchorsKWhPerYear.value) ? b.homeOtherElectricityAnchorsKWhPerYear.value : {min:0,typical:0,max:0};
-  const otherKWh = piecewiseSliderToAnchor(homeUseLevel, anchors);
+  const otherKWh = (homeUseLevel === "min") ? Number(anchors.min ?? 0)
+    : (homeUseLevel === "max") ? Number(anchors.max ?? 0)
+    : Number(anchors.typical ?? 0);
   const otherElecTons = (otherKWh * gridCI) / 1000;
 
   const homeValues = [heatingTons, dhwTons, otherElecTons];
@@ -201,15 +193,18 @@ function compute(){
   const kmCar = weeklyKm - kmPublic;
 
   // Car kg/km (EV derived from gridCI)
+  const alone = !!document.getElementById("alone")?.checked;
+
   let carKgPerKm = val(f.carType?.[carType] ?? 0);
   if (carType === "electric"){
     const ev_kWh_km = val(p.evConsumption_kWh_per_km);
     carKgPerKm = gridCI * ev_kWh_km;
   }
-  const carTons = kmCar * val(c.weeklyToTonsFactor) * carKgPerKm;
+  let carTons = kmCar * val(c.weeklyToTonsFactor) * carKgPerKm;
+  if (!alone) carTons = carTons / 2;
 
   // Public transport kg/passenger-km
-  const publicType = getSelectValue("publicTransport"); // bus/train
+  const publicType = getSelectValue("publicType"); // bus/metro
   const publicKgPerKm = val(f.publicTransport?.[publicType] ?? 0);
   const publicTons = kmPublic * val(c.weeklyToTonsFactor) * publicKgPerKm;
 
@@ -318,22 +313,18 @@ document.addEventListener("DOMContentLoaded", async ()=>{
 
   setText("lblWeeklyKm", t.labels.weeklyKm);
   setText("lblCarType", t.labels.carType);
+  setText("lblAlone", t.labels.alone);
   setText("lblPublicTransport", t.labels.publicTransport);
   setText("lblPublicPct", t.labels.publicPct);
   setText("lblFlightsDomestic", t.labels.flightsDomestic);
   setText("lblFlightsEurope", t.labels.flightsEurope);
-  setText("flightHint", t.labels.flightHint);
 
   setText("lblDiet", t.labels.diet);
-  setText("dietHint", t.labels.dietHint);
   setText("lblGoodsProfile", t.labels.goodsProfile);
   setText("goodsHint", t.labels.goodsHint);
   setText("lblDigitalLevel", t.labels.digitalLevel);
   setText("lblSocialShare", t.labels.socialShare);
 
-  setText("homeUseMin", t.labels.homeUseMin);
-  setText("homeUseMid", t.labels.homeUseMid);
-  setText("homeUseMax", t.labels.homeUseMax);
 
   setText("digitalMin", t.labels.digitalMin);
   setText("digitalMid", t.labels.digitalMid);
@@ -348,10 +339,10 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   populateSelect(document.getElementById("homeCond"), "homeCondition");
   populateSelect(document.getElementById("heatingType"), "heatingType");
   populateSelect(document.getElementById("occupants"), "occupants");
-  populateSelect(document.getElementById("solarDHW"), "solarDHW");
+  populateSelect(document.getElementById("homeUseLevel"), "homeUseLevel");
   populateSelect(document.getElementById("carType"), "carType");
   populateSelect(document.getElementById("goodsProfile"), "goodsProfile");
-  populateSelect(document.getElementById("publicTransport"), "publicTransport");
+  populateSelect(document.getElementById("publicType"), "publicTransport");
   populateSelect(document.getElementById("diet"), "diet");
 
   // Defaults (from ui if present)
@@ -365,70 +356,57 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   setDefault("homeCond","homeCondition");
   setDefault("heatingType","heatingType");
   setDefault("occupants","occupants");
-  setDefault("solarDHW","solarDHW");
   setDefault("carType","carType");
-  setDefault("publicTransport","publicTransport");
+  setDefault("publicType","publicTransport");
   setDefault("diet","diet");
   setDefault("goodsProfile","goodsProfile");
 
-  // Range defaults from ui
-  const homeUse = document.getElementById("homeUseLevel");
-  if (homeUse) homeUse.value = String(model.ui?.homeUseLevel?.default ?? 50);
+  // Defaults for select + ranges
+  const homeUseSel = document.getElementById("homeUseLevel");
+  if (homeUseSel) homeUseSel.value = String(model.ui?.homeUseLevel?.default ?? "typical");
 
   const digital = document.getElementById("digitalLevel");
   if (digital) digital.value = String(model.ui?.digitalLevel?.default ?? 50);
 
-  function updateRanges(){
-    const hv = document.getElementById("homeUseVal");
-    if (hv && homeUse) hv.textContent = String(homeUse.value);
+  const publicPct = document.getElementById("publicPct");
+  if (publicPct) publicPct.value = String(model.ui?.publicPct?.default ?? 0);
 
+  const updateBadges = ()=>{
     const dv = document.getElementById("digitalVal");
     const pv = document.getElementById("publicPctVal");
-
-    function updateRangeBadges(){
-      const hu = document.getElementById("homeUseLevel");
-      const di = document.getElementById("digitalLevel");
-      const pu = document.getElementById("publicPct");
-      if (hv && hu) hv.textContent = `${Math.round(Number(hu.value)||0)}%`; 
-      if (dv && di) dv.textContent = `${Math.round(Number(di.value)||0)}%`; 
-      if (pv && pu) pv.textContent = `${Math.round(Number(pu.value)||0)}%`; 
-    }
-
-    ["homeUseLevel","digitalLevel","publicPct"].forEach(id=>{
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.addEventListener("input", ()=>{ updateRangeBadges(); updateTotal(); });
-      el.addEventListener("change", ()=>{ updateRangeBadges(); updateTotal(); });
-    });
-
-    // Defaults for ranges if present in model.ui
-    const setRangeDefault = (id, dim)=>{
-      const el = document.getElementById(id);
-      const def = model.ui?.[dim]?.default;
-      if (el && def !== undefined) el.value = String(def);
-    };
-    setRangeDefault("homeUseLevel","homeUseLevel");
-    setRangeDefault("digitalLevel","digitalLevel");
-    setRangeDefault("publicPct","publicPct");
-
-    updateRangeBadges();
-    if (dv && digital) dv.textContent = String(digital.value);
+    if (dv && digital) dv.textContent = `${Math.round(Number(digital.value)||0)}%`;
+    if (pv && publicPct) pv.textContent = `${Math.round(Number(publicPct.value)||0)}%`;
 
     const dl = document.getElementById("digitalLabel");
     if (dl && digital){
       const x = Number(digital.value);
       dl.textContent = (x < 33) ? t.labels.digitalMin : (x > 66) ? t.labels.digitalMax : t.labels.digitalMid;
     }
-    const hl = document.getElementById("homeUseLabel");
-    if (hl && homeUse){
-      const x = Number(homeUse.value);
-      hl.textContent = (x < 33) ? t.labels.homeUseMin : (x > 66) ? t.labels.homeUseMax : t.labels.homeUseMid;
-    }
+  };
+
+  ["digitalLevel","publicPct"].forEach(id=>{
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("input", ()=>{ updateBadges(); updateTotal(); });
+    el.addEventListener("change", ()=>{ updateBadges(); updateTotal(); });
+  });
+
+  if (homeUseSel){
+    homeUseSel.addEventListener("change", updateTotal);
+    homeUseSel.addEventListener("input", updateTotal);
   }
 
-  if (homeUse) homeUse.addEventListener("input", ()=>{ updateRanges(); updateTotal(); });
-  if (digital) digital.addEventListener("input", ()=>{ updateRanges(); updateTotal(); });
-  updateRanges();
+  // Checkbox listeners
+  const solarBox = document.getElementById("solarDHW");
+  if (solarBox){
+    solarBox.addEventListener("change", updateTotal);
+  }
+  const aloneBox = document.getElementById("alone");
+  if (aloneBox){
+    aloneBox.addEventListener("change", updateTotal);
+  }
+
+  updateBadges();
 
   const btnCalc = document.getElementById("btnCalc");
   const btnDash = document.getElementById("btnDash");

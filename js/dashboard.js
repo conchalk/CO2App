@@ -31,8 +31,8 @@
         backToCalc: "Back to calculator",
         categoryLabels: {
           home: ["Heating", "Hot water (DHW)", "Electricity & cooling"],
-          transport: ["Travel", "Flights"],
-          life: ["Goods", "Digital", "Public services"]
+          transport: ["Car/motorbike", "Public transport", "Domestic flights", "Intra-Europe flights"],
+          life: ["Diet", "Goods", "Digital", "Public services"]
         },
         unit: "t CO₂/year",
         percentLabel: "% of target",
