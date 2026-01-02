@@ -78,12 +78,27 @@
 
   document.addEventListener("DOMContentLoaded", ()=>{
     initLangButtons();
+    applyUnitYearElements();
     const t = T();
 
     const setText = (id, txt)=>{ const el = document.getElementById(id); if (el) el.textContent = txt; };
 
     setText("dashTitle", t.title);
-    const pct = euTarget > 0 ? (userTotal / euTarget) * 100 : 0;
+
+    // Totals are produced by footprint.js
+    const userTotal = Number(localStorage.getItem("USER_TOTAL") || "0") || 0;
+    const euTarget = Number(localStorage.getItem("EU_TARGET") || "0") || 0;
+
+    // KPI labels & values
+    setText("kpiUserLbl", t.kpiUserLbl);
+    setText("kpiTargetLbl", t.kpiTargetLbl);
+    setText("kpiUserVal", fmt(userTotal, 2));
+    setText("kpiTargetVal", fmt(euTarget, 2));
+
+    // Section titles
+    setText("homeTitle", t.home);
+    setText("transportTitle", t.transport);
+    setText("lifeTitle", t.life);
     const homeVals = safeArr("CO2_HOME_VALUES", 3);
     const trVals = safeArr("CO2_TRANSPORT_VALUES", 4);
     const lifeVals = safeArr("CO2_LIFE_VALUES", 4);

@@ -43,3 +43,8 @@
 - Fix: Charts button works reliably.
 - Remove qrCO2App.png (QR is generated dynamically on install page).
 - Bump service worker cache to v15.
+
+
+## v17
+- Dashboard: fixed crash (ReferenceError: euTarget) by reading USER_TOTAL & EU_TARGET from localStorage and rendering the two KPI boxes correctly.
+- Cache-bust: bumped assets to v17 and updated service worker cache name to co2app-cache-v17.
