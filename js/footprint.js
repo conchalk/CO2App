@@ -460,8 +460,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   if (publicPct) publicPct.value = String(model.ui?.publicPct?.default ?? 0);
 
 const updateBadges = ()=>{
-    // Digital slider label
-    if (dv) dv.textContent = "";
+    // No percentage badges; we only show descriptive labels below sliders.
 // Public transport: show km (pct * weekly km)
     const pv = document.getElementById("publicKmVal");
     const wk = document.getElementById("weeklyKm");
