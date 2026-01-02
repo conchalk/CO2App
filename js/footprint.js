@@ -11,8 +11,8 @@ function T(){
   const lang = getLang();
   return {
     el: {
-      title: "Υπολογισμός Αποτυπώματος CO₂",
-      subtitle: "Τα αποτελέσματα είναι προσεγγιστικά.",
+      title: "Εκτίμηση Αποτυπώματος CO₂",
+      subtitle: "Τα αποτελέσματα είναι προσεγγιστικά, αναλυτικά στοιχεία για το χρησιμοποιούμενο μοντέλο δες στην Τεκμηρίωση.",
       home: "Κατοικία",
       transport: "Μεταφορές",
       lifestyle: "Lifestyle",
@@ -26,7 +26,7 @@ function T(){
         weeklyKm: "Απόσταση μετακίνησης (km/εβδομάδα)",
         carType: "Κύρια επιλογή μετακίνησης",
         publicTransport: "Δημόσια μέσα",
-        publicPct: "Ποσοστό μετακίνησης με δημόσια μέσα",
+        publicPct: "Από τα οποία γίνονται με δημόσια μέσα",
         alone: "Μετακινούμαι μόνος",
         flightsDomestic: "Πτήσεις εντός Ελλάδας (ανά έτος)",
         flightsEurope: "Πτήσεις εντός Ευρώπης (ανά έτος)",        diet: "Διατροφή",        goodsProfile: "Κατανάλωση προϊόντων",
@@ -135,6 +135,40 @@ function piecewiseSliderToAnchor(slider0to100, anchors){
   }
 }
 
+
+function homeCondKey(){
+  const el = document.getElementById("homeCond");
+  const idx = el ? Number(el.value) : 1;
+  const order = getUIOrder("homeCondition");
+  const safeIdx = Number.isFinite(idx) ? Math.max(0, Math.min(order.length-1, Math.round(idx))) : 1;
+  return String(order[safeIdx] ?? order[0] ?? "modern");
+}
+
+function goodsFactorFromLevel(level0to100){
+  const anchors = (model?.factors?.goodsLevel4?.anchors) ? model.factors.goodsLevel4.anchors : [0,33,67,100];
+  const values  = (model?.factors?.goodsLevel4?.values)  ? model.factors.goodsLevel4.values  : [0.4,1.0,1.6,2.2];
+  return piecewise4(level0to100, anchors, values);
+}
+
+function piecewise4(level0to100, anchors, values){
+  const x = Math.max(0, Math.min(100, Number(level0to100)));
+  const a = anchors.map(Number);
+  const v = values.map(Number);
+  // Expect 4 anchors and 4 values
+  const A0=a[0]??0, A1=a[1]??33, A2=a[2]??67, A3=a[3]??100;
+  const V0=v[0]??0, V1=v[1]??0, V2=v[2]??0, V3=v[3]??0;
+  if (x <= A1){
+    const t = (A1===A0) ? 0 : (x-A0)/(A1-A0);
+    return V0 + (V1-V0)*t;
+  } else if (x <= A2){
+    const t = (A2===A1) ? 0 : (x-A1)/(A2-A1);
+    return V1 + (V2-V1)*t;
+  } else {
+    const t = (A3===A2) ? 0 : (x-A2)/(A3-A2);
+    return V2 + (V3-V2)*t;
+  }
+}
+
 function compute(){
   if (!model) {
     return {
@@ -155,11 +189,11 @@ function compute(){
 
   // --- HOME ---
   const homeType = getSelectValue("homeType");          // apartment/detached
-  const homeCond = getSelectValue("homeCond");          // modern/partial/none
+  const homeCond = homeCondKey();                      // from slider index -> key
   const heatingType = getSelectValue("heatingType");    // heat_pump, ...
   const occ = occupantsToNumber(getSelectValue("occupants"));
   const solar = !!document.getElementById("solarDHW")?.checked;
-  const homeUseLevel = getSelectValue("homeUseLevel"); // min/typical/max
+  const homeUseLevel = getNumber("homeUseLevel"); // min/typical/max
 
   const aptDemandMap = (b.heatingDemandKWhApartment && b.heatingDemandKWhApartment.value) ? b.heatingDemandKWhApartment.value : {};
   const aptKWh = Number(aptDemandMap[homeCond] ?? 0);
@@ -175,9 +209,7 @@ function compute(){
   const dhwTons = (dhwKWh * gridCI) / 1000;
 
   const anchors = (b.homeOtherElectricityAnchorsKWhPerYear && b.homeOtherElectricityAnchorsKWhPerYear.value) ? b.homeOtherElectricityAnchorsKWhPerYear.value : {min:0,typical:0,max:0};
-  const otherKWh = (homeUseLevel === "min") ? Number(anchors.min ?? 0)
-    : (homeUseLevel === "max") ? Number(anchors.max ?? 0)
-    : Number(anchors.typical ?? 0);
+  const otherKWh = piecewiseSliderToAnchor(homeUseLevel, anchors);
   const otherElecTons = (otherKWh * gridCI) / 1000;
 
   const homeValues = [heatingTons, dhwTons, otherElecTons];
@@ -229,9 +261,9 @@ function compute(){
   const dietFactor = val(f.diet?.[diet] ?? 0);
   const dietTons = (dietUnitKg * dietFactor) / 1000;
 
-  const goodsProfile = getSelectValue("goodsProfile");
+  const goodsLevel = getNumber("goodsLevel");
   const goodsUnitKg = val(b.goodsKgCO2PerYear_unit);
-  const goodsFactor = val(f.goodsProfile?.[goodsProfile] ?? 0);
+  const goodsFactor = goodsFactorFromLevel(goodsLevel);
   const goodsTons = (goodsUnitKg * goodsFactor) / 1000;
 
   const digitalLevel = getNumber("digitalLevel");
@@ -393,14 +425,8 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   setText("socialShareVal", `${Math.round(socialKg)} ${t.units.socialShare}`);
 
   // Populate selects
-  populateSelect(document.getElementById("homeType"), "homeType");
-  populateSelect(document.getElementById("homeCond"), "homeCondition");
-  populateSelect(document.getElementById("heatingType"), "heatingType");
-  populateSelect(document.getElementById("occupants"), "occupants");
-  populateSelect(document.getElementById("homeUseLevel"), "homeUseLevel");
-  populateSelect(document.getElementById("carType"), "carType");
-  populateSelect(document.getElementById("goodsProfile"), "goodsProfile");
-  populateSelect(document.getElementById("publicType"), "publicTransport");
+  populateSelect(document.getElementById("homeType"), "homeType");  populateSelect(document.getElementById("heatingType"), "heatingType");
+  populateSelect(document.getElementById("occupants"), "occupants");  populateSelect(document.getElementById("carType"), "carType");  populateSelect(document.getElementById("publicType"), "publicTransport");
   populateSelect(document.getElementById("diet"), "diet");
 
   // Defaults (from ui if present)
@@ -417,11 +443,15 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   setDefault("carType","carType");
   setDefault("publicType","publicTransport");
   setDefault("diet","diet");
-  setDefault("goodsProfile","goodsProfile");
-
   // Defaults for select + ranges
-  const homeUseSel = document.getElementById("homeUseLevel");
-  if (homeUseSel) homeUseSel.value = String(model.ui?.homeUseLevel?.default ?? "typical");
+  const homeCondEl = document.getElementById("homeCond");
+  if (homeCondEl) homeCondEl.value = String(model.ui?.homeCondition?.defaultIndex ?? 1);
+
+  const homeUseEl = document.getElementById("homeUseLevel");
+  if (homeUseEl) homeUseEl.value = String(model.ui?.homeUseLevel?.default ?? 50);
+
+  const goodsEl = document.getElementById("goodsLevel");
+  if (goodsEl) goodsEl.value = String(model.ui?.goodsLevel4?.default ?? 33);
 
   const digital = document.getElementById("digitalLevel");
   if (digital) digital.value = String(model.ui?.digitalLevel?.default ?? 50);
@@ -429,12 +459,52 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   const publicPct = document.getElementById("publicPct");
   if (publicPct) publicPct.value = String(model.ui?.publicPct?.default ?? 0);
 
-  const updateBadges = ()=>{
+const updateBadges = ()=>{
+    // Digital slider % label
     const dv = document.getElementById("digitalVal");
-    const pv = document.getElementById("publicPctVal");
     if (dv && digital) dv.textContent = `${Math.round(Number(digital.value)||0)}%`;
-    if (pv && publicPct) pv.textContent = `${Math.round(Number(publicPct.value)||0)}%`;
 
+    // Public transport: show km (pct * weekly km)
+    const pv = document.getElementById("publicKmVal");
+    const wk = document.getElementById("weeklyKm");
+    const wkKm = wk ? (Number(wk.value)||0) : 0;
+    const pct = publicPct ? (Number(publicPct.value)||0) : 0;
+    const pubKm = wkKm * (pct/100);
+    if (pv && publicPct) pv.textContent = `${Math.round(pubKm)} km`;
+
+    // Home condition (3-stop slider) label
+    const hcL = document.getElementById("homeCondLabel");
+    const hc = document.getElementById("homeCond");
+    if (hcL && hc){
+      const order = getUIOrder("homeCondition");
+      const labels = getUILabel("homeCondition") || {};
+      const idx = Math.max(0, Math.min(order.length-1, Math.round(Number(hc.value)||0)));
+      const key = order[idx];
+      hcL.textContent = (labels && typeof labels === "object") ? (labels[key] ?? String(key)) : String(key);
+    }
+
+    // Home electricity use (continuous slider with 3 anchor descriptions)
+    const huL = document.getElementById("homeUseLabel");
+    const hu = document.getElementById("homeUseLevel");
+    if (huL && hu){
+      const x = Number(hu.value)||0;
+      const labels = getUILabel("homeUseLevel") || {};
+      // show closest anchor label (min/typical/max) while allowing intermediate mapping
+      const key = (x < 33) ? "min" : (x > 66) ? "max" : "typical";
+      huL.textContent = labels[key] ?? "";
+    }
+
+    // Goods slider (4 anchor descriptions)
+    const gL = document.getElementById("goodsLabel");
+    const g = document.getElementById("goodsLevel");
+    if (gL && g){
+      const x = Number(g.value)||0;
+      const labels = getUILabel("goodsLevel4") || {};
+      const key = (x < 17) ? "lvl0" : (x < 50) ? "lvl1" : (x < 84) ? "lvl2" : "lvl3";
+      gL.textContent = labels[key] ?? "";
+    }
+
+    // Digital label (low/med/high)
     const dl = document.getElementById("digitalLabel");
     if (dl && digital){
       const x = Number(digital.value);
@@ -442,17 +512,12 @@ document.addEventListener("DOMContentLoaded", async ()=>{
     }
   };
 
-  ["digitalLevel","publicPct"].forEach(id=>{
+  ["digitalLevel","publicPct","weeklyKm","homeCond","homeUseLevel","goodsLevel"].forEach(id=>{
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener("input", ()=>{ updateBadges(); updateTotal(); });
     el.addEventListener("change", ()=>{ updateBadges(); updateTotal(); });
   });
-
-  if (homeUseSel){
-    homeUseSel.addEventListener("change", updateTotal);
-    homeUseSel.addEventListener("input", updateTotal);
-  }
 
   // Checkbox listeners
   const solarBox = document.getElementById("solarDHW");

@@ -11,8 +11,8 @@
     "heatingDemandKWhApartment": {
       "value": {
         "modern": 2000,
-        "partial": 5000,
-        "none": 9000
+        "post1980": 5000,
+        "pre1980": 9000
       },
       "unit": "kWh_heat_per_year"
     },
@@ -242,6 +242,20 @@
         "value": 0.04,
         "unit": "kgCO2e_per_passenger_km"
       }
+    },
+    "goodsLevel4": {
+      "anchors": [
+        0,
+        33,
+        67,
+        100
+      ],
+      "values": [
+        0.4,
+        1.0,
+        1.6,
+        2.2
+      ]
     }
   },
   "ui": {
@@ -267,22 +281,22 @@
       "type": "select",
       "order": [
         "modern",
-        "partial",
-        "none"
+        "post1980",
+        "pre1980"
       ],
       "labels": {
         "el": {
           "modern": "Σύγχρονη κατασκευή με θερμοπρόσοψη, θερμομονωτικά κουφώματα",
-          "partial": "Κατασκευής μετά το 1980 με διπλά τζάμια, μόνωση οροφής",
-          "none": "Κατασκευής πριν το 1980, χωρίς μόνωση"
+          "post1980": "Κατασκευής μετά το 1980 με διπλά τζάμια, μόνωση οροφής",
+          "pre1980": "Κατασκευής πριν το 1980, χωρίς μόνωση"
         },
         "en": {
-          "modern": "Modern insulation",
-          "partial": "Partly insulated",
-          "none": "No insulation"
+          "modern": "Modern build with facade insulation and insulated frames",
+          "post1980": "Post-1980 build with double glazing, roof insulation",
+          "pre1980": "Pre-1980 build, no insulation"
         }
       },
-      "default": "partial"
+      "defaultIndex": 1
     },
     "heatingType": {
       "type": "select",
@@ -360,20 +374,18 @@
       "default": "yes"
     },
     "homeUseLevel": {
-      "type": "select",
-      "default": "typical",
+      "type": "range",
+      "default": 50,
       "labels": {
         "el": {
-          "title": "Χρήση ηλεκτρικής ενέργειας (εκτός θέρμανσης)",
           "min": "Συντηρητική, χωρίς σπατάλες, ελάχιστο A/C ψύξης",
           "typical": "Τυπική, κανονική χρήση + λίγο A/C ψύξης, κυρίως μεσημεριανές ώρες",
           "max": "Σπάταλη, υπερβολική χρήση A/C για ψύξη και άσκοπη λειτουργία συσκευών"
         },
         "en": {
-          "title": "Electricity use (excluding heating)",
-          "min": "Conservative, minimal waste, minimal A/C",
-          "typical": "Typical use + some A/C (mostly midday)",
-          "max": "Wasteful, heavy A/C and unnecessary device use"
+          "min": "Conservative, no waste, minimal cooling A/C",
+          "typical": "Typical use + some cooling A/C, mostly midday hours",
+          "max": "Wasteful, heavy cooling A/C and unnecessary device use"
         }
       },
       "order": [
@@ -552,6 +564,24 @@
         },
         "en": {
           "title": "Intra-Europe flights per year"
+        }
+      }
+    },
+    "goodsLevel4": {
+      "type": "range",
+      "default": 33,
+      "labels": {
+        "el": {
+          "lvl0": "Επαναχρησιμοποίηση, επισκευή, ελάχιστα απορρίματα.",
+          "lvl1": "Τυπική κατανάλωση δυτικού τρόπου ζωής.",
+          "lvl2": "Στενή παρακολούθηση μόδας, συχνές αναβαθμίσεις gadget.",
+          "lvl3": "Υπερκατανάλωση, απόρριψη χωρίς ανακύκλωση, πολυτελής ζωή."
+        },
+        "en": {
+          "lvl0": "Reuse/repair, minimal waste.",
+          "lvl1": "Typical western consumption.",
+          "lvl2": "Fast fashion, frequent gadget upgrades.",
+          "lvl3": "Overconsumption, no recycling, luxury lifestyle."
         }
       }
     }

@@ -68,7 +68,7 @@ a{color:inherit}
   border-radius: 14px;
   box-shadow: var(--btnShadow);
   display:flex;
-  align-items:stretch;
+  align-items:center;
   justify-content:center;
   cursor:pointer;
 }
@@ -468,9 +468,9 @@ select, input[type="number"], input[type="range"]{
 
 
 /* Two items on the same line (stacks on small screens) */
-.row2{display:flex; gap:12px; align-items:flex-end;}
-.row2 > .field{flex:1;}
-.row2 > .checkRow{min-width:0; flex:0 0 auto;}
+.row2{display:flex; gap:12px; flex-wrap:wrap; align-items:flex-start;}
+.row2 > .field{flex:1 1 260px;}
+.row2 > .checkRow{min-width:0; flex:1 1 260px;}
 /* Prevent selects/inputs from forcing overflow in flex rows */
 .row2 .field{min-width:0;}
 
@@ -480,6 +480,9 @@ select, input[type="number"], input[type="range"]{
 
 /* Horizontal carousel (mobile) */
 .cardsCarousel{display:block;}
+.cardsCarousel > .card{margin-bottom:18px;}
+.cardsCarousel > .card:last-child{margin-bottom:0;}
+
 @media (max-width: 700px){
   .cardsCarousel{display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:14px; -webkit-overflow-scrolling:touch; padding:0 14px 4px;}
   .cardsCarousel > .card{flex:0 0 calc(100% - 28px); max-width:calc(100% - 28px); scroll-snap-align:start;}
@@ -550,7 +553,8 @@ body.homeNoDrawer #drawerBackdrop{
 }
 .homeLogo{
   width: min(320px, 78vw);
-  margin-top: 4px;
+  margin: 4px auto 0;
+  align-self: center;
 }
 .homeLogo img{
   width:100%;
@@ -1150,3 +1154,9 @@ select option{
   .drawerFooter{ justify-content:center; flex-wrap:wrap; }
   .drawerLang{ width:100%; justify-content:space-between; }
 }
+
+
+/* Range controls (mobile-friendly) */
+.rangeInput{width:100%;}
+.rangeTicks4{display:flex; justify-content:space-between; font-size:12px; opacity:0.8; margin-top:4px;}
+.rangeLabel{margin-top:6px; font-size:13px; line-height:1.35; opacity:0.9;}

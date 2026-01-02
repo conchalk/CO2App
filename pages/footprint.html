@@ -9,7 +9,7 @@
 <meta content="#74a974" name="theme-color"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <link href="../assets/icons/icon-192.png" rel="apple-touch-icon"/>
-<link href="../styles.css?v=11" rel="stylesheet"/>
+<link href="../styles.css?v=12" rel="stylesheet"/>
 </head>
 <body>
 <div class="container">
@@ -55,7 +55,8 @@
 </div>
 <div class="field">
 <label for="homeCond" id="lblHomeCond"></label>
-<select id="homeCond"></select>
+<input type="range" id="homeCond" min="0" max="2" step="1" value="1" class="rangeInput"/>
+<div class="rangeLabel" id="homeCondLabel"></div>
 </div>
 <div class="field">
 <label for="heatingType" id="lblHeating"></label>
@@ -79,7 +80,11 @@
 <!-- Electricity use (excluding heating) -->
 <div class="field" style="grid-column: 1 / -1;">
 <label for="homeUseLevel" id="lblHomeUse"></label>
-<select id="homeUseLevel"></select>
+<input type="range" id="homeUseLevel" min="0" max="100" step="1" value="50" class="rangeInput"/>
+<div class="rangeTicks4">
+  <span>0%</span><span>50%</span><span>100%</span>
+</div>
+<div class="rangeLabel" id="homeUseLabel"></div>
 </div>
 </div>
 </div>
@@ -99,7 +104,7 @@
     <label for="publicPct" id="lblPublicPct"></label>
     <div class="rangeRow">
       <input id="publicPct" type="range" min="0" max="100" step="1" value="0"/>
-      <div class="rangeValue" id="publicPctVal">0%</div>
+      <div class="rangeValue" id="publicKmVal">0 km</div>
     </div>
   </div>
 
@@ -148,8 +153,12 @@
 </div>
 
 <div class="field">
-  <label for="goodsProfile" id="lblGoodsProfile"></label>
-  <select id="goodsProfile"></select>
+  <label for="goodsLevel" id="lblGoodsProfile"></label>
+  <input type="range" id="goodsLevel" min="0" max="100" step="1" value="33" class="rangeInput"/>
+  <div class="rangeTicks4">
+    <span>0%</span><span>33%</span><span>67%</span><span>100%</span>
+  </div>
+  <div class="rangeLabel" id="goodsLabel"></div>
   <div class="small" id="goodsHint"></div>
 </div>
 
@@ -186,9 +195,9 @@
   </div>
 </div>
 </div>
-<script src="../js/common.js?v=11"></script>
-<script src="../js/menu.js?v=11"></script>
-<script src="../js/footprint.js?v=11"></script>
+<script src="../js/common.js?v=12"></script>
+<script src="../js/menu.js?v=12"></script>
+<script src="../js/footprint.js?v=12"></script>
 <div aria-hidden="true" class="drawerBackdrop" id="drawerBackdrop"></div>
 <nav aria-hidden="true" class="drawer" id="drawer">
 <div class="drawerHeader">

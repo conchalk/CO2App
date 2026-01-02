@@ -1,5 +1,12 @@
 # CO2App
 
+## Update v13 (Sliders + goods 4-level + public km display)
+- Replaced long dropdowns on mobile with sliders for Home insulation, Home electricity use, and Goods consumption (4-level with intermediate mapping).
+- Updated model keys for home condition (modern/post1980/pre1980) and updated heating-demand mapping.
+- Public transport slider now displays km (computed from weekly distance × share).
+- Improved inline wrapping alignment for mobile/desktop.
+
+
 ## Update v10 (UI mobile layout)
 - Mobile footprint cards now use a horizontal swipe carousel with proper full-width snap (no overflow/peek).
 - Fixed inline row layout in Transport (car type + “Μετακινούμαι μόνος”) and improved wrapping on small screens.
@@ -14,3 +21,11 @@
 - More prominent category KPI badge styling (closer to total KPI).
 - Version bump for cache-busting (styles/js) and service worker cache name.
 
+
+### v12
+- Διόρθωση κεντραρίσματος λογοτύπου στην αρχική σελίδα.
+- Καλύτερες αποστάσεις (desktop) μεταξύ των cards στο footprint.
+- Ενημέρωση τίτλου/υπότιτλου στο footprint.
+- Αφαίρεση KPI “% του στόχου” και “Απαιτούμενη μείωση” από Dashboard.
+- Λεπτότερα donuts στο Dashboard.
+- Κεντράρισμα icon σε hamburger/κλείσιμο menu.

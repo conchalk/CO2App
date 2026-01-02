@@ -17,10 +17,7 @@
           transport: ["ΙΧ/Μηχανή", "Δημόσια μέσα", "Πτήσεις εσωτερικού", "Πτήσεις Ευρώπης"],
           life: ["Διατροφή", "Προϊόντα", "Ψηφιακή κατανάλωση", "Υπηρεσίες & υποδομές"]
         },
-        unit: "t CO₂/έτος",
-        percentLabel: "% του στόχου",
-        reductionLabel: "Απαιτούμενη μείωση"
-      },
+        unit: "t CO₂/έτος",      },
       en: {
         title: "CO₂ Footprint Dashboard",
         eu: "EU target",
@@ -34,10 +31,7 @@
           transport: ["Car/motorbike", "Public transport", "Domestic flights", "Intra-Europe flights"],
           life: ["Diet", "Goods", "Digital", "Public services"]
         },
-        unit: "t CO₂/year",
-        percentLabel: "% of target",
-        reductionLabel: "Reduction needed"
-      }
+        unit: "t CO₂/year",      }
     }[lang];
   }
 
@@ -66,7 +60,7 @@
       tooltip: { trigger: "item", formatter: "{b}: {c} ({d}%)" },
       series: [{
         type: "pie",
-        radius: ["35%","70%"],
+        radius: ["50%","72%"],
         avoidLabelOverlap: true,
         itemStyle: { borderRadius: 6, borderColor: "#fff", borderWidth: 2 },
         label: { show: true, formatter: "{b}\n{c}" },
@@ -98,12 +92,6 @@
     setText("euVal", `${fmt(euTarget,2)} ${t.unit}`);
     setText("userVal", `${fmt(userTotal,2)} ${t.unit}`);
     const pct = euTarget > 0 ? (userTotal / euTarget) * 100 : 0;
-    const reduction = Math.max(0, userTotal - euTarget);
-    setText("percentLabel", t.percentLabel);
-    setText("reductionLabel", t.reductionLabel);
-    setText("percentVal", `${fmt(pct,1)}%`);
-    setText("reductionVal", `${fmt(reduction,2)} ${t.unit}`);
-
     const homeVals = safeArr("CO2_HOME_VALUES", 3);
     const trVals = safeArr("CO2_TRANSPORT_VALUES", 4);
     const lifeVals = safeArr("CO2_LIFE_VALUES", 4);
