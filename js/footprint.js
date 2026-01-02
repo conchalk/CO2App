@@ -536,6 +536,9 @@ const updateBadges = ()=>{
 
   function updateTotal(){
     const res = compute();
+    // sanitize NaN
+    ["totalTons","homeTons","transportTons","lifestyleTons"].forEach(k=>{ if(!Number.isFinite(res[k])) res[k]=0; });
+    ["homeValues","transportValues","lifestyleValues"].forEach(k=>{ if(Array.isArray(res[k])) res[k]=res[k].map(x=>Number.isFinite(x)?x:0); });
     const tv = document.getElementById("totalVal");
     if (tv) tv.textContent = fmt(res.totalTons, 2);
 
@@ -568,13 +571,16 @@ const updateBadges = ()=>{
   }
 
   // Live updates
-  document.querySelectorAll("select,input[type='number']").forEach(el=>{
+  document.querySelectorAll("select,input").forEach(el=>{
+    const t = (el.getAttribute("type")||"").toLowerCase();
+    if (t==="button" || t==="submit" || t==="hidden") return;
+
     el.addEventListener("input", updateTotal);
     el.addEventListener("change", updateTotal);
   });
 
   if (btnCalc) btnCalc.addEventListener("click", updateTotal);
-  if (btnDash) btnDash.addEventListener("click", ()=>{
+  if (btnDash) btnDash.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation();
     const res = compute();
     saveForDashboard(res);
     go("./dashboard.html");

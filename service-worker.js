@@ -16,7 +16,6 @@ const PRECACHE = [
   "./pages/info.html",
   "./pages/install.html",
   "./assets/logo.png",
-  "./assets/qrCO2App.png",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
   "./assets/questions/quiz2.json",

@@ -36,3 +36,10 @@
 - Sliders: removed % labels; Digital slider shows descriptive labels.
 - Install page: generates QR dynamically from current URL.
 - Updated manifest.webmanifest.
+
+
+## v15
+- Fix: footprint live updates on all inputs (ranges/checkboxes), sanitize NaN.
+- Fix: Charts button works reliably.
+- Remove qrCO2App.png (QR is generated dynamically on install page).
+- Bump service worker cache to v15.
