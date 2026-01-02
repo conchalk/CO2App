@@ -31,3 +31,12 @@ function fmt(num, digits=2){
   if (!Number.isFinite(n)) return "—";
   return n.toFixed(digits);
 }
+
+
+function applyUnitYearElements(){
+  const lang = getLang();
+  const unit = (lang === "en") ? " tCO2/year" : " tCO2/έτος";
+  document.querySelectorAll(".unitYear").forEach(el=>{
+    el.textContent = unit;
+  });
+}

@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
 
-  <link rel="stylesheet" href="../styles.css?v=12" />
+  <link rel="stylesheet" href="../styles.css?v=14?v=14" />
 </head>
 <body>
   <div class="container">
@@ -21,8 +21,19 @@
       </div>
 
       <div class="card chartCard">
-        <h2 class="pageTitle" id="dashTitle" style="margin:0 0 8px 0;"></h2>
-</div>
+        <h2 class="pageTitle" id="dashTitle" style="margin:0 0 10px 0;"></h2>
+
+        <div class="kpiRow" id="dashKpiRow">
+          <div class="kpi user">
+            <div class="kpiLabel" id="kpiUserLbl"></div>
+            <div class="kpiValue"><span id="kpiUserVal">—</span><span class="small unitYear" data-unit="tco2_year"></span></div>
+          </div>
+          <div class="kpi eu">
+            <div class="kpiLabel" id="kpiTargetLbl"></div>
+            <div class="kpiValue"><span id="kpiTargetVal">—</span><span class="small unitYear" data-unit="tco2_year"></span></div>
+          </div>
+        </div>
+      </div>
 
         <div class="chartRow">
           <div class="chartBox">
@@ -47,10 +58,10 @@
     </div>
   </div>
 
-  <script src="../js/common.js?v=12"></script>
-  <script src="../js/menu.js?v=12"></script>
+  <script src="../js/common.js?v=14"></script>
+  <script src="../js/menu.js?v=14"></script>
   <script src="../assets/vendor/echarts.min.js"></script>
-  <script src="../js/dashboard.js?v=12"></script>
+  <script src="../js/dashboard.js?v=14"></script>
 
   <div class="drawerBackdrop" id="drawerBackdrop" aria-hidden="true"></div>
   <nav class="drawer" id="drawer" aria-hidden="true">

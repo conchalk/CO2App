@@ -5,7 +5,9 @@
     const lang = getLang();
     return {
       el: {
-        title: "Dashboard Αποτυπώματος CO₂",
+        title: "Ετήσια Εκτίμηση",
+        kpiUserLbl: "Εκτιμώμενη ποσότητα CO₂ (χρήστη)",
+        kpiTargetLbl: "Στόχος ΕΕ για το 2030",
         eu: "Στόχος ΕΕ",
         user: "Το αποτύπωμά σου",
         home: "Κατοικία",
@@ -19,7 +21,9 @@
         },
         unit: "t CO₂/έτος",      },
       en: {
-        title: "CO₂ Footprint Dashboard",
+        title: "Annual Estimate",
+        kpiUserLbl: "Estimated CO₂ (user)",
+        kpiTargetLbl: "EU target for 2030",
         eu: "EU target",
         user: "Your footprint",
         home: "Home",
@@ -60,7 +64,7 @@
       tooltip: { trigger: "item", formatter: "{b}: {c} ({d}%)" },
       series: [{
         type: "pie",
-        radius: ["50%","72%"],
+        radius: ["58%","72%"],
         avoidLabelOverlap: true,
         itemStyle: { borderRadius: 6, borderColor: "#fff", borderWidth: 2 },
         label: { show: true, formatter: "{b}\n{c}" },
@@ -79,18 +83,6 @@
     const setText = (id, txt)=>{ const el = document.getElementById(id); if (el) el.textContent = txt; };
 
     setText("dashTitle", t.title);
-    setText("euLabel", t.eu);
-    setText("userLabel", t.user);
-
-    setText("homeTitle", t.home);
-    setText("transportTitle", t.transport);
-    setText("lifeTitle", t.life);
-
-    const euTarget = Number(localStorage.getItem("EU_TARGET")) || 2.3;
-    const userTotal = Number(localStorage.getItem("USER_TOTAL")) || 0;
-
-    setText("euVal", `${fmt(euTarget,2)} ${t.unit}`);
-    setText("userVal", `${fmt(userTotal,2)} ${t.unit}`);
     const pct = euTarget > 0 ? (userTotal / euTarget) * 100 : 0;
     const homeVals = safeArr("CO2_HOME_VALUES", 3);
     const trVals = safeArr("CO2_TRANSPORT_VALUES", 4);

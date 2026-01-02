@@ -1,4 +1,4 @@
-const CACHE_NAME = 'co2app-cache-v13';
+const CACHE_NAME = 'co2app-cache-v14';
 const PRECACHE = [
   "./",
   "./index.html",

@@ -1160,3 +1160,8 @@ select option{
 .rangeInput{width:100%;}
 .rangeTicks4{display:flex; justify-content:space-between; font-size:12px; opacity:0.8; margin-top:4px;}
 .rangeLabel{margin-top:6px; font-size:13px; line-height:1.35; opacity:0.9;}
+
+.chartCard .pageTitle{margin-bottom:14px;}
+
+.sectionTitle{margin-bottom:10px;}
+.chartRow{margin-top:8px;}

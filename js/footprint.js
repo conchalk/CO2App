@@ -460,11 +460,9 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   if (publicPct) publicPct.value = String(model.ui?.publicPct?.default ?? 0);
 
 const updateBadges = ()=>{
-    // Digital slider % label
-    const dv = document.getElementById("digitalVal");
-    if (dv && digital) dv.textContent = `${Math.round(Number(digital.value)||0)}%`;
-
-    // Public transport: show km (pct * weekly km)
+    // Digital slider label
+    if (dv) dv.textContent = "";
+// Public transport: show km (pct * weekly km)
     const pv = document.getElementById("publicKmVal");
     const wk = document.getElementById("weeklyKm");
     const wkKm = wk ? (Number(wk.value)||0) : 0;

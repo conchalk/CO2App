@@ -29,3 +29,10 @@
 - Αφαίρεση KPI “% του στόχου” και “Απαιτούμενη μείωση” από Dashboard.
 - Λεπτότερα donuts στο Dashboard.
 - Κεντράρισμα icon σε hamburger/κλείσιμο menu.
+
+
+## v14
+- Dashboard: title changed to “Ετήσια Εκτίμηση” and added 2 KPIs (User CO₂, EU 2030 target) with tCO2/έτος units.
+- Sliders: removed % labels; Digital slider shows descriptive labels.
+- Install page: generates QR dynamically from current URL.
+- Updated manifest.webmanifest.
