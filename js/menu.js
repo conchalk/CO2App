@@ -56,12 +56,14 @@ function buildNav(){
     {label:t.foot, href: "./footprint.html", icon:"co2"},
     {label:t.info, href: "./info.html", icon:"info"},
     {label:t.about, href: "./about.html", icon:"about"},
+    {label:t.settings, href: "./settings.html", icon:"info"},
     {label:t.install, href: "./install.html", icon:"install"},  ] : [
     {label:t.home, href: "./index.html", icon:"home"},
     {label:t.quiz, href: "./pages/quiz.html", icon:"quiz"},
     {label:t.foot, href: "./pages/footprint.html", icon:"co2"},
     {label:t.info, href: "./pages/info.html", icon:"info"},
     {label:t.about, href: "./pages/about.html", icon:"about"},
+    {label:t.settings, href: "./pages/settings.html", icon:"info"},
     {label:t.install, href: "./pages/install.html", icon:"install"},  ];
 
   nav.innerHTML = "";

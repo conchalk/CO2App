@@ -7,6 +7,8 @@ function val(x){
   if (typeof x === "number") return x;
   if (typeof x === "object" && "value" in x) return Number(x.value) || 0;
   return Number(x) || 0;
+}
+
 function getOverrideNumber(key){
   try{
     const enabled = localStorage.getItem(key + "_OVERRIDE_ENABLED") === "1";
@@ -25,7 +27,6 @@ function getEffectiveNumber(key, fallback){
   return fallback;
 }
 
-}
 
 function T(){
   const lang = getLang();

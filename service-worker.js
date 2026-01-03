@@ -1,4 +1,4 @@
-const CACHE_NAME = 'co2app-cache-v18';
+const CACHE_NAME = 'co2app-cache-v19';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -10,6 +10,9 @@ const PRECACHE = [
   "./js/quiz.js",
   "./js/footprint.js",
   "./js/dashboard.js",
+  "./js/settings.js",
+  "./config.json",
+  "./pages/settings.html",
   "./pages/quiz.html",
   "./pages/footprint.html",
   "./pages/dashboard.html",
