@@ -48,3 +48,11 @@
 ## v17
 - Dashboard: fixed crash (ReferenceError: euTarget) by reading USER_TOTAL & EU_TARGET from localStorage and rendering the two KPI boxes correctly.
 - Cache-bust: bumped assets to v17 and updated service worker cache name to co2app-cache-v17.
+
+
+## Update v18 (2026-01-03)
+- Added `config.json` for easy updates of CI and other constants.
+- Added Settings page to temporarily override CI, EU target, social share, and metro/tram energy (stored locally).
+- Public transport slider now represents km/week (clamped to total distance).
+- Metro/Tram emissions now computed from energy (0.05 kWh/pkm) × CI.
+- Updated digital-use slider labels and hid numeric ticks under sliders.

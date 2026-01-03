@@ -42,8 +42,8 @@ function buildNav(){
 
   const lang = getLang();
   const t = {
-    el: {home:"Αρχική", quiz:"Quiz", foot:"Υπολογιστής CO₂", info:"Τεκμηρίωση", about:"Πληροφορίες", install:"Εγκατάσταση σε κινητό" },
-    en: {home:"Home", quiz:"Quiz", foot:"Footprint", info:"Documentation", about:"Info", install:"Install on phone" }
+    el: {home:"Αρχική", quiz:"Quiz", foot:"Υπολογιστής CO₂", info:"Τεκμηρίωση", about:"Πληροφορίες", install:"Εγκατάσταση σε κινητό", settings:"Ρυθμίσεις" },
+    en: {home:"Home", quiz:"Quiz", foot:"Footprint", info:"Documentation", about:"Info", install:"Install on phone", settings:"Settings" }
   }[lang];
 
   const here = pageName();

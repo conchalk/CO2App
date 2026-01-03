@@ -1,10 +1,30 @@
 let model = null;
+let appConfig = null; // loaded from /config.json
+
 
 function val(x){
   if (x === null || x === undefined) return 0;
   if (typeof x === "number") return x;
   if (typeof x === "object" && "value" in x) return Number(x.value) || 0;
   return Number(x) || 0;
+function getOverrideNumber(key){
+  try{
+    const enabled = localStorage.getItem(key + "_OVERRIDE_ENABLED") === "1";
+    if (!enabled) return null;
+    const v = Number(localStorage.getItem(key + "_OVERRIDE_VALUE"));
+    return Number.isFinite(v) ? v : null;
+  }catch(e){ return null; }
+}
+function getEffectiveNumber(key, fallback){
+  const ov = getOverrideNumber(key);
+  if (ov !== null) return ov;
+  if (appConfig && typeof appConfig[key] !== "undefined"){
+    const v = Number(appConfig[key]);
+    if (Number.isFinite(v)) return v;
+  }
+  return fallback;
+}
+
 }
 
 function T(){
@@ -15,7 +35,7 @@ function T(){
       subtitle: "Τα αποτελέσματα είναι προσεγγιστικά, αναλυτικά στοιχεία για το χρησιμοποιούμενο μοντέλο δες στην Τεκμηρίωση.",
       home: "Κατοικία",
       transport: "Μεταφορές",
-      lifestyle: "Lifestyle",
+      lifestyle: "Τρόπος Ζωής - Διατροφή",
       labels: {
         homeType: "Τύπος κατοικίας",
         homeCond: "Μόνωση / κατάσταση",
@@ -35,9 +55,9 @@ function T(){
         socialShare: "Κοινόχρηστες υπηρεσίες & υποδομές (σταθερό)",
         total: "Σύνολο",
         calc: "Υπολόγισε",
-        dash: "Διαγράμματα",        digitalMin: "Χαμηλή",
-        digitalMid: "Μέση",
-        digitalMax: "Υψηλή"
+        dash: "Διαγράμματα",        digitalMin: "Mostly email + light web browsing",
+        digitalMid: "Cloud storage, moderate social media",
+        digitalMax: "Frequent streaming + frequent AI use"
       },
       units: {
         socialShare: "kg CO₂/έτος"
@@ -48,7 +68,7 @@ function T(){
       subtitle: "Results are approximate.",
       home: "Home",
       transport: "Transport",
-      lifestyle: "Lifestyle",
+      lifestyle: "Τρόπος Ζωής - Διατροφή",
       labels: {
         homeType: "Home type",
         homeCond: "Insulation / condition",
@@ -185,7 +205,7 @@ function compute(){
   const c = model.constants || {};
   const p = model.parameters || {};
 
-  const gridCI = val(p.gridCI_kgCO2_per_kWh); // kg/kWh
+  const gridCI = getEffectiveNumber("gridCI_kgCO2_per_kWh", val(p.gridCI_kgCO2_per_kWh)); // kg/kWh
 
   // --- HOME ---
   const homeType = getSelectValue("homeType");          // apartment/detached
@@ -220,9 +240,9 @@ function compute(){
   const carType = getSelectValue("carType");
 
   // Split weekly distance into car vs public transport
-  const publicPct = Math.max(0, Math.min(100, getNumber("publicPct")));
-  const kmPublic = weeklyKm * (publicPct / 100);
-  const kmCar = weeklyKm - kmPublic;
+  const kmPublicRaw = getNumber("publicPct");
+  const kmPublic = Math.max(0, Math.min(weeklyKm, kmPublicRaw));
+  const kmCar = Math.max(0, weeklyKm - kmPublic);
 
   // Car kg/km (EV derived from gridCI)
   const alone = !!document.getElementById("alone")?.checked;
@@ -237,8 +257,12 @@ function compute(){
 
   // Public transport kg/passenger-km
   const publicType = getSelectValue("publicType"); // bus/metro
-  const publicKgPerKm = val(f.publicTransport?.[publicType] ?? 0);
-  const publicTons = kmPublic * val(c.weeklyToTonsFactor) * publicKgPerKm;
+  let publicKgPerKm = val(f.publicTransport?.[publicType] ?? 0);
+if (publicType === "metro"){
+  const metroEnergy = getEffectiveNumber("metro_tram_kWh_per_pkm", val(p.metro_tram_kWh_per_pkm ?? 0.05));
+  publicKgPerKm = gridCI * metroEnergy; // kgCO2 per passenger-km
+}
+const publicTons = kmPublic * val(c.weeklyToTonsFactor) * publicKgPerKm;
 
   // Flights split (Domestic GR vs Europe)
   const tripsDom = getNumber("flightTripsDomestic");
@@ -301,7 +325,7 @@ function saveForDashboard(res){
   localStorage.setItem("CO2_LIFE_VALUES", JSON.stringify(res.lifestyleValues));
   localStorage.setItem("USER_TOTAL", String(res.totalTons));
 
-  const target = model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.3;
+  const target = getEffectiveNumber("euTarget_tCO2_per_year", (model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.3));
   localStorage.setItem("EU_TARGET", String(target));
 }
 
@@ -309,7 +333,13 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   initLangButtons();
 
   // No fallback: must exist
-  const resp = await fetch(`../assets/footprintModel_final_draft.json?v=${Date.now()}`, { cache: "no-store" });
+  
+// Load config (optional, for easy updates)
+try{
+  const cfgResp = await fetch(`../config.json?v=${Date.now()}`, { cache: "no-store" });
+  if (cfgResp.ok) appConfig = await cfgResp.json();
+}catch(e){ appConfig = null; }
+const resp = await fetch(`../assets/footprintModel_final_draft.json?v=${Date.now()}`, { cache: "no-store" });
   if (!resp.ok) {
     alert("Λείπει το footprintModel_final_draft.json από τον φάκελο assets.");
     return;
@@ -421,7 +451,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   setText("digitalMax", t.labels.digitalMax);
 
   // Social share value (fixed)
-  const socialKg = val(model.base?.socialShareKgCO2PerYear);
+  const socialKg = (getEffectiveNumber("socialShare_tCO2_per_year", val(model.base?.socialShareKgCO2PerYear)/1000) * 1000);
   setText("socialShareVal", `${Math.round(socialKg)} ${t.units.socialShare}`);
 
   // Populate selects
@@ -465,9 +495,10 @@ const updateBadges = ()=>{
     const pv = document.getElementById("publicKmVal");
     const wk = document.getElementById("weeklyKm");
     const wkKm = wk ? (Number(wk.value)||0) : 0;
-    const pct = publicPct ? (Number(publicPct.value)||0) : 0;
-    const pubKm = wkKm * (pct/100);
-    if (pv && publicPct) pv.textContent = `${Math.round(pubKm)} km`;
+    const pubKm = publicPct ? (Number(publicPct.value)||0) : 0;
+    if (publicPct && wk) publicPct.max = String(wkKm);
+    const clamped = Math.max(0, Math.min(wkKm, pubKm));
+    if (pv && publicPct) pv.textContent = `${Math.round(clamped)} km`;
 
     // Home condition (3-stop slider) label
     const hcL = document.getElementById("homeCondLabel");
@@ -552,7 +583,7 @@ const updateBadges = ()=>{
     // Mobile stepper KPI
     if (typeof updateStepperUI === "function") updateStepperUI(res);
 
-    const target = model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.3;
+    const target = getEffectiveNumber("euTarget_tCO2_per_year", (model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.3));
     const rp = document.getElementById("reducePct");
     if (rp){
       const lang = getLang();

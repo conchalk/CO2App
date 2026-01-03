@@ -1165,3 +1165,12 @@ select option{
 
 .sectionTitle{margin-bottom:10px;}
 .chartRow{margin-top:8px;}
+
+
+/* v18 UI polish: hide numeric ticks under sliders (labels are shown separately) */
+.rangeTicks, .rangeTicks3, .rangeTicks4 { display:none !important; }
+/* Increase readability of slider labels on mobile */
+.rangeLabel, .rangeValue, .small, .rangeLabel4 { font-size: 1rem; }
+@media (max-width: 520px){
+  .rangeLabel, .rangeValue, .small, .rangeLabel4 { font-size: 1.05rem; }
+}
