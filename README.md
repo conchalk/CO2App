@@ -1,5 +1,24 @@
 # CO2App
 
+## Update v3.0 (2026-01-03)
+
+- Added `config.json` for easy updates of key constants (Grid CI, EU target, social services, transport factors) with safe fallbacks.
+- Added a **Settings** page to temporarily override selected constants (stored in `localStorage`) and reset to defaults.
+- Transport fix: public-transport slider now represents **km/week** (not %). Emissions use km split (car vs public) with clamping to total distance.
+- Metro/Tram now computed from energy intensity **0.05 kWh/pkm** × Grid CI (instead of fixed kg/km).
+- EU target updated to **2.5 tCO2/year** (Paris Agreement reference) and unified across config/model/UI.
+- Goods slider title updated to include “Clothes, electronics, shopping & lifestyle” (no separate hint text).
+- Dashboard: chart labels/tooltips formatted to 2 decimals, improved title visibility, and KPI layout refinements.
+- Removed legacy static QR image (`qrCO2App.png`) — installation page generates QR dynamically.
+
+## Update v18 (2026-01-03)
+- Added `config.json` for easy updates of CI and other constants.
+- Added Settings page to temporarily override CI, EU target, social share, and metro/tram energy (stored locally).
+- Public transport slider now represents km/week (clamped to total distance).
+- Metro/Tram emissions now computed from energy (0.05 kWh/pkm) × CI.
+- Updated digital-use slider labels and hid numeric ticks under sliders.
+
+
 ## Update v13 (Sliders + goods 4-level + public km display)
 - Replaced long dropdowns on mobile with sliders for Home insulation, Home electricity use, and Goods consumption (4-level with intermediate mapping).
 - Updated model keys for home condition (modern/post1980/pre1980) and updated heating-demand mapping.
@@ -49,10 +68,3 @@
 - Dashboard: fixed crash (ReferenceError: euTarget) by reading USER_TOTAL & EU_TARGET from localStorage and rendering the two KPI boxes correctly.
 - Cache-bust: bumped assets to v17 and updated service worker cache name to co2app-cache-v17.
 
-
-## Update v18 (2026-01-03)
-- Added `config.json` for easy updates of CI and other constants.
-- Added Settings page to temporarily override CI, EU target, social share, and metro/tram energy (stored locally).
-- Public transport slider now represents km/week (clamped to total distance).
-- Metro/Tram emissions now computed from energy (0.05 kWh/pkm) × CI.
-- Updated digital-use slider labels and hid numeric ticks under sliders.
