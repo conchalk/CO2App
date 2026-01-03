@@ -56,14 +56,14 @@ function buildNav(){
     {label:t.foot, href: "./footprint.html", icon:"co2"},
     {label:t.info, href: "./info.html", icon:"info"},
     {label:t.about, href: "./about.html", icon:"about"},
-    {label:t.settings, href: "./settings.html", icon:"info"},
+    {label:t.settings, href: "./settings.html", icon:"settings"},
     {label:t.install, href: "./install.html", icon:"install"},  ] : [
     {label:t.home, href: "./index.html", icon:"home"},
     {label:t.quiz, href: "./pages/quiz.html", icon:"quiz"},
     {label:t.foot, href: "./pages/footprint.html", icon:"co2"},
     {label:t.info, href: "./pages/info.html", icon:"info"},
     {label:t.about, href: "./pages/about.html", icon:"about"},
-    {label:t.settings, href: "./pages/settings.html", icon:"info"},
+    {label:t.settings, href: "./pages/settings.html", icon:"settings"},
     {label:t.install, href: "./pages/install.html", icon:"install"},  ];
 
   nav.innerHTML = "";
@@ -139,6 +139,17 @@ function buildNav(){
     } else if (it.icon === "info"){
       const img = document.createElement("img");
       img.src = iconBase + "bookN.png";
+      img.alt = "";
+      img.width = 26;
+      img.height = 26;
+      img.style.width = "26px";
+      img.style.height = "26px";
+      img.style.display = "block";
+      img.style.objectFit = "contain";
+      ic.appendChild(img);
+    } else if (it.icon === "settings"){
+      const img = document.createElement("img");
+      img.src = iconBase + "settingsN.png";
       img.alt = "";
       img.width = 26;
       img.height = 26;

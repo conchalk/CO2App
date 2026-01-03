@@ -289,6 +289,12 @@ select, input[type="number"], input[type="range"]{
   justify-content:center;
   margin-bottom: 12px;
 }
+
+.kpiRow.kpiColumn{
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+}
 .kpi{
   background:#f5f5f5;
   border-radius: 18px;
@@ -773,6 +779,10 @@ select option{
   margin: 0 0 8px;
   font-size: 22px;
   text-align: center;
+
+  color: #314e4e;
+  font-weight: 700;
+  font-family: Comfortaa, system-ui, -apple-system, Segoe UI, Roboto, Arial;
 }
 .chartCard{padding-top: 18px;}
 .chartWrap{

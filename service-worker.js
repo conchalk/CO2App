@@ -1,4 +1,4 @@
-const CACHE_NAME = 'co2app-cache-v19';
+const CACHE_NAME = 'co2app-cache-v20';
 const PRECACHE = [
   "./",
   "./index.html",
@@ -39,6 +39,7 @@ const PRECACHE = [
   "./assets/ui/co2N.png",
   "./assets/ui/quizN.png",
   "./assets/ui/infoN.png",
+  "./assets/ui/settingsN.png",
   "./assets/ui/lang_en.png",
   "./assets/ui/lang_el.png"];
 

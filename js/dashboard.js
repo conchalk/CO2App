@@ -60,14 +60,15 @@
     const data = labels.map((name, i)=>({name, value: Math.max(0, Number(values[i]||0))}));
 
     chart.setOption({
-      title: { text: title, left: "center", top: 8 },
-      tooltip: { trigger: "item", formatter: "{b}: {c} ({d}%)" },
+      title: { text: title, left: "center", top: 6, textStyle: { fontSize: 16, fontWeight: 600, color: "#314e4e" } },
+      tooltip: { trigger: "item", formatter: (p)=> `${p.name}: ${Number(p.value).toFixed(2)} (${Number(p.percent).toFixed(0)}%)` },
       series: [{
         type: "pie",
         radius: ["58%","72%"],
+        center: ["50%","56%"],
         avoidLabelOverlap: true,
         itemStyle: { borderRadius: 6, borderColor: "#fff", borderWidth: 2 },
-        label: { show: true, formatter: "{b}\n{c}" },
+        label: { show: true, formatter: (p)=> `${p.name}\n${Number(p.value).toFixed(2)}` },
         emphasis: { label: { show: true, fontSize: 14, fontWeight: "bold" } },
         data
       }]
