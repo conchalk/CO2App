@@ -241,8 +241,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
   buildNav();
   buildLangToggle();
 
-  const menuBtn = document.getElementById("menuBtn");
-  const closeBtn = document.getElementById("drawerClose");
+  // Some pages used legacy ids (openDrawer/closeDrawer). Support both.
+  const menuBtn = document.getElementById("menuBtn") || document.getElementById("openDrawer");
+  const closeBtn = document.getElementById("drawerClose") || document.getElementById("closeDrawer");
   const backdrop = document.getElementById("drawerBackdrop");
 
   if (menuBtn) menuBtn.addEventListener("click", openDrawer);

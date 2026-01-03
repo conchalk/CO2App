@@ -52,7 +52,7 @@
   },
   "targets": {
     "euTargetTonsPerYear": {
-      "value": 2.3,
+      "value": 2.5,
       "unit": "tCO2e_per_year"
     }
   },

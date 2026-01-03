@@ -50,15 +50,17 @@ function T(){
         publicPct: "Από τα οποία γίνονται με δημόσια μέσα",
         alone: "Μετακινούμαι μόνος",
         flightsDomestic: "Πτήσεις εντός Ελλάδας (ανά έτος)",
-        flightsEurope: "Πτήσεις εντός Ευρώπης (ανά έτος)",        diet: "Διατροφή",        goodsProfile: "Κατανάλωση προϊόντων",
-        goodsHint: "Ρούχα, ηλεκτρονικά, αγορές & lifestyle.",
+        flightsEurope: "Πτήσεις εντός Ευρώπης (ανά έτος)",
+        diet: "Διατροφή",
+        goodsProfile: "Κατανάλωση προϊόντων (Ρούχα, ηλεκτρονικά, αγορές & lifestyle)",
         digitalLevel: "Ψηφιακή κατανάλωση (internet/cloud)",
         socialShare: "Κοινόχρηστες υπηρεσίες & υποδομές (σταθερό)",
         total: "Σύνολο",
         calc: "Υπολόγισε",
-        dash: "Διαγράμματα",        digitalMin: "Mostly email + light web browsing",
-        digitalMid: "Cloud storage, moderate social media",
-        digitalMax: "Frequent streaming + frequent AI use"
+        dash: "Διαγράμματα",
+        digitalMin: "Χρήση κυρίως email και ελαφριά χρήση internet",
+        digitalMid: "Αποθήκευση στο Cloud, λογική χρήση social media",
+        digitalMax: "Συχνή χρήση Streaming (Netflix/YouTube), συχνή χρήση AI"
       },
       units: {
         socialShare: "kg CO₂/έτος"
@@ -66,10 +68,10 @@ function T(){
     },
     en: {
       title: "Carbon Footprint Calculator",
-      subtitle: "Results are approximate.",
+      subtitle: "Results are approximate. For details about the model, see Documentation.",
       home: "Home",
       transport: "Transport",
-      lifestyle: "Τρόπος Ζωής - Διατροφή",
+      lifestyle: "Lifestyle & Diet",
       labels: {
         homeType: "Home type",
         homeCond: "Insulation / condition",
@@ -83,15 +85,17 @@ function T(){
         publicPct: "Share of trips by public transport",
         alone: "I travel alone",
         flightsDomestic: "Domestic flights (Greece) per year",
-        flightsEurope: "Intra-Europe flights per year",        diet: "Diet",        goodsProfile: "Goods consumption",
-        goodsHint: "Clothes, electronics, shopping & lifestyle.",
+        flightsEurope: "Intra-Europe flights per year",
+        diet: "Diet",
+        goodsProfile: "Goods consumption (Clothes, electronics, shopping & lifestyle)",
         digitalLevel: "Digital consumption (internet/cloud)",
         socialShare: "Public services & infrastructure (fixed)",
         total: "Total",
         calc: "Calculate",
-        dash: "Dashboard",        digitalMin: "Low",
-        digitalMid: "Medium",
-        digitalMax: "High"
+        dash: "Dashboard",
+        digitalMin: "Mostly email and light web use",
+        digitalMid: "Cloud storage and moderate social media use",
+        digitalMax: "Frequent streaming (Netflix/YouTube) and frequent AI use"
       },
       units: {
         socialShare: "kg CO₂/year"
@@ -326,7 +330,7 @@ function saveForDashboard(res){
   localStorage.setItem("CO2_LIFE_VALUES", JSON.stringify(res.lifestyleValues));
   localStorage.setItem("USER_TOTAL", String(res.totalTons));
 
-  const target = getEffectiveNumber("euTarget_tCO2_per_year", (model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.3));
+  const target = getEffectiveNumber("euTarget_tCO2_per_year", (model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.5));
   localStorage.setItem("EU_TARGET", String(target));
 }
 
@@ -442,7 +446,6 @@ const resp = await fetch(`../assets/footprintModel_final_draft.json?v=${Date.now
 
   setText("lblDiet", t.labels.diet);
   setText("lblGoodsProfile", t.labels.goodsProfile);
-  setText("goodsHint", t.labels.goodsHint);
   setText("lblDigitalLevel", t.labels.digitalLevel);
   setText("lblSocialShare", t.labels.socialShare);
 
@@ -584,7 +587,7 @@ const updateBadges = ()=>{
     // Mobile stepper KPI
     if (typeof updateStepperUI === "function") updateStepperUI(res);
 
-    const target = getEffectiveNumber("euTarget_tCO2_per_year", (model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.3));
+    const target = getEffectiveNumber("euTarget_tCO2_per_year", (model && model.targets ? val(model.targets.euTargetTonsPerYear) : 2.5));
     const rp = document.getElementById("reducePct");
     if (rp){
       const lang = getLang();

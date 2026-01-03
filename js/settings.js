@@ -6,6 +6,74 @@ async function loadConfig(){
   }catch(e){ return null; }
 }
 
+const T = {
+  el: {
+    pageTitle: "Ρυθμίσεις",
+    sectionTitle: "Παράμετροι μοντέλου (προσωρινές αλλαγές)",
+    sectionDesc: "Οι αλλαγές αποθηκεύονται τοπικά (στη συσκευή/φυλλομετρητή) και εφαρμόζονται μέχρι να γίνει επαναφορά.",
+    ciLabel: "Ένταση άνθρακα δικτύου (CI) (kg CO₂/kWh)",
+    euLabel: "Στόχος ΕΕ 2030 (tCO₂/έτος)",
+    socialLabel: "Κοινόχρηστες υπηρεσίες & υποδομές (tCO₂/έτος)",
+    metroLabel: "Μετρό / Τραμ — ενέργεια (kWh/επιβατοχιλιόμετρο)",
+    metroHint: "Οι εκπομπές μετρό/τραμ υπολογίζονται ως: kWh/επιβατοχιλιόμετρο × CI.",
+    useCustom: "Χρήση προσαρμοσμένης τιμής",
+    save: "Αποθήκευση",
+    reset: "Επαναφορά",
+    back: "Πίσω",
+    saved: "Αποθηκεύτηκαν. Επιστρέψτε στον Υπολογιστή ή στο Dashboard για να δείτε τις αλλαγές.",
+    resetDone: "Έγινε επαναφορά. Οι προεπιλογές θα ληφθούν από το config.json.",
+    errCI: "CI: μη έγκυρη τιμή",
+    errEU: "Στόχος ΕΕ: μη έγκυρη τιμή",
+    errSocial: "Κοινόχρηστες υπηρεσίες: μη έγκυρη τιμή",
+    errMetro: "Μετρό/Τραμ: μη έγκυρη τιμή",
+    hintDefault: (v)=>`Προεπιλογή από config.json: ${v}`
+  },
+  en: {
+    pageTitle: "Settings",
+    sectionTitle: "Model parameters (temporary overrides)",
+    sectionDesc: "Changes are saved locally (on this device/browser) and apply until you reset them.",
+    ciLabel: "Grid carbon intensity (CI) (kg CO₂/kWh)",
+    euLabel: "EU 2030 target (tCO₂/year)",
+    socialLabel: "Public services & infrastructure (tCO₂/year)",
+    metroLabel: "Metro / Tram — energy (kWh per passenger‑km)",
+    metroHint: "Metro/tram emissions are computed as: kWh per passenger‑km × CI.",
+    useCustom: "Use custom value",
+    save: "Save",
+    reset: "Reset",
+    back: "Back",
+    saved: "Saved. Go back to the Calculator or Dashboard to see the changes.",
+    resetDone: "Reset complete. Defaults will be read from config.json.",
+    errCI: "CI: invalid value",
+    errEU: "EU target: invalid value",
+    errSocial: "Public services: invalid value",
+    errMetro: "Metro/Tram: invalid value",
+    hintDefault: (v)=>`Default from config.json: ${v}`
+  }
+};
+
+function applySettingsTexts(){
+  const lang = (typeof getLang === "function" ? getLang() : "el") || "el";
+  const tt = T[lang] || T.el;
+  const set = (id, val)=>{ const el = document.getElementById(id); if (el) el.textContent = val; };
+  set("settingsTitle", tt.pageTitle);
+  set("settingsSectionTitle", tt.sectionTitle);
+  set("settingsSectionDesc", tt.sectionDesc);
+  set("ciLabel", tt.ciLabel);
+  set("euTargetLabel", tt.euLabel);
+  set("socialLabel", tt.socialLabel);
+  set("metroLabel", tt.metroLabel);
+  set("metroHint", tt.metroHint);
+  set("useCustom_ci", tt.useCustom);
+  set("useCustom_eu", tt.useCustom);
+  set("useCustom_social", tt.useCustom);
+  set("useCustom_metro", tt.useCustom);
+  set("saveBtn", tt.save);
+  set("resetBtn", tt.reset);
+  const backBtn = document.getElementById("backBtn");
+  if (backBtn) backBtn.textContent = `← ${tt.back}`;
+  return tt;
+}
+
 function bindNumber(id, val){
   const el = document.getElementById(id);
   if (el) el.value = (val ?? "").toString();
@@ -43,6 +111,8 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   initLangButtons();
   buildNav();
 
+  const tt = applySettingsTexts();
+
   const cfg = await loadConfig();
 
   // CI
@@ -51,10 +121,10 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   bindNumber("ciValue", ciOv.enabled ? ciOv.value : ciDef);
   bindCheck("ciEnable", ciOv.enabled);
   const ciHint = document.getElementById("ciHint");
-  if (ciHint) ciHint.textContent = `Προεπιλογή από config.json: ${ciDef}`;
+  if (ciHint) ciHint.textContent = (tt?.hintDefault ? tt.hintDefault(ciDef) : `Default: ${ciDef}`);
 
   // EU target
-  const euDef = cfg?.euTarget_tCO2_per_year ?? 2.3;
+  const euDef = cfg?.euTarget_tCO2_per_year ?? 2.5;
   const euOv = readOverride("euTarget_tCO2_per_year");
   bindNumber("euTargetValue", euOv.enabled ? euOv.value : euDef);
   bindCheck("euTargetEnable", euOv.enabled);
@@ -74,32 +144,32 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   document.getElementById("saveBtn")?.addEventListener("click", ()=>{
     const ciV = getNum("ciValue");
     const ciE = getCheck("ciEnable");
-    if (ciE && !Number.isFinite(ciV)) return alert("CI: μη έγκυρη τιμή");
+    if (ciE && !Number.isFinite(ciV)) return alert(tt.errCI);
     setOverride("gridCI_kgCO2_per_kWh", ciE, ciV);
 
     const euV = getNum("euTargetValue");
     const euE = getCheck("euTargetEnable");
-    if (euE && !Number.isFinite(euV)) return alert("Στόχος ΕΕ: μη έγκυρη τιμή");
+    if (euE && !Number.isFinite(euV)) return alert(tt.errEU);
     setOverride("euTarget_tCO2_per_year", euE, euV);
 
     const sV = getNum("socialValue");
     const sE = getCheck("socialEnable");
-    if (sE && !Number.isFinite(sV)) return alert("Κοινόχρηστες υπηρεσίες: μη έγκυρη τιμή");
+    if (sE && !Number.isFinite(sV)) return alert(tt.errSocial);
     setOverride("socialShare_tCO2_per_year", sE, sV);
 
     const mV = getNum("metroEnergyValue");
     const mE = getCheck("metroEnergyEnable");
-    if (mE && !Number.isFinite(mV)) return alert("Μετρό/Τραμ: μη έγκυρη τιμή");
+    if (mE && !Number.isFinite(mV)) return alert(tt.errMetro);
     setOverride("metro_tram_kWh_per_pkm", mE, mV);
 
-    alert("Αποθηκεύτηκαν. Επιστρέψτε στον Υπολογιστή ή στο Dashboard για να δείτε τις αλλαγές.");
+    alert(tt.saved);
   });
 
   document.getElementById("resetBtn")?.addEventListener("click", ()=>{
     ["gridCI_kgCO2_per_kWh","euTarget_tCO2_per_year","socialShare_tCO2_per_year","metro_tram_kWh_per_pkm"].forEach(k=>{
       setOverride(k,false,"");
     });
-    alert("Έγινε επαναφορά. Οι προεπιλογές θα ληφθούν από το config.json.");
+    alert(tt.resetDone);
     location.reload();
   });
 

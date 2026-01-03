@@ -3,74 +3,72 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ρυθμίσεις</title>
+  <title>Settings</title>
   <link rel="manifest" href="../manifest.webmanifest?v=20" />
   <link rel="stylesheet" href="../styles.css?v=20" />
 </head>
 <body>
   <div class="container">
     <div class="pageHeader">
-      <button class="hamburger" id="openDrawer" aria-label="menu">☰</button>
-      <div class="pageTitle" id="settingsTitle">Ρυθμίσεις</div>
+      <button class="hamburger" id="menuBtn" aria-label="menu">☰</button>
+      <div class="pageTitle" id="settingsTitle"></div>
     </div>
 
     <div class="card">
-      <div class="sectionTitle">Παράμετροι μοντέλου (προσωρινές αλλαγές)</div>
-      <p class="small">
-        Οι αλλαγές αποθηκεύονται τοπικά (στη συσκευή/φυλλομετρητή) και εφαρμόζονται μέχρι να γίνει επαναφορά.
-      </p>
+      <div class="sectionTitle" id="settingsSectionTitle"></div>
+      <p class="small" id="settingsSectionDesc"></p>
 
       <div class="formGrid">
         <div class="field" style="grid-column: 1 / -1;">
-          <label>Ένταση άνθρακα δικτύου (CI) (kg CO₂/kWh)</label>
+          <label id="ciLabel"></label>
           <div class="row2" style="align-items:flex-end;">
             <input id="ciValue" type="number" step="0.01" min="0" />
             <label class="checkRow" style="margin:0;">
               <input id="ciEnable" type="checkbox" />
-              <span>Χρήση προσαρμοσμένης τιμής</span>
+              <span id="useCustom_ci"></span>
             </label>
           </div>
           <div class="small" id="ciHint"></div>
         </div>
 
         <div class="field" style="grid-column: 1 / -1;">
-          <label>Στόχος ΕΕ 2030 (t CO₂/έτος)</label>
+          <label id="euTargetLabel"></label>
           <div class="row2" style="align-items:flex-end;">
             <input id="euTargetValue" type="number" step="0.01" min="0" />
             <label class="checkRow" style="margin:0;">
               <input id="euTargetEnable" type="checkbox" />
-              <span>Χρήση προσαρμοσμένης τιμής</span>
+              <span id="useCustom_eu"></span>
             </label>
           </div>
         </div>
 
         <div class="field" style="grid-column: 1 / -1;">
-          <label>Κοινόχρηστες υπηρεσίες & υποδομές (t CO₂/έτος)</label>
+          <label id="socialLabel"></label>
           <div class="row2" style="align-items:flex-end;">
             <input id="socialValue" type="number" step="0.01" min="0" />
             <label class="checkRow" style="margin:0;">
               <input id="socialEnable" type="checkbox" />
-              <span>Χρήση προσαρμοσμένης τιμής</span>
+              <span id="useCustom_social"></span>
             </label>
           </div>
         </div>
 
         <div class="field" style="grid-column: 1 / -1;">
-          <label>Μετρό / Τραμ — ενέργεια (kWh ανά επιβατοχιλιόμετρο)</label>
+          <label id="metroLabel"></label>
           <div class="row2" style="align-items:flex-end;">
             <input id="metroEnergyValue" type="number" step="0.01" min="0" />
             <label class="checkRow" style="margin:0;">
               <input id="metroEnergyEnable" type="checkbox" />
-              <span>Χρήση προσαρμοσμένης τιμής</span>
+              <span id="useCustom_metro"></span>
             </label>
           </div>
-          <div class="small">Οι εκπομπές μετρό/τραμ υπολογίζονται ως: kWh/pkm × CI.</div>
+          <div class="small" id="metroHint"></div>
         </div>
 
         <div class="field" style="grid-column: 1 / -1;">
           <div class="bottomRow">
-            <button class="pillBtn" id="saveBtn">Αποθήκευση</button>
-            <button class="pillBtn" id="resetBtn">Επαναφορά</button>
+            <button class="pillBtn" id="saveBtn"></button>
+            <button class="pillBtn" id="resetBtn"></button>
             <button class="pillBtn" id="backBtn">←</button>
           </div>
         </div>
@@ -85,8 +83,9 @@
   <div class="drawerBackdrop" id="drawerBackdrop" aria-hidden="true"></div>
   <nav class="drawer" id="drawer" aria-hidden="true">
     <div class="drawerHeader">
-      <button class="drawerClose" id="closeDrawer" aria-label="close">✕</button>
+      <button class="drawerClose" id="drawerClose" aria-label="close">✕</button>
     </div>
+    <div class="drawerLang" id="drawerLang"></div>
     <div class="drawerNav" id="drawerNav"></div>
   </nav>
 </body>

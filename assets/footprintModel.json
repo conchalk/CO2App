@@ -30,7 +30,7 @@
   },
   "targets": {
     "euTargetTonsPerYear": {
-      "value": 2.3,
+      "value": 2.5,
       "unit": "tCO2e_per_year",
       "notes": "Comparative reference (not a Greek average)."
     }
@@ -380,7 +380,7 @@
       "homeUseKgPerYear": 900,
       "foodKgPerYear": 1400,
       "goodsKgPerYear": 2500,
-      "euTargetTonsPerYear": 2.3
+      "euTargetTonsPerYear": 2.5
     },
     "constants": {
       "weeklyToTonsFactor": 0.052,

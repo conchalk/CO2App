@@ -1,6 +1,6 @@
 {
   "gridCI_kgCO2_per_kWh": 0.25,
-  "euTarget_tCO2_per_year": 2.3,
+  "euTarget_tCO2_per_year": 2.5,
   "socialShare_tCO2_per_year": 1.2,
   "metro_tram_kWh_per_pkm": 0.05,
   "evConsumption_kWh_per_km": 0.16,
