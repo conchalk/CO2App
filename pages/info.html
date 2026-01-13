@@ -1,51 +1,57 @@
 <!DOCTYPE html>
-
 <html lang="el">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Info</title>
-<link href="../manifest.webmanifest" rel="manifest"/>
-<meta content="#74a974" name="theme-color"/>
-<meta content="yes" name="apple-mobile-web-app-capable"/>
-<link href="../assets/icons/icon-192.png" rel="apple-touch-icon"/>
-<link href="../styles.css?v=20" rel="stylesheet">
-</link></head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Info</title>
+  <link href="../manifest.webmanifest" rel="manifest"/>
+  <meta content="#74a974" name="theme-color"/>
+  <meta content="yes" name="apple-mobile-web-app-capable"/>
+  <link href="../assets/icons/icon-192.png" rel="apple-touch-icon"/>
+  <link href="../styles.css" rel="stylesheet">
+</head>
 <body>
-<div class="container">
-<div class="panel infoWide" id="mainPanel">
-<div class="topbar">
-<button aria-label="Menu" class="iconBtn" id="menuBtn"><span class="hamburger"><span></span></span></button>
-<div class="topbarSpacer"></div>
-</div>
-<div class="card">
-<h2 id="title" style="margin:0 0 10px 0;"></h2>
-<div id="content" style="line-height:1.35;"></div>
-</div>
-</div>
-</div>
-<div aria-hidden="true" class="drawerBackdrop" id="drawerBackdrop"></div>
-<nav aria-hidden="true" class="drawer" id="drawer">
-<div class="drawerHeader">
-<div class="drawerTitle">CO2app</div>
-<button aria-label="Close menu" class="iconBtn" id="drawerClose">×</button>
-</div>
-<div class="drawerSection" id="drawerNav"></div>
-<div class="drawerSection" id="drawerLang"></div>
-</nav>
-<script src="../js/common.js"></script>
-<script src="../js/menu.js"></script>
-<script>
+  <div class="container">
+    <div class="panel infoWide" id="mainPanel">
+      <div class="topbar">
+        <button aria-label="Menu" class="iconBtn" id="menuBtn"><span class="hamburger"><span></span></span></button>
+        <div class="topbarSpacer"></div>
+      </div>
+      <div class="card">
+        <h2 id="title" style="margin:0 0 10px 0;"></h2>
+        <div id="content" style="line-height:1.35;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div aria-hidden="true" class="drawerBackdrop" id="drawerBackdrop"></div>
+  <nav aria-hidden="true" class="drawer" id="drawer">
+    <div class="drawerHeader">
+      <div class="drawerTitle">CO2app</div>
+      <button aria-label="Close menu" class="iconBtn" id="drawerClose">×</button>
+    </div>
+    <div class="drawerSection" id="drawerNav"></div>
+    <div class="drawerSection" id="drawerLang"></div>
+  </nav>
+
+  <script src="../js/common.js"></script>
+  <script src="../js/menu.js"></script>
+  <script>
     const lang = getLang();
     document.getElementById("title").textContent = (lang === "el") ? "Πληροφορίες" : "Info";
-
     const url = (lang === "el") ? "../assets/info/Info_gr.html" : "../assets/info/InfoEn.html";
 
     async function loadInfo(){
-      const resp = await fetch(url, {cache:"no-store"});
-      const txt = await resp.text();
-      const bodyMatch = txt.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-      document.getElementById("content").innerHTML = bodyMatch ? bodyMatch[1] : txt;
+      try {
+        const resp = await fetch(url, {cache:"no-store"});
+        if(resp.ok){
+          const txt = await resp.text();
+          const bodyMatch = txt.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+          document.getElementById("content").innerHTML = bodyMatch ? bodyMatch[1] : txt;
+        }
+      } catch(e) {
+        console.error(e);
+      }
     }
     loadInfo();
   </script>

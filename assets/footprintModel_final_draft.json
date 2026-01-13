@@ -68,35 +68,17 @@
     "homeUseLevelMapping": {
       "type": "piecewiseLinear",
       "points": [
-        {
-          "x": 0,
-          "anchor": "min"
-        },
-        {
-          "x": 50,
-          "anchor": "typical"
-        },
-        {
-          "x": 100,
-          "anchor": "max"
-        }
+        { "x": 0, "anchor": "min" },
+        { "x": 50, "anchor": "typical" },
+        { "x": 100, "anchor": "max" }
       ]
     },
     "digitalLevelMapping": {
       "type": "piecewiseLinear",
       "points": [
-        {
-          "x": 0,
-          "anchor": "low"
-        },
-        {
-          "x": 50,
-          "anchor": "medium"
-        },
-        {
-          "x": 100,
-          "anchor": "high"
-        }
+        { "x": 0, "anchor": "low" },
+        { "x": 50, "anchor": "medium" },
+        { "x": 100, "anchor": "high" }
       ]
     }
   },
@@ -120,82 +102,34 @@
   },
   "factors": {
     "homeType": {
-      "apartment": {
-        "value": 1.0,
-        "unit": "dimensionless"
-      },
-      "detached": {
-        "value": 1.7,
-        "unit": "dimensionless"
-      }
+      "apartment": { "value": 1.0, "unit": "dimensionless" },
+      "detached": { "value": 1.7, "unit": "dimensionless" }
     },
     "homeCondition": {
-      "modern": {
-        "value": 1.0,
-        "unit": "dimensionless"
-      },
-      "partial": {
-        "value": 1.0,
-        "unit": "dimensionless"
-      },
-      "none": {
-        "value": 1.0,
-        "unit": "dimensionless"
-      }
+      "modern": { "value": 1.0, "unit": "dimensionless" },
+      "partial": { "value": 1.0, "unit": "dimensionless" },
+      "none": { "value": 1.0, "unit": "dimensionless" }
     },
     "heatingType": {
-      "heat_pump": {
-        "value": 0.0725,
-        "unit": "tCO2_per_MWh_heat"
-      },
-      "natural_gas": {
-        "value": 0.202,
-        "unit": "tCO2_per_MWh_heat"
-      },
-      "heating_oil": {
-        "value": 0.265,
-        "unit": "tCO2_per_MWh_heat"
-      },
-      "wood": {
-        "value": 0.035,
-        "unit": "tCO2_per_MWh_heat"
-      },
-      "electric_resistance": {
-        "value": 0.25,
-        "unit": "tCO2_per_MWh_heat"
-      },
-      "air_conditioning": {
-        "value": 0.0825,
-        "unit": "tCO2_per_MWh_heat"
-      }
+      "heat_pump": { "value": 0.0725, "unit": "tCO2_per_MWh_heat" },
+      "natural_gas": { "value": 0.202, "unit": "tCO2_per_MWh_heat" },
+      "heating_oil": { "value": 0.265, "unit": "tCO2_per_MWh_heat" },
+      "wood": { "value": 0.035, "unit": "tCO2_per_MWh_heat" },
+      "electric_resistance": { "value": 0.25, "unit": "tCO2_per_MWh_heat" },
+      "air_conditioning": { "value": 0.0825, "unit": "tCO2_per_MWh_heat" }
     },
     "carType": {
-      "petrol": {
-        "value": 0.18,
-        "unit": "kgCO2e_per_vehicle_km"
-      },
-      "diesel": {
-        "value": 0.155,
-        "unit": "kgCO2e_per_vehicle_km"
-      },
+      "petrol": { "value": 0.18, "unit": "kgCO2e_per_vehicle_km" },
+      "diesel": { "value": 0.155, "unit": "kgCO2e_per_vehicle_km" },
       "electric": {
         "type": "derived",
-        "derivedFrom": [
-          "parameters.gridCI_kgCO2_per_kWh",
-          "parameters.evConsumption_kWh_per_km"
-        ],
+        "derivedFrom": ["parameters.gridCI_kgCO2_per_kWh", "parameters.evConsumption_kWh_per_km"],
         "formula": "kgCO2_per_km = gridCI_kgCO2_per_kWh * evConsumption_kWh_per_km",
         "baselineValue": 0.04,
         "unit": "kgCO2e_per_vehicle_km"
       },
-      "motorcycle": {
-        "value": 0.09,
-        "unit": "kgCO2e_per_vehicle_km"
-      },
-      "bicycle_walking": {
-        "value": 0.0,
-        "unit": "kgCO2e_per_vehicle_km"
-      }
+      "motorcycle": { "value": 0.09, "unit": "kgCO2e_per_vehicle_km" },
+      "bicycle_walking": { "value": 0.0, "unit": "kgCO2e_per_vehicle_km" }
     },
     "goodsProfile": {
       "minimalist": 0.4,
@@ -208,82 +142,35 @@
       "high": 1.8
     },
     "diet": {
-      "vegan": {
-        "value": 0.5,
-        "unit": "dimensionless"
-      },
-      "vegetarian": {
-        "value": 0.65,
-        "unit": "dimensionless"
-      },
-      "mediterranean": {
-        "value": 0.85,
-        "unit": "dimensionless"
-      },
-      "standard": {
-        "value": 1.0,
-        "unit": "dimensionless"
-      },
-      "high_meat": {
-        "value": 1.14,
-        "unit": "dimensionless"
-      }
+      "vegan": { "value": 0.5, "unit": "dimensionless" },
+      "vegetarian": { "value": 0.65, "unit": "dimensionless" },
+      "mediterranean": { "value": 0.85, "unit": "dimensionless" },
+      "standard": { "value": 1.0, "unit": "dimensionless" },
+      "high_meat": { "value": 1.14, "unit": "dimensionless" }
     },
     "publicTransport": {
-      "bus": {
-        "value": 0.081,
-        "unit": "kgCO2e_per_passenger_km"
-      },
-      "train": {
-        "value": 0.04,
-        "unit": "kgCO2e_per_passenger_km"
-      },
-      "metro": {
-        "value": 0.04,
-        "unit": "kgCO2e_per_passenger_km"
-      }
+      "bus": { "value": 0.081, "unit": "kgCO2e_per_passenger_km" },
+      "train": { "value": 0.04, "unit": "kgCO2e_per_passenger_km" },
+      "metro": { "value": 0.04, "unit": "kgCO2e_per_passenger_km" }
     },
     "goodsLevel4": {
-      "anchors": [
-        0,
-        33,
-        67,
-        100
-      ],
-      "values": [
-        0.4,
-        1.0,
-        1.6,
-        2.2
-      ]
+      "anchors": [0, 33, 67, 100],
+      "values": [0.4, 1.0, 1.6, 2.2]
     }
   },
   "ui": {
     "homeType": {
       "type": "select",
-      "order": [
-        "apartment",
-        "detached"
-      ],
+      "order": ["apartment", "detached"],
       "labels": {
-        "el": {
-          "apartment": "Διαμέρισμα",
-          "detached": "Μονοκατοικία"
-        },
-        "en": {
-          "apartment": "Apartment",
-          "detached": "Detached house"
-        }
+        "el": { "apartment": "Διαμέρισμα", "detached": "Μονοκατοικία" },
+        "en": { "apartment": "Apartment", "detached": "Detached house" }
       },
       "default": "apartment"
     },
     "homeCondition": {
       "type": "select",
-      "order": [
-        "modern",
-        "post1980",
-        "pre1980"
-      ],
+      "order": ["modern", "post1980", "pre1980"],
       "labels": {
         "el": {
           "modern": "Σύγχρονη κατασκευή με θερμοπρόσοψη, θερμομονωτικά κουφώματα",
@@ -300,14 +187,7 @@
     },
     "heatingType": {
       "type": "select",
-      "order": [
-        "heat_pump",
-        "natural_gas",
-        "heating_oil",
-        "wood",
-        "electric_resistance",
-        "air_conditioning"
-      ],
+      "order": ["heat_pump", "natural_gas", "heating_oil", "wood", "electric_resistance", "air_conditioning"],
       "labels": {
         "el": {
           "heat_pump": "Αντλία θερμότητας",
@@ -330,46 +210,19 @@
     },
     "occupants": {
       "type": "select",
-      "order": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5plus"
-      ],
+      "order": ["1", "2", "3", "4", "5plus"],
       "labels": {
-        "el": {
-          "1": "1 άτομο",
-          "2": "2 άτομα",
-          "3": "3 άτομα",
-          "4": "4 άτομα",
-          "5plus": "5+ άτομα"
-        },
-        "en": {
-          "1": "1 person",
-          "2": "2 people",
-          "3": "3 people",
-          "4": "4 people",
-          "5plus": "5+ people"
-        }
+        "el": { "1": "1 άτομο", "2": "2 άτομα", "3": "3 άτομα", "4": "4 άτομα", "5plus": "5+ άτομα" },
+        "en": { "1": "1 person", "2": "2 people", "3": "3 people", "4": "4 people", "5plus": "5+ people" }
       },
       "default": "1"
     },
     "solarDHW": {
       "type": "select",
-      "order": [
-        "yes",
-        "no"
-      ],
+      "order": ["yes", "no"],
       "labels": {
-        "el": {
-          "yes": "Υπάρχει ηλιακός θερμοσίφωνας",
-          "no": "Δεν υπάρχει ηλιακός θερμοσίφωνας"
-        },
-        "en": {
-          "yes": "Solar water heater",
-          "no": "No solar water heater"
-        }
+        "el": { "yes": "Υπάρχει ηλιακός θερμοσίφωνας", "no": "Δεν υπάρχει ηλιακός θερμοσίφωνας" },
+        "en": { "yes": "Solar water heater", "no": "No solar water heater" }
       },
       "default": "yes"
     },
@@ -388,21 +241,11 @@
           "max": "Wasteful, heavy cooling A/C and unnecessary device use"
         }
       },
-      "order": [
-        "min",
-        "typical",
-        "max"
-      ]
+      "order": ["min", "typical", "max"]
     },
     "carType": {
       "type": "select",
-      "order": [
-        "petrol",
-        "diesel",
-        "electric",
-        "motorcycle",
-        "bicycle_walking"
-      ],
+      "order": ["petrol", "diesel", "electric", "motorcycle", "bicycle_walking"],
       "labels": {
         "el": {
           "petrol": "Βενζίνη",
@@ -425,44 +268,24 @@
       "type": "number",
       "default": 0,
       "labels": {
-        "el": {
-          "title": "Πτήσεις εντός Ελλάδας (ανά έτος)"
-        },
-        "en": {
-          "title": "Domestic flights (Greece) per year"
-        }
+        "el": { "title": "Πτήσεις εντός Ελλάδας (ανά έτος)" },
+        "en": { "title": "Domestic flights (Greece) per year" }
       }
     },
     "flightsEurope": {
       "type": "number",
       "default": 0,
       "labels": {
-        "el": {
-          "title": "Πτήσεις εντός Ευρώπης (ανά έτος)"
-        },
-        "en": {
-          "title": "Intra-Europe flights per year"
-        }
+        "el": { "title": "Πτήσεις εντός Ευρώπης (ανά έτος)" },
+        "en": { "title": "Intra-Europe flights per year" }
       }
     },
     "goodsProfile": {
       "type": "select",
-      "order": [
-        "minimalist",
-        "balanced",
-        "active"
-      ],
+      "order": ["minimalist", "balanced", "active"],
       "labels": {
-        "el": {
-          "minimalist": "Μινιμαλιστής",
-          "balanced": "Ισορροπημένος",
-          "active": "Ενεργός καταναλωτής"
-        },
-        "en": {
-          "minimalist": "Minimalist",
-          "balanced": "Balanced",
-          "active": "Active consumer"
-        }
+        "el": { "minimalist": "Μινιμαλιστής", "balanced": "Ισορροπημένος", "active": "Ενεργός καταναλωτής" },
+        "en": { "minimalist": "Minimalist", "balanced": "Balanced", "active": "Active consumer" }
       },
       "default": "balanced"
     },
@@ -489,19 +312,10 @@
     },
     "publicTransport": {
       "type": "select",
-      "order": [
-        "bus",
-        "metro"
-      ],
+      "order": ["bus", "metro"],
       "labels": {
-        "el": {
-          "bus": "Λεωφορείο",
-          "metro": "Μετρό"
-        },
-        "en": {
-          "bus": "Bus",
-          "metro": "Metro/Subway"
-        }
+        "el": { "bus": "Λεωφορείο", "metro": "Μετρό" },
+        "en": { "bus": "Bus", "metro": "Metro/Subway" }
       },
       "default": "bus"
     },
@@ -518,13 +332,7 @@
     },
     "diet": {
       "type": "select",
-      "order": [
-        "vegan",
-        "vegetarian",
-        "mediterranean",
-        "standard",
-        "high_meat"
-      ],
+      "order": ["vegan", "vegetarian", "mediterranean", "standard", "high_meat"],
       "labels": {
         "el": {
           "vegan": "Vegan",
@@ -542,30 +350,6 @@
         }
       },
       "default": "standard"
-    },
-    "flightTripsDomestic": {
-      "type": "number",
-      "default": 0,
-      "labels": {
-        "el": {
-          "title": "Πτήσεις εντός Ελλάδας (ανά έτος)"
-        },
-        "en": {
-          "title": "Domestic flights (Greece) per year"
-        }
-      }
-    },
-    "flightTripsEurope": {
-      "type": "number",
-      "default": 0,
-      "labels": {
-        "el": {
-          "title": "Πτήσεις εντός Ευρώπης (ανά έτος)"
-        },
-        "en": {
-          "title": "Intra-Europe flights per year"
-        }
-      }
     },
     "goodsLevel4": {
       "type": "range",

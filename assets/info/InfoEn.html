@@ -2,100 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About the CO₂ App</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-    header {
-      background-color: #2e8b57;
-      color: white;
-      padding: 20px 10px;
-      text-align: center;
-      border-radius: 8px;
-    }
-    section {
-      background: white;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    h1, h2 {
-      color: #2e8b57;
-    }
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 0.9em;
-      color: #555;
-    }
+    body { font-family: sans-serif; line-height: 1.6; color: #333; margin:0; padding:10px; }
+    h2 { color: #2e8b57; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 30px; }
+    .meta { font-size: 0.9em; color: #666; background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 20px; }
+    .funding { background: #e8f5e9; padding: 15px; border-radius: 8px; border-left: 5px solid #2e8b57; margin-bottom: 20px; }
+    strong { color: #2e8b57; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>About the CO₂ App</h1>
-  </header>
 
-  <section>
-    <h2>Application Information</h2>
-    <p>The CO₂ application is an educational tool that includes a knowledge quiz and a calculator for estimating the household carbon footprint in a simple yet reliable way, based on everyday activities.</p>
-  </section>
+  <div class="meta">
+    <strong>App Version:</strong> 4.0 (Current)<br>
+    <strong>Last Update:</strong> 2025
+  </div>
 
-  <section>
-    <h2>Knowledge Quiz</h2>
-    <p>The knowledge quiz helps users evaluate their understanding of CO₂ emissions, their sources, and their impact on the environment. The quiz has an educational purpose and includes explanations to support learning and awareness.</p>
-  </section>
+  <div class="funding">
+    <p style="margin-top:0;">
+      This application was funded by the <strong>Municipality of Agios Nikolaos</strong> for the <strong>Finokalia Environmental Station</strong>, operated by the Department of Chemistry, University of Crete.
+    </p>
+  </div>
 
-  <section>
-    <h2>Key Assumptions</h2>
-    <ul>
-      <li>Internationally accepted CO₂ emission factors are used for different activities.</li>
-      <li>Emissions are calculated by category: Energy, Transportation, Food & Consumption.</li>
-      <li>Users provide estimates based on their habits.</li>
-      <li>Emissions are expressed on an annual basis (kg or tons of CO₂/year).</li>
-    </ul>
-  </section>
+  <h2>About the App</h2>
+  <p>
+    <strong>CO₂App</strong> is an educational tool designed to help users understand how human activities contribute to increasing atmospheric CO₂.
+  </p>
+  <ul>
+    <li><strong>Quiz:</strong> Test your knowledge on climate change sources.</li>
+    <li><strong>Footprint Calculator:</strong> Estimate emissions from housing, transport, and lifestyle in a simple yet reliable way.</li>
+  </ul>
 
-  <section>
-    <h2>Calculation Method</h2>
-    <p>The app multiplies estimated activities (such as electricity use or travel distance) by the corresponding CO₂ emission factors. The total footprint results from the sum of each category. Values are based on sources such as the UN, OECD, or the ADEME database.</p>
-  </section>
+  <h2>Credits</h2>
+  <p>
+    Design, content selection, and programming by <strong>Kostis Chalkiadakis</strong>, Head of the Rethymno Science Education Center (EKFE Rethymno).
+  </p>
+  <p>
+    <em>Full model details and references are available on the "Documentation" page.</em>
+  </p>
 
-  <section>
-    <h2>Explanation of Factors</h2>
-    <ul>
-      <li><strong>Base_Heating_kWh:</strong> Estimated annual energy consumption for heating (kWh).</li>
-      <li><strong>CI<sub>heating</sub>:</strong> Carbon intensity factor for the heating fuel used (kg CO₂/kWh).</li>
-      <li><strong>Housing_Factor:</strong> Reflects the size and type of the home.</li>
-      <li><strong>Insulation_Factor:</strong> Represents the quality of thermal insulation.</li>
-      <li><strong>Heating_Factor:</strong> Efficiency and technology of the heating system.</li>
-      <li><strong>Base_Use_kWh:</strong> Annual electricity consumption for uses other than heating.</li>
-      <li><strong>CI<sub>electricity</sub>:</strong> Carbon intensity of electricity production, representing the amount of CO₂ generated per kWh (considering lifecycle emissions). For Greece, the average value for 2024 is approximately <strong>0.326 kg CO₂/kWh</strong>.</li>
-      <li><strong>Behavior_Factor<sub>use</sub>:</strong> Factor related to consumer habits and behavioral patterns (e.g., frugal, average, excessive use).</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Web References</h2>
-    <ul>
-      <li><a href="https://www.ipcc.ch/" target="_blank">IPCC - Intergovernmental Panel on Climate Change</a></li>
-      <li><a href="https://www.iea.org/" target="_blank">IEA - International Energy Agency</a></li>
-      <li><a href="https://www.ademe.fr/" target="_blank">ADEME - French Environment and Energy Management Agency</a></li>
-      <li><a href="https://ourworldindata.org/co2-emissions" target="_blank">Our World in Data - CO₂ Emissions</a></li>
-      <li><a href="https://www.eea.europa.eu/" target="_blank">European Environment Agency (EEA)</a></li>
-      <li><a href="https://app.electricitymaps.com/map/72h/hourly" target="_blank">Electricity Maps</a></li>
-    </ul>
-  </section>
-
-  <footer>
-    This application was developed by Kostis Chalkiadakis, Head of the Rethymno Science Education Center (EKFE Rethymno).
-  </footer>
 </body>
 </html>

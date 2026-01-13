@@ -1,121 +1,133 @@
-/* Dashboard powered by ECharts (offline, self-hosted) */
-
 (function(){
-  function T(){
-    const lang = getLang();
-    return {
+  function renderCharts(){
+    if(!window.echarts) return;
+    
+    // 1. Ανάκτηση Δεδομένων από τη μνήμη
+    const homeVals = JSON.parse(localStorage.getItem("CO2_HOME_VALUES") || "[0,0,0]");
+    const transVals = JSON.parse(localStorage.getItem("CO2_TRANSPORT_VALUES") || "[0,0,0,0]");
+    const lifeVals = JSON.parse(localStorage.getItem("CO2_LIFE_VALUES") || "[0,0,0,0]");
+    const userTotal = Number(localStorage.getItem("USER_TOTAL")) || 0;
+    const euTarget = Number(localStorage.getItem("EU_TARGET")) || 2.5;
+
+    // 2. Ορισμός Κειμένων (Ελληνικά / Αγγλικά)
+    const lang = getLang(); // Η συνάρτηση υπάρχει στο common.js
+
+    const T = {
       el: {
-        title: "Ετήσια Εκτίμηση",
-        kpiUserLbl: "Εκτιμώμενη ποσότητα CO₂ (χρήστη)",
-        kpiTargetLbl: "Στόχος ΕΕ για το 2030",
-        eu: "Στόχος ΕΕ",
-        user: "Το αποτύπωμά σου",
-        home: "Κατοικία",
-        transport: "Μεταφορές",
-        life: "Τρόπος Ζωής - Διατροφή",
-        backToCalc: "Επιστροφή στον Υπολογισμό",
-        categoryLabels: {
-          home: ["Θέρμανση", "Ζεστό νερό (DHW)", "Ηλεκτρική ενέργεια & ψύξη"],
-          transport: ["ΙΧ/Μηχανή", "Δημόσια μέσα", "Πτήσεις εσωτερικού", "Πτήσεις Ευρώπης"],
-          life: ["Διατροφή", "Προϊόντα", "Ψηφιακή κατανάλωση", "Υπηρεσίες & υποδομές"]
-        },
-        unit: "t CO₂/έτος",      },
+        pageTitle: "Ετήσια Εκτίμηση",
+        userLabel: "Εκτιμώμενη ποσότητα CO₂ (χρήστη)",
+        targetLabel: "Στόχος ΕΕ για το 2030",
+        
+        homeTitle: "Κατοικία",
+        transTitle: "Μεταφορές",
+        lifeTitle: "Τρόπος Ζωής - Διατροφή",
+        
+        back: "Επιστροφή",
+        
+        chartLabels: {
+          home: ["Θέρμανση", "ΖΝΧ", "Ηλεκτρισμός"],
+          trans: ["ΙΧ", "Δημόσια", "Πτήσεις Εσ.", "Πτήσεις Εξ."],
+          life: ["Διατροφή", "Αγαθά", "Digital", "Κοινόχρηστα"]
+        }
+      },
       en: {
-        title: "Annual Estimate",
-        kpiUserLbl: "Estimated CO₂ (user)",
-        kpiTargetLbl: "EU target for 2030",
-        eu: "EU target",
-        user: "Your footprint",
-        home: "Home",
-        transport: "Transport",
-        life: "Lifestyle",
-        backToCalc: "Back to calculator",
-        categoryLabels: {
-          home: ["Heating", "Hot water (DHW)", "Electricity & cooling"],
-          transport: ["Car/motorbike", "Public transport", "Domestic flights", "Intra-Europe flights"],
-          life: ["Diet", "Goods", "Digital", "Public services"]
-        },
-        unit: "t CO₂/year",      }
-    }[lang];
-  }
-
-  function safeArr(key, n){
-    try{
-      const v = JSON.parse(localStorage.getItem(key) || "[]");
-      if (Array.isArray(v)) {
-        const out = v.map(x=>Number(x)||0);
-        while(out.length < n) out.push(0);
-        return out.slice(0,n);
+        pageTitle: "Annual Estimation",
+        userLabel: "Estimated CO₂ amount (user)",
+        targetLabel: "EU Target 2030",
+        
+        homeTitle: "Housing",
+        transTitle: "Transport",
+        lifeTitle: "Lifestyle - Diet",
+        
+        back: "Back",
+        
+        chartLabels: {
+          home: ["Heating", "DHW", "Electricity"],
+          trans: ["Car", "Public", "Dom. Flights", "Intl. Flights"],
+          life: ["Diet", "Goods", "Digital", "Public Services"]
+        }
       }
-    }catch(e){}
-    return Array.from({length:n}, ()=>0);
-  }
+    }[lang];
 
-  function renderPie(domId, title, labels, values){
-    const el = document.getElementById(domId);
-    if (!el || !window.echarts) return;
+    // 3. Ενημέρωση των Τίτλων στη σελίδα
+    const setText = (id, txt) => { const el = document.getElementById(id); if(el) el.textContent = txt; };
 
-    const chart = echarts.init(el);
+    setText("dashTitle", T.pageTitle);      // Ο Γενικός Τίτλος
+    setText("kpiUserLbl", T.userLabel);
+    setText("kpiTargetLbl", T.targetLabel);
+    
+    setText("homeTitle", T.homeTitle);      // Τίτλος Κατοικίας
+    setText("transportTitle", T.transTitle); // Τίτλος Μεταφορών
+    setText("lifeTitle", T.lifeTitle);      // Τίτλος Τρόπου Ζωής
 
-    const data = labels.map((name, i)=>({name, value: Math.max(0, Number(values[i]||0))}));
+    // Ενημέρωση Κουμπιού Επιστροφής
+    setText("toFootprintBtn", T.back);
 
-    chart.setOption({
-      title: { text: title, left: "center", top: 6, textStyle: { fontSize: 16, fontWeight: 600, color: "#314e4e" } },
-      tooltip: { trigger: "item", formatter: (p)=> `${p.name}: ${Number(p.value).toFixed(2)} (${Number(p.percent).toFixed(0)}%)` },
+    // 4. Ενημέρωση Τιμών (KPIs)
+    document.getElementById("kpiUserVal").textContent = fmt(userTotal);
+    document.getElementById("kpiTargetVal").textContent = fmt(euTarget);
+
+
+    // 5. Ρυθμίσεις Διαγραμμάτων (Pie Charts)
+    const pieOpt = (data) => ({
+      tooltip: { 
+        trigger: 'item', 
+        formatter: '{b}: {c} ({d}%)' // Εμφανίζει: Όνομα: Τιμή (Ποσοστό%)
+      },
       series: [{
-        type: "pie",
-        radius: ["58%","72%"],
-        center: ["50%","56%"],
-        avoidLabelOverlap: true,
-        itemStyle: { borderRadius: 6, borderColor: "#fff", borderWidth: 2 },
-        label: { show: true, formatter: (p)=> `${p.name}\n${Number(p.value).toFixed(2)}` },
-        emphasis: { label: { show: true, fontSize: 14, fontWeight: "bold" } },
-        data
+        type: 'pie',
+        radius: ['50%', '70%'], // Δακτύλιος
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 5,
+          borderColor: '#fff',
+          borderWidth: 2
+        },
+        label: { show: false }, // Απόκρυψη ετικετών για καθαρή εμφάνιση
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: '14',
+            fontWeight: 'bold'
+          }
+        },
+        data: data
       }]
     });
 
-    window.addEventListener("resize", ()=>chart.resize());
+    const initChart = (id, names, vals) => {
+      const el = document.getElementById(id);
+      if(!el) return;
+      
+      // Καθαρισμός αν υπάρχει ήδη γράφημα (για αποφυγή bugs σε reload)
+      if(echarts.getInstanceByDom(el)) echarts.getInstanceByDom(el).dispose();
+
+      const ch = echarts.init(el);
+      // Αντιστοίχιση ονομάτων με τιμές
+      const data = names.map((n,i) => ({ value: Number((vals[i]||0).toFixed(2)), name: n }));
+      
+      ch.setOption(pieOpt(data));
+      window.addEventListener("resize", ()=>ch.resize());
+    };
+
+    // 6. Δημιουργία των 3 γραφημάτων
+    initChart("pieHome", T.chartLabels.home, homeVals);
+    initChart("pieTransport", T.chartLabels.trans, transVals);
+    initChart("pieLife", T.chartLabels.life, lifeVals);
   }
 
+  // Εκκίνηση όταν φορτώσει η σελίδα
   document.addEventListener("DOMContentLoaded", ()=>{
-    initLangButtons();
-    applyUnitYearElements();
-    const t = T();
-
-    const setText = (id, txt)=>{ const el = document.getElementById(id); if (el) el.textContent = txt; };
-
-    setText("dashTitle", t.title);
-
-    // Totals are produced by footprint.js
-    const userTotal = Number(localStorage.getItem("USER_TOTAL") || "0") || 0;
-    const euTarget = Number(localStorage.getItem("EU_TARGET") || "0") || 0;
-
-    // KPI labels & values
-    setText("kpiUserLbl", t.kpiUserLbl);
-    setText("kpiTargetLbl", t.kpiTargetLbl);
-    setText("kpiUserVal", fmt(userTotal, 2));
-    setText("kpiTargetVal", fmt(euTarget, 2));
-
-    // Section titles
-    setText("homeTitle", t.home);
-    setText("transportTitle", t.transport);
-    setText("lifeTitle", t.life);
-    const homeVals = safeArr("CO2_HOME_VALUES", 3);
-    const trVals = safeArr("CO2_TRANSPORT_VALUES", 4);
-    const lifeVals = safeArr("CO2_LIFE_VALUES", 4);
-
-    renderPie("pieHome", t.home, t.categoryLabels.home, homeVals);
-    renderPie("pieTransport", t.transport, t.categoryLabels.transport, trVals);
-    renderPie("pieLife", t.life, t.categoryLabels.life, lifeVals);
-
-    const toCalc = document.getElementById("toFootprintBtn");
-    if (toCalc){
-      toCalc.textContent = t.backToCalc;
-      toCalc.addEventListener("click", ()=>go("./footprint.html"));
-    }
+    if(typeof initLangButtons === 'function') initLangButtons();
+    if(typeof applyUnitYearElements === 'function') applyUnitYearElements();
+    
+    renderCharts();
+    
+    // Λειτουργία κουμπιών
     const backBtn = document.getElementById("backBtn");
-    if (backBtn){
-      backBtn.addEventListener("click", ()=>history.back());
-    }
+    if(backBtn) backBtn.addEventListener("click", ()=>history.back());
+    
+    const toFoot = document.getElementById("toFootprintBtn");
+    if(toFoot) toFoot.addEventListener("click", ()=>location.href="./footprint.html");
   });
 })();

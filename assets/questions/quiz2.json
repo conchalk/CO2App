@@ -1,217 +1,50 @@
 [
-{
-  "question": {
-    "gr": "Το ανθρακικό αποτύπωμα εκφράζεται σε τόνους CO₂ και άλλες φορές σε τόνους CO₂e. Ποια είναι η διαφορά;",
-    "en": "The carbon footprint is sometimes expressed in tons of CO₂ and other times in tons of CO₂e. What is the difference?"
-  },
-  "img": "http://localhost/12.png",
-  "a1": {
-    "gr": "Δεν υπάρχει διαφορά, είναι απλώς δύο διαφορετικοί τρόποι γραφής του ίδιου πράγματος.",
-    "en": "There is no difference, they are just two ways of writing the same thing."
-  },
-  "a2": {
-    "gr": "Το CO₂e περιλαμβάνει και άλλα αέρια του θερμοκηπίου, μετατρέποντάς τα σε ισοδύναμη ποσότητα CO₂.",
-    "en": "CO₂e includes other greenhouse gases by converting them into an equivalent amount of CO₂."
-  },
-  "a3": {
-    "gr": "Το CO₂ αφορά μόνο φυσικές εκπομπές, ενώ το CO₂e χρησιμοποιείται μόνο για βιομηχανικές εκπομπές.",
-    "en": "CO₂ refers only to natural emissions, while CO₂e is used only for industrial emissions."
-  },
-  "right": 2,
-  "explanation": {
-    "gr": "Το CO₂ (διοξείδιο του άνθρακα) είναι ένα μόνο από τα αέρια του θερμοκηπίου. Όμως, υπάρχουν και άλλα ισχυρά αέρια, όπως το μεθάνιο (CH₄). Το CO₂e (ισοδύναμο CO₂) επιτρέπει να εκφράσουμε την επίδραση αυτών των αερίων σε **ισοδύναμους τόνους CO₂**. Για παράδειγμα, 1 τόνος CH₄ ισοδυναμεί με περίπου 27–30 τόνους CO₂e. Έτσι, το αποτύπωμα σε CO₂e περιλαμβάνει το **συνολικό αποτέλεσμα όλων των αερίων του θερμοκηπίου** και όχι μόνο του CO₂.",
-    "en": "CO₂ (carbon dioxide) is only one of the greenhouse gases. Others, like methane (CH₄) are much stronger. CO₂e (carbon dioxide equivalent) allows us to express the effect of these gases in **equivalent tons of CO₂**. For example, 1 ton of CH₄ equals about 27–30 tons of CO₂e. Thus, the footprint in CO₂e reflects the **combined effect of all greenhouse gases**, not just CO₂."
-  },
-  "url": "https://ourworldindata.org/greenhouse-gas-emissions#how-do-we-quantify-greenhouse-gas-emissions"
-}, 
- {
+  {
     "question": {
-      "gr": "Ποιος τομέας συμβάλλει κατά μέσο όρο περισσότερο στο συνολικό ανθρακικό αποτύπωμα (CO₂) ανά κάτοικο στην Ελλάδα;",
-      "en": "Which sector contributes most to the total per capita carbon footprint (CO₂) in Greece?"
+      "gr": "Το ανθρακικό αποτύπωμα εκφράζεται σε τόνους CO₂ και άλλες φορές σε τόνους CO₂e. Ποια είναι η διαφορά;",
+      "en": "The carbon footprint is sometimes expressed in tons of CO₂ and other times in tons of CO₂e. What is the difference?"
     },
-    "img": "http://localhost/1.png",
-    "a1": { "gr": "Διατροφή", "en": "Food" },
-    "a2": { "gr": "Μεταφορές", "en": "Transport" },
-    "a3": { "gr": "Κατανάλωση ενέργειας σε οικιακή χρήση", "en": "Household Energy" },
+    "img": "../assets/questions/img/12.png",
+    "a1": {
+      "gr": "Δεν υπάρχει διαφορά, είναι απλώς δύο διαφορετικοί τρόποι γραφής του ίδιου πράγματος.",
+      "en": "There is no difference, they are just two ways of writing the same thing."
+    },
+    "a2": {
+      "gr": "Το CO₂e περιλαμβάνει και άλλα αέρια του θερμοκηπίου, μετατρέποντάς τα σε ισοδύναμη ποσότητα CO₂.",
+      "en": "CO₂e includes other greenhouse gases by converting them into an equivalent amount of CO₂."
+    },
+    "a3": {
+      "gr": "Το CO₂ αφορά μόνο φυσικές εκπομπές, ενώ το CO₂e χρησιμοποιείται μόνο για βιομηχανικές εκπομπές.",
+      "en": "CO₂ refers only to natural emissions, while CO₂e is used only for industrial emissions."
+    },
     "right": 2,
     "explanation": {
-      "gr": "O τομέας “μεταφορές” περιλαμβάνει τις μετακινήσεις μας με ΙΧ ή λεωφορείο, αλλά και το αποτύπωμα από τη διανομή αγαθών και εμπορευμάτων που φτάνουν στο σπίτι μας ή στο σούπερ μάρκετ (logistics). Συνυπολογίζοντας λοιπόν το σύνολο του μεταφορικού φορτίου, το συνολικό αποτύπωμα μεταφορών ανά κάτοικο ξεπερνά όλους τους άλλους τομείς. Το 2022, στην Ελλάδα οι εκπομπές από μεταφορές (προσωπικές & αγαθών) ήταν περίπου 2,1 τόνους CO₂eq/κάτοικο, όταν η ενέργεια που καταναλώνεται για οικιακή χρήση προσφέρει ~1,2 τόνους και η διατροφή ~1,7 τόνους. Αυτό δείχνει πόσο σημαντικό είναι να ενθαρρύνουμε συστήματα φιλικότερα προς το περιβάλλον τόσο στις μαζικές μεταφορές όσο και στα τοπικά δίκτυα διανομής.",
-      "en": "The 'transportation' sector includes our travel by car or bus, but also the footprint from the distribution of goods and merchandise that arrive at our homes or supermarkets (logistics). Taking into account the total transport load, the overall transport footprint per capita exceeds all other sectors. In 2022, emissions from transport (personal and goods) in Greece were approximately 2.1 tons of CO₂eq/resident, while energy consumed for domestic use accounted for ~1.2 tons and food ~1.7 tons. This shows how important it is to encourage more environmentally friendly systems in both mass transportation and local distribution networks."
-    },
-    "url": "https://ourworldindata.org/co2-emissions-from-transport"
+      "gr": "Το CO₂ (διοξείδιο του άνθρακα) είναι ένα μόνο από τα αέρια του θερμοκηπίου. Το CO₂e (ισοδύναμο διοξείδιο του άνθρακα) είναι μια μονάδα μέτρησης που χρησιμοποιείται για να συμπεριλάβει την επίδραση και άλλων αερίων (όπως μεθάνιο, υποξείδιο του αζώτου) εκφράζοντάς τα ως την ποσότητα CO₂ που θα προκαλούσε την ίδια θέρμανση.",
+      "en": "CO₂ is just one greenhouse gas. CO₂e (Carbon Dioxide Equivalent) is a metric used to compare the emissions from various greenhouse gases on the basis of their global-warming potential (GWP), by converting amounts of other gases to the equivalent amount of carbon dioxide with the same global warming potential."
+    }
   },
   {
     "question": {
-      "gr": "Ποια από τις παρακάτω πράξεις μειώνει το προσωπικό σου αποτύπωμα CO₂ περισσότερο;",
-      "en": "Which of the following actions reduces your personal CO₂ footprint the most?"
+      "gr": "Ποια είναι η επίδραση της αποψίλωσης των τροπικών δασών στο ισοζύγιο του CO₂ στην ατμόσφαιρα;",
+      "en": "What is the effect of tropical deforestation on the balance of CO₂ in the atmosphere?"
     },
-    "img": "http://localhost/1.png",
-    "a1": { "gr": "Αντικατάσταση λαμπτήρων με LED", "en": "Replacing all bulbs with LEDs" },
-    "a2": { "gr": "Μείωση κατανάλωσης κρέατος", "en": "Reducing meat consumption" },
-    "a3": { "gr": "Μείωση κατανάλωσης εμφιαλωμένου νερού", "en": "Reducing bottled water consumption" },
+    "img": "../assets/questions/img/17.png",
+    "a1": {
+      "gr": "Μειώνεται, γιατί τα καλλιεργούμενα φυτά απορροφούν CO₂.",
+      "en": "It decreases, because crops also absorb CO₂."
+    },
+    "a2": {
+      "gr": "Αυξάνεται, γιατί απελευθερώνεται άνθρακας από το δάσος και μειώνεται η δυνατότητα απορρόφησης.",
+      "en": "It increases, because carbon stored in the forest is released and the absorption capacity is reduced."
+    },
+    "a3": {
+      "gr": "Μένει περίπου σταθερό, γιατί θεωρητικά τα δέντρα που χάνονται αντικαθίστανται από τις καλλιέργειες.",
+      "en": "It stays roughly the same, since in theory the lost trees are replaced by crops."
+    },
     "right": 2,
     "explanation": {
-      "gr": "Η διατροφή παίζει τεράστιο ρόλο στο συνολικό περιβαλλοντικό μας αποτύπωμα. Η παραγωγή ζωικών προϊόντων (κυρίως βοδινό, χοιρινό, γαλακτοκομικά) απαιτεί τεράστιες ποσότητες ενέργειας, νερού και εκτάσεων γης και οδηγεί σε υψηλές εκπομπές αερίων του θερμοκηπίου (ιδιαίτερα τα μυρηκαστικά που παράγουν μεγάλες ποσότητες μεθανίου). Ένα κιλό βοδινό μπορεί να προκαλέσει εκπομπές πάνω από 60 kg CO₂eq, ενώ το ίδιο βάρος φασολιών μόλις 2 kg CO₂eq. Μια έντονα κρεοφαγική διατροφή μπορεί να φτάνει 2,5–3 τόνους CO₂eq/έτος – όσο το αποτύπωμα από τη χρήση ΙΧ! Μειώνοντας δραστικά το ζωικό κρέας ή ακολουθώντας φυτική διατροφή, το ετήσιο αποτύπωμα μπορεί να μειωθεί στο μισό ή και περισσότερο.",
-      "en": "Diet plays a huge role in our overall environmental footprint. The production of animal products (mainly beef, pork, dairy) requires enormous amounts of energy, water, and land and leads to high greenhouse gas emissions (especially ruminants, which produce large amounts of methane). One kilogram of beef can cause emissions of over 60 kg CO₂eq, while the same weight of beans causes only 2 kg CO₂eq. A heavily meat-based diet can reach 2.5–3 tons CO₂eq/year—as much as the footprint from using a car! By drastically reducing animal meat or following a plant-based diet, the annual footprint can be reduced by half or more."
-    },
-    "url": "https://ourworldindata.org/food-choice-vs-eating-local"
-  },
-  {
-    "question": {
-      "gr": "Ποια μετακίνηση έχει το χαμηλότερο κατά κεφαλήν μέσο ανθρακικό αποτύπωμα ανά χιλιόμετρο στον κόσμο;",
-      "en": "Which mode of transport has the lowest carbon footprint per capita per kilometre?"
-    },
-    "img": "http://localhost/1.png",
-    "a1": { "gr": "Ηλεκτρικό ποδήλατο", "en": "Electric Bicycle" },
-    "a2": { "gr": "ΙΧ βενζίνης", "en": "Petrol car" },
-    "a3": { "gr": "Αεροπορικό ταξίδι", "en": "Airport flight" },
-    "right": 3,
-    "explanation": {
-      "gr": "Η λέξη-κλειδί είναι το «κατά κεφαλήν»: μετράμε το μέσο αποτύπωμα ανά κάτοικο και όχι ανά επιβάτη-χιλιόμετρο. Αν και τα αεροπορικά ταξίδια έχουν υψηλές εκπομπές ανά χιλιόμετρο, λίγοι άνθρωποι ταξιδεύουν συχνά με αεροπλάνο. Έτσι, μοιρασμένα σε όλο τον πληθυσμό, το μέσο αποτύπωμα από τις πτήσεις είναι χαμηλότερο σε σχέση με τη συχνή χρήση ΙΧ ή ποδηλάτου.",
-      "en": "The key word is 'per capita': we measure the average footprint per person, not per passenger-kilometre. Although flights emit a lot per kilometre, relatively few people fly often. Spread across the whole population, the per capita footprint of flying is lower than that of frequent car use or cycling."
-    },
-    "url": "https://www.iea.org"
-  },
-  {
-    "question": {
-      "gr": "Τι ρόλο παίζουν στην εκπομπή θερμοκηπιακών αερίων τα απορρίματα των τροφίμων; ",
-      "en": "Which mode of transport has the lowest carbon footprint per person per kilometer?"
-    },
-    "img": "http://localhost/1.png",
-    "a1": { "gr": "Kανέναν ρόλο ή σχεδόν κανένα η συμβολή τους είναι αμελητέα", "en": "Νo role or almost none, their contribution is negligible" },
-    "a2": { "gr": "Σημαντικό, η απόρριψη τροφίμων παράγει περισσότερο CO2 από τις μεταφορές", "en": "Important role, food waste produces more CO2 than transport" },
-    "a3": { "gr": "Όχι τόσο μικρό, η σπατάλη αυτή προσθέτει CO2 στην ατμόσφαιρα περισσότερο από εκείνον που παράγεται από τις αεροπορικές μεταφορές", "en": "Not so small a role, this waste adds more CO2 to the atmosphere than that produced by air transport" },
-    "right": 3,
-    "explanation": {
-      "gr": "Περίπου το ένα τέταρτο των θερμίδων που παράγει ο κόσμος πετιέται, αλλοιώνεται ή διαχέεται μέσω των αλυσίδων εφοδιασμού ή σπαταλιέται από τους λιανοπωλητές, τα εστιατόρια και τους καταναλωτές. Για την παραγωγή αυτών των τροφίμων χρειαζόμαστε γη, νερό, ενέργεια. Υπολογίζεται ότι αυτά τα απορρίμματα ευθύνονται για το 6% της παγκόσμιας παραγωγής CO2, ποσότητα καθόλου αμελητέα, όταν οι αερομεταφορές ευθύνονται για περίπου 2,5%.",
-      "en": "About a quarter of the calories the world produces are thrown away, spoiled or diffused through supply chains or wasted by retailers, restaurants and consumers. To produce this food we need land, water, energy. It is estimated that this waste is responsible for 6% of global CO2 production, a far from negligible amount when air transport is responsible for around 2.5%."
-    },
-    "url": "https://ourworldindata.org/food-waste-emissions"
-  },
-  {
-	  "question": {
-      "gr": "Αν δύο οδηγοί ο ένας στην Ελλάδα και ο άλλος στην Κύπρο  οδηγούν όμοια ηλεκτρικά αυτοκίνητα για 100 km αφήνουν το ίδιο περιβαλλοντικό αποτύπωμα; ",
-      "en": "If two drivers, one in Greece and one in Cyprus, drive the same electric car for 100 km do they leave the same environmental footprint?"
-    },
-    "img": "http://localhost/1.png",
-    "a1": { "gr": "Ναι, γιατί το ηλ. αυτοκίνητο δεν παράγει CO2 αφού δεν έχει εξάτμιση", "en": "Yes, because EVs have no tailpipe emissions." },
-    "a2": { "gr": "Όχι, γιατί το αποτύπωμα του εξαρτάται από τον τρόπο με τον οποίο παράγεται το ηλεκτρικό ρεύμα που φορτίζει την μπαταρία του.", "en": "No, because its footprint depends on how the electricity that charges its battery is generated." },
-    "a3": { "gr": "Ναι, γιατί αφού είναι όμοια λειτουργούν με τον ίδιο τρόπο.", "en": "Yes, because since they're identical they work in the same way." },
-    "right": 2,
-    "explanation": {
-      "gr": "Η ηλεκτρική ενέργεια δεν είναι από μόνη της “καθαρή” ή “βρώμικη” — εξαρτάται από το ενεργειακό μίγμα της χώρας. Στην Ελλάδα, περίπου 50% της ηλεκτρικής ενέργειας παράγεται από ανανεώσιμες πηγές (2024), ενώ στην Κύπρο το ποσοστό είναι 25% (μεγάλη εξάρτηση από πετρέλαιο και ντίζελ για ηλεκτροπαραγωγή). Άρα, ένα EV που φορτίζεται στην Κύπρο έχει υψηλότερο έμμεσο αποτύπωμα CO₂ ανά kWh σε σχέση με την Ελλάδα.",
-      "en": "Electricity is not inherently “clean” or “dirty” — it depends on the energy mix of the country. In Greece, about 50% of electricity comes from renewables (2024) , while in Cyprus, it’s 25%, with most power generated from oil and diesel. So, an EV charged in Cyprus has a higher indirect CO₂ footprint per kWh than one in Greece."
-    },
-    "url": "https://ourworldindata.org/grapher/share-electricity-renewables?time=latest&mapSelect=CYP~GRC"
-  },
-      
-  {
-  "question": {
-    "gr": "Η αύξηση του CO₂ στην ατμόσφαιρα επηρεάζει τη θαλάσσια ζωή;",
-    "en": "Does the increase of atmospheric CO₂ affect marine life?"
-  },
-  "img": "http://localhost/11.png",
-  "a1": {
-    "gr": "Όχι, γιατί το CO₂ δεν διαλύεται εύκολα στο νερό.",
-    "en": "No, because CO₂ does not dissolve easily in water."
-  },
-  "a2": {
-    "gr": "Ναι, γιατί το CO₂ αυξάνει την οξύτητα των ωκεανών και δυσκολεύει τη ζωή οργανισμών με κελύφη.",
-    "en": "Yes, because CO₂ increases ocean acidity and harms organisms with shells."
-  },
-  "a3": {
-    "gr": "Όχι, γιατί οι ωκεανοί απορροφούν CO₂ χωρίς να αλλάζει η χημεία τους.",
-    "en": "No, because oceans absorb CO₂ without changing their chemistry."
-  },
-  "right": 2,
-  "explanation": {
-    "gr": "Η αύξηση του CO₂ στην ατμόσφαιρα οδηγεί στην απορρόφησή του από τους ωκεανούς, όπου σχηματίζεται ανθρακικό οξύ. Το θαλάσσιο περιβάλλον γίνεται πιο όξινο και μειώνει τα ιόντα ανθρακικού (CO₃²⁻) που είναι κρίσιμα για την κατασκευή κελυφών και σκελετών σε κοράλλια, οστρακοειδή και πλαγκτόν. Η οξίνιση των ωκεανών εξελίσσεται σήμερα 10–100 φορές γρηγορότερα από οποιαδήποτε φυσική αλλαγή των τελευταίων 100 εκατομμυρίων ετών!",
-    "en": "The increase in atmospheric CO₂ leads to more CO₂ being absorbed by the oceans, where it forms carbonic acid. Τhe marine environment becomes more acidic and reduces carbonate ions (CO₃²⁻), which are essential for building shells and skeletons in corals, shellfish, and plankton. Today, ocean acidification is happening 10–100 times faster than any natural chemical shift in the oceans over the past 100 million years!"
-  },
-  "url": "https://www.noaa.gov/education/resource-collections/ocean-coasts/ocean-acidification"
-},
-
-{
-  "question": {
-    "gr": "Σε ένα μέσο ελληνικό σπίτι, ποια επιλογή μειώνει περισσότερο τις ετήσιες εκπομπές CO₂;",
-    "en": "In an average Greek household, which option reduces annual CO₂ emissions the most?"
-  },
-  "img": "http://localhost/13.png",
-  "a1": {
-    "gr": "Αντικατάσταση όλων των λαμπτήρων με LED.",
-    "en": "Replacing all light bulbs with LEDs."
-  },
-  "a2": {
-    "gr": "Εγκατάσταση καλής θερμομόνωσης.",
-    "en": "Installing proper thermal insulation."
-  },
-  "a3": {
-    "gr": "Απενεργοποίηση συσκευών από την πρίζα όταν δεν χρησιμοποιούνται.",
-    "en": "Unplugging devices when not in use."
-  },
-  "right": 2,
-  "explanation": {
-    "gr": "Η θέρμανση και ψύξη καταναλώνει το μεγαλύτερο ποσοστό ενέργειας σε ένα ελληνικό σπίτι. Η σωστή θερμομόνωση μπορεί να μειώσει τις ενεργειακές ανάγκες για θέρμανση/ψύξη κατά 20–40%, οδηγώντας σε μείωση εκπομπών που φτάνει και πάνω από 0,4 τόνους CO₂ τον χρόνο. Η αντικατάσταση λαμπτήρων με LED μειώνει την κατανάλωση στον φωτισμό, αλλά ο φωτισμός είναι μικρό ποσοστό της συνολικής κατανάλωσης. Το να κλείνουμε τις συσκευές βοηθά, αλλά η εξοικονόμηση είναι πολύ μικρότερη σε σχέση με τη θέρμανση και την ψύξη.",
-    "en": "Heating and cooling consume the largest share of household energy in Greece. Proper insulation can cut heating/cooling needs by 20–40%, reducing emissions by over 0.4 tons of CO₂ annually. Switching to LEDs saves energy, but lighting makes up a relatively small share of total use. Unplugging devices helps, but the savings are much smaller compared to heating and cooling."
-  },
-  "url": "https://www.eea.europa.eu/en/analysis/indicators/final-energy-consumption-in-households"
-},
-{
-  "question": {
-    "gr": "Τι αφήνει περίπου το ίδιο αποτύπωμα CO₂: η μεταφορά ενός laptop (1 κιλό) από την Κίνα στην Ευρώπη με πλοίο (διάρκεια ~1 εβδομάδα) ή η κατανάλωση μιας τηλεόρασης σε αναμονή για μια εβδομάδα;",
-    "en": "Which has about the same CO₂ footprint: shipping a 1 kg laptop from China to Europe by ship (~1 week) or a TV in standby mode for one week?"
-  },
-  "img": "http://localhost/16.png",
-  "a1": { 
-    "gr": "Η μεταφορά του laptop από την Κίνα", 
-    "en": "Shipping the laptop from China" 
-  },
-  "a2": { 
-    "gr": "Η τηλεόραση σε αναμονή για μια εβδομάδα", 
-    "en": "The TV in standby for one week" 
-  },
-  "a3": { 
-    "gr": "Έχουν περίπου το ίδιο αποτύπωμα", 
-    "en": "They have about the same footprint" 
-  },
-  "right": 3,
-  "explanation": {
-    "gr": "Η μεταφορά ενός laptop βάρους 1 κιλού με πλοίο από την Κίνα στην Ευρώπη (διάρκεια ταξιδιού περίπου 1 εβδομάδα) εκπέμπει περίπου 0,2 κιλά CO₂. Μια τηλεόραση σε αναμονή καταναλώνει γύρω στα 1–2 Watt συνεχώς· σε μια εβδομάδα αυτό αντιστοιχεί σε ~0,15–0,25 κιλά CO₂, ανάλογα με το ενεργειακό μίγμα. Έτσι, τα δύο αυτά αποτυπώματα είναι σχεδόν ίσα, δείχνοντας ότι η «αθώα» αναμονή μιας συσκευής μπορεί να συγκριθεί με ένα μεγάλο θαλάσσιο ταξίδι προϊόντος.",
-    "en": "Shipping a 1 kg laptop from China to Europe by ship (about 1 week voyage) emits roughly 0.2 kg of CO₂. A TV in standby mode consumes around 1–2 W continuously; over a week this equals ~0.15–0.25 kg CO₂, depending on the electricity mix. Thus, the two footprints are nearly the same, showing that the 'innocent' standby mode of a device can equal the footprint of a major shipping journey."
-  },
-  "url": "https://ourworldindata.org/food-transport"
-},
-{
-  "question": {
-    "gr": "Αν ένα στρέμμα τροπικού δάσους αποψιλωθεί και μετατραπεί σε γεωργική γη, τι συμβαίνει με το ισοδύναμο CO₂ στην ατμόσφαιρα;",
-    "en": "If one hectare of tropical forest is cleared and converted into farmland, what happens to the CO₂ equivalent in the atmosphere?"
-  },
-  "img": "http://localhost/17.png",
-  "a1": { 
-    "gr": "Μειώνεται, γιατί τα καλλιεργούμενα φυτά απορροφούν CO₂.", 
-    "en": "It decreases, because crops also absorb CO₂." 
-  },
-  "a2": { 
-    "gr": "Αυξάνεται, γιατί απελευθερώνεται άνθρακας από το δάσος και μειώνεται η δυνατότητα απορρόφησης.", 
-    "en": "It increases, because carbon stored in the forest is released and the absorption capacity is reduced." 
-  },
-  "a3": { 
-    "gr": "Μένει περίπου σταθερό, γιατί θεωρητικά τα δέντρα που χάνονται αντικαθίστανται από τις καλλιέργειες.", 
-    "en": "It stays roughly the same, since in theory the lost trees are replaced by crops." 
-  },
-  "right": 2,
-  "explanation": {
-    "gr": "Τα τροπικά δάση είναι τεράστιες αποθήκες άνθρακα. Όταν αποψιλώνονται, ο άνθρακας που είναι αποθηκευμένος στο ξύλο και στο έδαφος απελευθερώνεται ως CO₂. Επιπλέον, χάνονται τα δέντρα που απορροφούσαν CO₂ από την ατμόσφαιρα. Η γεωργική γη αποθηκεύει πολύ λιγότερο άνθρακα, οπότε το τελικό αποτέλεσμα είναι αύξηση του ισοδύναμου CO₂ στην ατμόσφαιρα.",
-    "en": "Tropical forests are massive carbon stores. When cleared, the carbon locked in trees and soils is released as CO₂. At the same time, the trees that used to absorb CO₂ are lost. Farmland stores much less carbon, so the net effect is an increase in the CO₂ equivalent in the atmosphere."
-  },
-  "url": "https://ourworldindata.org/land-use-change-and-forestry"
-}
-
-
-
-  ]
-  
-  
-  
-  
-  
+      "gr": "Τα τροπικά δάση είναι τεράστιες αποθήκες άνθρακα. Όταν αποψιλώνονται, ο άνθρακας που είναι αποθηκευμένος στο ξύλο και στο έδαφος απελευθερώνεται ως CO₂. Επιπλέον, χάνονται τα δέντρα που απορροφούσαν CO₂ από την ατμόσφαιρα. Η γεωργική γη αποθηκεύει πολύ λιγότερο άνθρακα.",
+      "en": "Tropical forests are massive carbon sinks. When cleared, the carbon stored in the wood and soil is released as CO₂. Additionally, the capacity to absorb future CO₂ is lost. Agricultural land stores significantly less carbon than forests."
+    }
+  }
+]

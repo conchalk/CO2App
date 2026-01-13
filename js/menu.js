@@ -1,252 +1,221 @@
-function isPagesDir(){
-  return location.pathname.includes("/pages/");
-}
+// CO2App Menu (robust) — works in root and /pages/
+(function(){
+  const isPagesDir = () => location.pathname.includes("/pages/");
+  
+  const isStandaloneMode = () => {
+    try{
+      return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+             (window.navigator && window.navigator.standalone === true);
+    }catch(e){ return false; }
+  };
 
+  const getLangSafe = () => (typeof window.getLang === "function") ? window.getLang() : (localStorage.getItem("lang") || "el");
+  const setLangSafe = (l) => (typeof window.setLang === "function") ? window.setLang(l) : localStorage.setItem("lang", l);
 
-function isStandaloneMode(){
-  try{
-    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || (window.navigator && window.navigator.standalone === true);
-  }catch(e){
-    return false;
-  }
-}
+  const openDrawer = () => {
+    const d = document.getElementById("drawer");
+    const b = document.getElementById("drawerBackdrop");
+    if (!d || !b) return;
+    d.classList.add("open");
+    b.style.display = "block";
+    d.setAttribute("aria-hidden","false");
+    b.setAttribute("aria-hidden","false");
+  };
 
-function openDrawer(){
-  const d = document.getElementById("drawer");
-  const b = document.getElementById("drawerBackdrop");
-  if (!d || !b) return;
-  d.classList.add("open");
-  b.style.display = "block";
-  d.setAttribute("aria-hidden", "false");
-  b.setAttribute("aria-hidden", "false");
-}
+  const closeDrawer = () => {
+    const d = document.getElementById("drawer");
+    const b = document.getElementById("drawerBackdrop");
+    if (!d || !b) return;
+    d.classList.remove("open");
+    b.style.display = "none";
+    d.setAttribute("aria-hidden","true");
+    b.setAttribute("aria-hidden","true");
+  };
 
-function closeDrawer(){
-  const d = document.getElementById("drawer");
-  const b = document.getElementById("drawerBackdrop");
-  if (!d || !b) return;
-  d.classList.remove("open");
-  b.style.display = "none";
-  d.setAttribute("aria-hidden", "true");
-  b.setAttribute("aria-hidden", "true");
-}
+  const pageName = () => {
+    const p = location.pathname.split("/").pop();
+    return p && p.length ? p : "index.html";
+  };
 
-function pageName(){
-  const p = location.pathname.split("/").pop();
-  return p && p.length ? p : "index.html";
-}
+  const ensureDrawerSkeleton = () => {
+    if (document.getElementById("drawer") && document.getElementById("drawerBackdrop")) {
+      const closeBtn = document.getElementById("drawerClose");
+      if(closeBtn) closeBtn.onclick = closeDrawer;
+      return;
+    }
 
-function buildNav(){
-  const nav = document.getElementById("drawerNav");
-  if (!nav) return;
+    let backdrop = document.getElementById("drawerBackdrop");
+    if (!backdrop){
+      backdrop = document.createElement("div");
+      backdrop.className = "drawerBackdrop";
+      backdrop.id = "drawerBackdrop";
+      document.body.appendChild(backdrop);
+    }
+    backdrop.setAttribute("aria-hidden","true");
+    backdrop.style.display = "none";
 
-  const lang = getLang();
-  const t = {
-    el: {home:"Αρχική", quiz:"Quiz", foot:"Υπολογιστής CO₂", info:"Τεκμηρίωση", about:"Πληροφορίες", install:"Εγκατάσταση σε κινητό", settings:"Ρυθμίσεις" },
-    en: {home:"Home", quiz:"Quiz", foot:"Footprint", info:"Documentation", about:"Info", install:"Install on phone", settings:"Settings" }
-  }[lang];
+    let drawer = document.getElementById("drawer");
+    if (!drawer){
+      drawer = document.createElement("nav");
+      drawer.className = "drawer";
+      drawer.id = "drawer";
+      document.body.appendChild(drawer);
+    }
+    drawer.setAttribute("aria-hidden","true");
 
-  const here = pageName();
-  const inPages = isPagesDir();
+    if (!drawer.innerHTML.trim()){
+      drawer.innerHTML = `
+        <div class="drawerHeader">
+          <div class="drawerTitle">CO2App</div>
+          <button class="iconBtn" id="drawerClose" aria-label="close">×</button>
+        </div>
+        <div class="drawerSection" id="drawerNav"></div>
+        <div class="drawerSection" id="drawerLang"></div>
+      `;
+    }
+  };
 
-  const base = inPages ? "../" : "./";
-  const items = inPages ? [
-    {label:t.home, href: base+"index.html", icon:"home"},
-    {label:t.quiz, href: "./quiz.html", icon:"quiz"},
-    {label:t.foot, href: "./footprint.html", icon:"co2"},
-    {label:t.info, href: "./info.html", icon:"info"},
-    {label:t.about, href: "./about.html", icon:"about"},
-    {label:t.settings, href: "./settings.html", icon:"settings"},
-    {label:t.install, href: "./install.html", icon:"install"},  ] : [
-    {label:t.home, href: "./index.html", icon:"home"},
-    {label:t.quiz, href: "./pages/quiz.html", icon:"quiz"},
-    {label:t.foot, href: "./pages/footprint.html", icon:"co2"},
-    {label:t.info, href: "./pages/info.html", icon:"info"},
-    {label:t.about, href: "./pages/about.html", icon:"about"},
-    {label:t.settings, href: "./pages/settings.html", icon:"settings"},
-    {label:t.install, href: "./pages/install.html", icon:"install"},  ];
+  const buildNav = () => {
+    const nav = document.getElementById("drawerNav");
+    if (!nav) return;
 
-  nav.innerHTML = "";
-  const standalone = isStandaloneMode();
-  const visibleItems = standalone ? items.filter(x => x.icon !== 'install') : items;
+    const lang = getLangSafe();
+    const t = {
+      el: {
+        home: "Αρχική", 
+        quiz: "Quiz", 
+        foot: "Υπολογιστής CO₂", 
+        docs: "Τεκμηρίωση", 
+        info: "Πληροφορίες",
+        install: "Εγκατάσταση", 
+        settings: "Ρυθμίσεις"
+      },
+      en: {
+        home: "Home",   
+        quiz: "Quiz", 
+        foot: "Footprint",       
+        docs: "Documentation", 
+        info: "Info",
+        install: "Install App", 
+        settings: "Settings"
+      }
+    }[lang];
 
-  visibleItems.forEach(it=>{
-    const div = document.createElement("div");
-    div.className = "drawerItem";
+    const here = pageName();
+    const inPages = isPagesDir();
+    const base = inPages ? "../" : "./";
+    const pagesBase = inPages ? "./" : "./pages/";
 
-    const target = it.href.split("/").pop();
-    div.classList.toggle("active", here === target);
+    const items = [
+      {label:t.home,     href: base + "index.html",      icon:"home"},
+      {label:t.quiz,     href: pagesBase + "quiz.html",      icon:"quiz"},
+      {label:t.foot,     href: pagesBase + "footprint.html", icon:"co2"},
+      {label:t.docs,     href: pagesBase + "model.html",     icon:"docs"},
+      {label:t.info,     href: pagesBase + "info.html",      icon:"about"},
+      {label:t.settings, href: pagesBase + "settings.html",  icon:"settings"},
+      {label:t.install,  href: pagesBase + "install.html",   icon:"install"},
+    ];
 
-    const ic = document.createElement("span");
-    ic.className = "drawerIcon";
+    nav.innerHTML = "";
+    const standalone = isStandaloneMode();
+    const visibleItems = standalone ? items.filter(x => x.icon !== "install") : items;
 
     const iconBase = inPages ? "../assets/ui/" : "./assets/ui/";
-    if (it.icon === "home"){
+    const iconMap = {
+      home: "homeN.png", co2: "co2N.png", quiz: "quizN.png",
+      docs: "bookN.png", about: "infoN.png", settings: "settingsN.png", install: "installN.png"
+    };
+
+    visibleItems.forEach(it => {
+      const div = document.createElement("div");
+      div.className = "drawerItem";
+      
+      const target = it.href.split("/").pop();
+      if (here === target) div.classList.add("active");
+
+      const ic = document.createElement("span");
+      ic.className = "drawerIcon";
       const img = document.createElement("img");
-      img.src = iconBase + "homeN.png";
       img.alt = "";
-      img.width = 26;
-      img.height = 26;
-      img.style.width = "26px";
-      img.style.height = "26px";
-      img.style.display = "block";
-      img.style.objectFit = "contain";
+      img.src = iconBase + (iconMap[it.icon] || "homeN.png");
       ic.appendChild(img);
-    } else if (it.icon === "co2"){
-      const img = document.createElement("img");
-      img.src = iconBase + "co2N.png";
-      img.alt = "";
-      img.width = 26;
-      img.height = 26;
-      img.style.width = "26px";
-      img.style.height = "26px";
-      img.style.display = "block";
-      img.style.objectFit = "contain";
-      ic.appendChild(img);
-    } else if (it.icon === "quiz"){
-      const img = document.createElement("img");
-      img.src = iconBase + "quizN.png";
-      img.alt = "";
-      img.width = 26;
-      img.height = 26;
-      img.style.width = "26px";
-      img.style.height = "26px";
-      img.style.display = "block";
-      img.style.objectFit = "contain";
-      ic.appendChild(img);
-    } else if (it.icon === "about"){
-      const img = document.createElement("img");
-      img.src = iconBase + "infoN.png";
-      img.alt = "";
-      img.width = 26;
-      img.height = 26;
-      img.style.width = "26px";
-      img.style.height = "26px";
-      img.style.display = "block";
-      img.style.objectFit = "contain";
-      ic.appendChild(img);
-    } else if (it.icon === "install"){
-      const img = document.createElement("img");
-      img.src = iconBase + "installN.png";
-      img.alt = "";
-      img.width = 26;
-      img.height = 26;
-      img.style.width = "26px";
-      img.style.height = "26px";
-      img.style.display = "block";
-      img.style.objectFit = "contain";
-      ic.appendChild(img);
-    } else if (it.icon === "info"){
-      const img = document.createElement("img");
-      img.src = iconBase + "bookN.png";
-      img.alt = "";
-      img.width = 26;
-      img.height = 26;
-      img.style.width = "26px";
-      img.style.height = "26px";
-      img.style.display = "block";
-      img.style.objectFit = "contain";
-      ic.appendChild(img);
-    } else if (it.icon === "settings"){
-      const img = document.createElement("img");
-      img.src = iconBase + "settingsN.png";
-      img.alt = "";
-      img.width = 26;
-      img.height = 26;
-      img.style.width = "26px";
-      img.style.height = "26px";
-      img.style.display = "block";
-      img.style.objectFit = "contain";
-      ic.appendChild(img);
-    } else {
-      ic.textContent = "•";
-    }
+
+      const tx = document.createElement("span");
+      tx.className = "drawerText";
+      tx.textContent = it.label;
+
+      if (it.icon === "quiz"){
+        const qs = localStorage.getItem("quizScore");
+        if (qs){
+          const badge = document.createElement("span");
+          badge.className = "quizBadge";
+          badge.textContent = `${qs}/100`;
+          tx.appendChild(badge);
+        }
+      }
+
+      div.appendChild(ic);
+      div.appendChild(tx);
+
+      div.addEventListener("click", () => {
+        closeDrawer();
+        location.href = it.href;
+      });
+
+      nav.appendChild(div);
+    });
+  };
+
+  const buildLangToggle = () => {
+    const wrap = document.getElementById("drawerLang");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+
+    const lang = getLangSafe();
+    const nextLang = (lang === "el") ? "en" : "el";
+    const label = (lang === "el") ? "English" : "Ελληνικά";
+    const icon = (lang === "el") ? "lang_en.png" : "lang_el.png";
+    const iconBase = isPagesDir() ? "../assets/ui/" : "./assets/ui/";
+
+    const div = document.createElement("div");
+    div.className = "drawerItem";
+    
+    const ic = document.createElement("span");
+    ic.className = "drawerIcon";
+    const img = document.createElement("img");
+    img.src = iconBase + icon;
+    img.alt = nextLang;
+    ic.appendChild(img);
 
     const tx = document.createElement("span");
     tx.className = "drawerText";
-    tx.textContent = it.label;
-
-    // Show last quiz score next to Quiz
-    if (it.icon === "quiz"){
-      try{
-        const qs = localStorage.getItem("quizScore");
-        const n = Number(qs);
-        if (qs !== null && !Number.isNaN(n)){
-          const badge = document.createElement("span");
-          badge.className = "quizBadge";
-          badge.textContent = `${n}/100`;
-          tx.appendChild(badge);
-        }
-      }catch(e){}
-    }
+    tx.textContent = label;
 
     div.appendChild(ic);
     div.appendChild(tx);
 
-    div.addEventListener("click", ()=>{
-      closeDrawer();
-      location.href = it.href;
+    div.addEventListener("click", () => {
+      setLangSafe(nextLang);
+      location.reload();
     });
 
-    nav.appendChild(div);
+    wrap.appendChild(div);
+  };
+
+  const wireDrawer = () => {
+    const menuBtn = document.getElementById("menuBtn");
+    const closeBtn = document.getElementById("drawerClose");
+    const backdrop = document.getElementById("drawerBackdrop");
+    
+    if (menuBtn) menuBtn.onclick = openDrawer;
+    if (closeBtn) closeBtn.onclick = closeDrawer;
+    if (backdrop) backdrop.onclick = closeDrawer;
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    ensureDrawerSkeleton();
+    buildNav();
+    buildLangToggle();
+    wireDrawer();
   });
-}
-
-function buildLangToggle(){
-  const wrap = document.getElementById("drawerLang");
-  if (!wrap) return;
-
-  const lang = getLang();
-  const target = (lang === "el") ? "en" : "el";
-  const label = (lang === "el") ? "English" : "Ελληνικά";
-  const icon = (lang === "el") ? "lang_en.png" : "lang_el.png";
-
-  wrap.innerHTML = "";
-
-  const div = document.createElement("div");
-  div.className = "drawerItem";
-  div.setAttribute("data-lang-toggle", "1");
-
-  const ic = document.createElement("span");
-  ic.className = "drawerIcon";
-  const img = document.createElement("img");
-  img.src = (isPagesDir() ? "../assets/ui/" : "./assets/ui/") + icon;
-  img.alt = "";
-  img.width = 28;
-  img.height = 28;
-  img.style.width = "28px";
-  img.style.height = "28px";
-  img.style.display = "block";
-  img.style.objectFit = "contain";
-  ic.appendChild(img);
-
-  const tx = document.createElement("span");
-  tx.className = "drawerText";
-  tx.textContent = label;
-
-  div.appendChild(ic);
-  div.appendChild(tx);
-
-  div.addEventListener("click", ()=>{
-    setLang(target);
-    location.reload();
-  });
-
-  wrap.appendChild(div);
-}
-
-document.addEventListener("DOMContentLoaded", ()=>{
-  try{ if (typeof initHomeButton === "function") initHomeButton(); }catch(e){}
-
-  buildNav();
-  buildLangToggle();
-
-  // Some pages used legacy ids (openDrawer/closeDrawer). Support both.
-  const menuBtn = document.getElementById("menuBtn") || document.getElementById("openDrawer");
-  const closeBtn = document.getElementById("drawerClose") || document.getElementById("closeDrawer");
-  const backdrop = document.getElementById("drawerBackdrop");
-
-  if (menuBtn) menuBtn.addEventListener("click", openDrawer);
-  if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
-  if (backdrop) backdrop.addEventListener("click", closeDrawer);
-});
+})();

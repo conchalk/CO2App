@@ -13,12 +13,14 @@ function initLangButtons(){
   const lang = getLang();
   document.querySelectorAll("[data-lang]").forEach(btn=>{
     const bLang = btn.getAttribute("data-lang");
-    btn.classList.toggle("active", bLang === lang);
-    btn.addEventListener("click", ()=>{
-      setLang(bLang);
-      // reload to re-render strings
-      location.reload();
-    });
+    if(bLang){
+        btn.classList.toggle("active", bLang === lang);
+        btn.addEventListener("click", ()=>{
+        setLang(bLang);
+        // reload to re-render strings
+        location.reload();
+        });
+    }
   });
 }
 
@@ -32,10 +34,9 @@ function fmt(num, digits=2){
   return n.toFixed(digits);
 }
 
-
 function applyUnitYearElements(){
   const lang = getLang();
-  const unit = (lang === "en") ? " tCO2/year" : " tCO2/έτος";
+  const unit = (lang === "en") ? " tCO₂/year" : " tCO₂/έτος";
   document.querySelectorAll(".unitYear").forEach(el=>{
     el.textContent = unit;
   });

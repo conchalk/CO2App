@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#74a974"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <link rel="apple-touch-icon" href="../assets/icons/icon-192.png"/>
-  <link rel="stylesheet" href="../styles.css?v=20"/>
+  <link rel="stylesheet" href="../styles.css"/>
 </head>
 <body>
   <div class="container">
@@ -25,22 +25,21 @@
         <div id="subtitle" class="muted" style="margin:0 0 14px 0; line-height:1.35;"></div>
 
         <div class="installQrWrap">
-          <img id="qrImg" class="installQr" src="" alt="QR CO2app" alt="QR CO2app"/>
+          <img id="qrImg" class="installQr" src="" alt="QR CO2app"/>
         </div>
         <div class="muted" id="installUrl" style="text-align:center; word-break:break-all; margin-bottom:14px;"></div>
 
         <div class="installColumns">
-        <div class="installSection">
-          <h3 id="iosTitle" style="margin:12px 0 8px 0;"></h3>
-          <ol id="iosSteps" class="installList"></ol>
-        </div>
-
-        <div class="installSection">
-          <h3 id="androidTitle" style="margin:12px 0 8px 0;"></h3>
-          <ol id="androidSteps" class="installList"></ol>
+          <div class="installSection">
+            <h3 id="iosTitle" style="margin:12px 0 8px 0;"></h3>
+            <ol id="iosSteps" class="installList"></ol>
+          </div>
+          <div class="installSection">
+            <h3 id="androidTitle" style="margin:12px 0 8px 0;"></h3>
+            <ol id="androidSteps" class="installList"></ol>
+          </div>
         </div>
       </div>
-</div>
     </div>
   </div>
 
@@ -50,15 +49,8 @@
       <div class="drawerTitle">CO2app</div>
       <button class="iconBtn" id="drawerClose" aria-label="Close menu">×</button>
     </div>
-    <div id="drawerNav"></div>
-    <div style="height:8px"></div>
-    <div class="drawerFooter">
-      <div style="font-size:.85rem; opacity:.7;">v1</div>
-      <div class="drawerLang">
-        <button class="pillBtn" data-lang="el">EL</button>
-        <button class="pillBtn" data-lang="en">EN</button>
-      </div>
-    </div>
+    <div class="drawerSection" id="drawerNav"></div>
+    <div class="drawerSection" id="drawerLang"></div>
   </nav>
 
   <script src="../js/common.js"></script>
@@ -112,18 +104,13 @@
     }
     fillList("iosSteps", T.ios);
     fillList("androidSteps", T.android);
-  </script>
 
-  <script>
     function setQrFromLocation(){
-      // Use the current page base URL (up to /pages/install.html) and point to index.html
       const u = new URL(window.location.href);
-      // if running from /pages/install.html, go one level up to index.html
       let base = u.href;
       if (base.includes('/pages/')) {
         base = base.split('/pages/')[0] + '/index.html';
       } else {
-        // fallback: strip filename
         base = base.replace(/\/[^\/]*$/, '/index.html');
       }
       const qr = document.getElementById('qrImg');
@@ -136,6 +123,5 @@
     }
     window.addEventListener('load', setQrFromLocation);
   </script>
-
 </body>
 </html>
