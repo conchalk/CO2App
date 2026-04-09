@@ -1,151 +1,955 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <title>CO2-app</title>
-  <link href="./manifest.webmanifest" rel="manifest"/>
-  <meta content="#74a974" name="theme-color"/>
-  <meta content="yes" name="apple-mobile-web-app-capable"/>
-  <link href="./assets/icons/icon-192.png" rel="apple-touch-icon"/>
-  <link href="./styles.css?v=20" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title data-i18n="app_title">mNotes Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <meta name="theme-color" content="#121212">
+    <link rel="stylesheet" href="fa/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="homeNoDrawer">
-  <div class="container">
-    <div class="panel" id="mainPanel">
-      <div style="height:12px"></div>
-    </div>
-    
-    <div class="card homeCard centerCard">
-      <div class="homeLogo">
-        <img alt="CO2app" height="260" id="appLogo" src="./assets/logo.png" style="width:min(70vw,260px);max-width:260px;height:auto;display:block;margin:0 auto;" width="260"/>
-      </div>
-      <div class="homeDesc" id="homeDesc"></div>
-      
-      <button class="homePrimary" id="btnQuiz">
-        <div class="homePrimaryTitle">
-          <span id="homeQuizTitle"></span>
-          <span class="badge orange" id="homeQuizBadge"></span>
+<body class="theme-slate"> 
+      <div id="fullScreenLoader" class="loader-overlay hidden">
+            <div class="loader-content">
+                <img src="icon-512.png" alt="mNotes Logo" class="loader-logo">
+                <div class="spinner"></div>
+                <p id="loaderText" data-i18n="syncing_data">Συγχρονισμός...</p>
+            </div>
         </div>
-        <div class="homePrimarySub" id="homeQuizSub"></div>
-      </button>
+    <div class="app-container">
+       
+        <aside class="col-nav" id="sidebar">
+            <div class="sidebar-header">
+                <div style="display: flex; flex-direction: column; gap: 5px; width: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="logo-text">mNotes <span id="songCount" style="font-size:0.8rem; opacity:0.6;">0</span></span>
+                        <div class="sidebar-actions">
+                            <button id="btnAuth" onclick="document.getElementById('authModal').style.display='flex'" class="action-btn" title="Login">
+                                <i class="fas fa-user"></i>
+                            </button>
+                            <button id="btnAddSong" onclick="createNewSong()" class="action-btn" title="Add Song / Προσθήκη">
+                                <i class="fas fa-plus"></i>
+                            </button>    
+                        </div>
+                    </div>
+                    <div id="userDisplayName" style="font-size: 0.8rem; color: var(--accent); font-weight: bold; min-height: 1.2em; margin-left: 2px;"></div>
+                    <div class="sidebar-tabs">
+                        <button id="tab-library" class="tab-btn active" onclick="switchSidebarTab('library')" data-i18n="tab_library">
+                            <i class="fas fa-list"></i> Library
+                        </button>
+                        <button id="tab-setlist" class="tab-btn" onclick="switchSidebarTab('setlist')" data-i18n="tab_setlist">
+                            <i class="fas fa-clipboard-list"></i> Setlist
+                        </button>
+                    </div>
+                </div>
+            </div>
+                <div class="sidebar-workspace" style="padding: 15px; background: var(--bg-panel); border-bottom: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">
+                        <i class="fas fa-layer-group"></i> Χώρος Εργασίας
+                    </span>
+                </div>
+                
+                <select id="selGroup" class="set-control" onchange="switchContext(this.value)" style="width: 100%; margin-bottom: 10px; font-weight: bold; font-size: 0.95rem; padding: 8px; border-radius: 6px;">
+                    <option value="personal" data-i18n="opt_personal_lib">🏠 Προσωπική Βιβλιοθήκη</option>
+                </select>
+            
+                <button onclick="showBandManagerModal()" id="btnBandManage" style="width: 100%; padding: 8px; background: transparent; border: 1px solid var(--accent); color: var(--accent); border-radius: 6px; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+                    <i class="fas fa-users-cog"></i> <span>Διαχείριση Μπάντας</span>
+                </button>
+            </div>
+            <div id="library-controls" class="sidebar-search" style="display:flex; flex-direction:column; gap:8px;">
+                
+                <input id="searchInp" type="text" data-i18n="search_ph" oninput="applyFilters()" style="width: 100%;">
+                
+                <div style="display:flex; gap:5px;">
+                    <select id="tagFilter" onchange="applyFilters()" style="flex:1;">
+                        <option value="" data-i18n="opt_all_tags">All Tags</option>
+                    </select>
+                    <select id="sortFilter" onchange="applySortAndRender()" class="sort-select-v2" style="flex:1;">
+                        <option value="alpha" data-i18n="sort_alpha">🔤 Αλφαβητικά</option>
+                        <option value="created" data-i18n="sort_newest">✨ Νεότερα</option>
+                        <option value="modified" data-i18n="sort_modified">✏️ Πρόσφατα</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="setlist-controls" class="sidebar-search" style="display:none; flex-direction:column; gap:10px; border-bottom: 2px solid var(--accent);">
+                <div id="setlist-area">
+                    <label class="small-label-v2">
+                        <i class="fas fa-list"></i> <span data-i18n="lbl_active_setlist">ACTIVE SETLIST</span>
+                    </label>
+                    
+                    <select id="selSetlistName" onchange="switchSetlist(this.value)" class="setlist-select-v2">
+                        <option value="Default">Default Setlist</option>
+                    </select>
+            
+                    <div style="display:flex; gap:5px; margin-top:5px;">
+                        <button onclick="createSetlist()" class="footer-btn" data-i18n="btn_new_list_title">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button id="btnRenSetlist" onclick="renameSetlist()" class="footer-btn" data-i18n="btn_rename_title">
+                            <i class="fas fa-edit"></i>
+                        </button> 
+                        <button onclick="printSetlistPDF()" class="footer-btn" title="Εκτύπωση Λίστας (PDF)">
+                            <i class="fas fa-file-pdf"></i>
+                        </button>
+                        <button id="btnDelSetlist" onclick="deleteSetlist()" class="footer-btn danger-v2" data-i18n="btn_delete_title">
+                            <i class="fas fa-trash"></i>
+                        </button>   
+                    </div>
+                </div>
+            </div>  
+            
+            <ul id="songList" class="song-list"></ul>
+            
+            <div class="sidebar-footer">
+                <button id="btnLang" onclick="toggleLanguage()" class="footer-btn small">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <button onclick="document.getElementById('importChoiceModal').style.display='flex'" class="footer-btn">
+                    <i class="fas fa-file-import"></i> <span data-i18n="btn_import">Import</span>
+                </button>
+                <button onclick="exportJSON()" class="footer-btn icon-only" title="Export / Εξαγωγή">
+                    <i class="fas fa-file-export"></i>
+                </button>
+                <button onclick="clearLibrary()" class="footer-btn icon-only danger">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </aside>
+        <div class="resizer" id="dragMeLeft"></div>
+        <main class="col-stage" id="mainZone">
+            <div id="view-player" class="view-section active-view">
+                <div class="player-header-container">
+                    <h2 id="mainAppTitle" style="margin:0; font-size:1rem; opacity:0.8;"></h2>
+                </div>
+
+                <div id="stickyNotesArea" style="display:none; padding:10px 15px;">
+                    <div class="sticky-note">
+                        <div class="note-pin"><i class="fas fa-thumbtack"></i></div>
+                        <div id="conductorNoteText" style="font-weight:bold; margin-bottom:5px; color:#222;"></div>
+                        <div id="personalNoteText" style="font-style:italic; color:#444; border-top:1px dashed #666; padding-top:5px; margin-top:5px;"></div>
+                    </div>
+                </div>
+
+                <div id="fixed-container" class="fixed-lyrics"></div>
+                <div id="scroll-container" class="scroll-lyrics"></div>
+                   <button id="floatingScrollBtn" class="floating-scroll-btn" onclick="toggleAutoScroll(event)">
+                        <i class="fas fa-play" id="scrollBtnIcon"></i> <span id="scrollBtnText" data-i18n="btn_auto_scroll">Auto Scroll</span>
+                    </button>
+                    
+                <div class="desktop-controls-area">
+                    <button id="btnPrevSong" onclick="navSetlist(-1)" class="round-btn">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button id="btnLyrics" onclick="toggleLyricsMode()" class="round-btn">
+                        <i class="fas fa-scroll"></i>
+                    </button>
+                    
+                    <div class="control-cluster">
+                        <span class="cluster-label" data-i18n="lbl_key">KEY</span>
+                        <div class="stepper">
+                            <button onclick="transDown()"><i class="fas fa-minus"></i></button>
+                            <span id="val-t">0</span>
+                            <button onclick="transUp()"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="control-cluster">
+                        <span class="cluster-label" data-i18n="lbl_capo">CAPO</span>
+                        <div class="stepper">
+                            <button onclick="capoDown()"><i class="fas fa-minus"></i></button>
+                            <span id="val-c">0</span>
+                            <button onclick="capoUp()"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+
+                    <button onclick="autoCapo()" class="round-btn accent-btn">
+                        <i class="fas fa-lightbulb"></i>
+                    </button>
+                    <button id="btnEditSong" onclick="switchToEditor()" class="round-btn">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                    <button id="btnShareBand" onclick="showTransferModal()" class="round-btn" title="Κοινοποίηση στη Μπάντα">
+                     <i class="fas fa-share-square"></i>
+                     </button>
+                    <button id="btnNextSong" onclick="navSetlist(1)" class="round-btn">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                </div>
+            </div>
       
-      <button class="homePrimary" id="btnFoot">
-        <div class="homePrimaryTitle">
-          <span id="homeFootTitle"></span>
-          <span class="badge blue" id="homeFootBadge"></span>
+            <div id="view-editor" class="view-section">
+                <div class="editor-toolbar">
+                    <button onclick="exitEditor()" class="text-btn">
+                        <i class="fas fa-times"></i> 
+                        <span data-i18n="btn_cancel">Cancel</span>
+                    </button>
+
+                    <div style="display:flex; gap:15px; align-items:center;">
+                        <button onclick="deleteCurrentSong()" class="icon-btn danger" title="Delete Song">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                       <button id="btnSyncFromBand" onclick="syncEditorFromBand()" class="tool-btn highlight-btn" title="Sync from Band" style="display:none;">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button onclick="saveEdit()" class="icon-btn accent" title="Save Changes">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </div>
+                </div>
+
+               <div class="editor-body">
+                    <input id="inpTitle" class="inp title-inp" data-i18n="inp_title" oninput="autoSaveDraft()">
+                    <details><summary data-i18n="sum_metadata">Metadata & Notes</summary>
+                        <div class="details-content">
+                            <input id="inpArtist" class="inp" data-i18n="inp_artist" placeholder="Artist">
+                            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                                <input id="inpVideo" class="inp" data-i18n="inp_video" placeholder="YouTube Link" style="flex: 1; margin: 0;" oninput="autoSaveDraft()">
+                                <div class="input-group">
+                                    <label style="font-size: 0.8rem; color: var(--accent); margin-bottom: 3px; display: block;">
+                                        <i class="fas fa-sticky-note"></i> Προσωπικές Σημειώσεις (Μόνο για εσάς)
+                                    </label>
+                                        <textarea id="inpPersonalNotes" class="inp" placeholder="Π.χ. Προσοχή στην αλλαγή..." style="width: 100%; height: 60px; resize: vertical;" oninput="autoSaveDraft()"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <div style="display:flex; gap:10px;">
+                        <input id="inpKey" class="inp" data-i18n="inp_key" style="width:80px; oninput="autoSaveDraft()">
+                        <div style="flex:1; position:relative">
+                            <div class="tag-wrapper" onclick="document.getElementById('tagInput').focus()">
+                                <div id="tagChips" style="display:contents;"></div>
+                                <input id="tagInput" class="tag-input-area" data-i18n="inp_tags" oninput="handleTagInput(this)" onkeydown="handleTagKey(event)">
+                            </div>
+                            <div id="tagSuggestions" class="tag-suggestions"></div>
+                            <input id="inpTags" type="hidden">
+                        </div>
+                    </div>
+                    <input id="inpIntro" class="inp" data-i18n="inp_intro oninput="autoSaveDraft()">
+                    <input id="inpInter" class="inp" data-i18n="inp_inter oninput="autoSaveDraft()">
+                    <textarea id="inpBody" class="inp txt-area" data-i18n="inp_body" oninput="autoSaveDraft()"></textarea>
+                </div>
+               
+            </div>
+        </main>
+<div class="resizer" id="dragMeRight"></div>
+<aside class="col-tools" id="rhythmTools">
+    <div class="sidebar-header-tools">
+        <span data-i18n="title_tools" style="font-weight:bold; color:var(--text-muted); font-size:0.9rem;">TOOLS & ASSETS</span>
+    </div>
+
+    <div id="video-sidebar-container" style="display:none; padding: 10px; border-bottom: 1px solid var(--border-color); background: rgba(0,0,0,0.1);">
+        <div id="video-embed-box" class="video-responsive" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px; background:transparent;">
         </div>
-        <div class="homePrimarySub" id="homeFootSub"></div>
-      </button>
-      
-      <div class="homeChips">
-        <button class="homeChip" id="chipDocs">
-          <img alt="Docs" class="homeChipIconImg" height="22" src="./assets/ui/bookN.png" style="width:22px;height:22px;display:block;" width="22"/>
-          <span id="chipDocsText"></span>
-        </button>
-        <button class="homeChip" id="chipInstall">
-          <span class="homeChipIcon">📱</span>
-          <span id="chipInstallText"></span>
-        </button>
-        <button class="homeChip" id="chipLang">
-          <span class="homeChipIcon">🌐</span>
-          <span id="chipLangText"></span>
-        </button>
-        <button class="homeChip" id="chipAbout">
-          <span class="homeChipIcon">i</span>
-          <span id="chipAboutText"></span>
-        </button>
-      </div>
+    </div>
 
-      <div style="text-align:center; font-size:0.85rem; color:#888; margin-top:1.5rem; opacity:0.7;">
-        v4.0
-      </div>
+    <div class="tool-panel">
+        
+        <div class="tool-section">
+            <div class="section-title">
+                <i class="fas fa-microphone-alt" style="color:var(--accent);"></i> 
+                <span data-i18n="title_audio_hub">AUDIO HUB</span>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                
+                <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 5px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s;">
+                    <span id="recTimer" class="rec-timer" style="font-size: 0.85rem; margin-bottom: 8px; color: var(--text-muted); font-family: monospace;">00:00</span>
+                    <div style="display: flex; gap: 8px;">
+                       <div style="display: flex; gap: 8px;">
+                            <button id="btnRecord" onclick="toggleRecording()" class="action-btn-circle" title="Record" style="background: var(--bg-main); color: #ff4757; border: 1px solid #ff4757; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+                                <i class="fas fa-circle"></i>
+                            </button>
+                            
+                            <button id="btnDiscardRec" onclick="discardCurrentRecording()" class="action-btn-circle" style="display:none; background: #dc3545; color: #fff; border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;" title="Ακύρωση Εγγραφής">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        
+                            <button id="btnLinkRec" onclick="uploadAndLinkCurrent()" class="action-btn-circle" style="display:none; background: #4db6ac; color: #000; border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;" title="Save to Song">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div onclick="openAssetManager('audio')" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 5px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                    <i class="fas fa-folder-open" style="font-size: 1.6rem; color: var(--accent); margin-bottom: 8px;"></i>
+                    <span data-i18n="btn_manage_audio" style="font-size: 0.8rem; font-weight: bold; color: var(--text-main);">Audio Library</span>
+                </div>
+
+            </div>
+
+            <div id="uploadProgressBox" style="display:none; margin-bottom: 15px;">
+                <div class="prog-bg"><div id="uploadBar" class="prog-fill"></div></div>
+                <span id="uploadText" data-i18n="msg_uploading" style="font-size:0.7rem; color:#888;">Uploading...</span>
+            </div>
+
+            <audio id="masterAudio"></audio>
+           <div id="customPlayerUI" style="display: none; align-items: center; gap: 8px; background: var(--bg-panel, rgba(0,0,0,0.2)); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; width: 100%; box-sizing: border-box; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <button id="cpPlayBtn" onclick="toggleCustomPlayer()" style="background: var(--accent); color: #000; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: 0.2s transform;">
+                    <i class="fas fa-play" id="cpPlayIcon"></i>
+                </button>
+                <span id="cpCurrentTime" style="font-size: 0.75rem; color: var(--text-main); font-family: monospace; min-width: 35px;">0:00</span>
+                <input type="range" id="cpSeekbar" value="0" max="100" oninput="seekCustomPlayer(this.value)" style="flex: 1; accent-color: var(--accent); height: 4px; cursor: pointer;">
+                <span id="cpDuration" style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace; min-width: 35px;">0:00</span>
+            </div>
+            
+            <div id="audio-tools-panel" style="display:none; margin-bottom:15px; padding: 10px; background: rgba(0,0,0,0.1); border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; color: var(--text-muted);">
+                    <i class="fas fa-sliders-h"></i> <span data-i18n="lbl_audio_tools">AUDIO TOOLS</span>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <span style="font-size: 0.85rem;" data-i18n="lbl_pitch">Pitch:</span>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button id="btnAudioPitchDown" class="play-mini-btn" style="width: 28px; height: 28px; padding: 0;">-</button>
+                        <span id="audioPitchDisplay" style="width: 24px; text-align: center; font-weight: bold; font-size: 0.9rem;">0</span>
+                        <button id="btnAudioPitchUp" class="play-mini-btn" style="width: 28px; height: 28px; padding: 0;">+</button>
+                    </div>
+                    <button id="btnAudioPitchReset" class="add-mini-btn" style="padding: 2px 8px; font-size: 0.75rem;" data-i18n="btn_reset">Reset</button>
+                </div>
+
+                <button id="btnDetectKey" class="add-mini-btn" style="width: 100%; justify-content: center; background-color: rgba(40, 167, 69, 0.15); border-color: rgba(40, 167, 69, 0.4);">
+                    <i class="fas fa-magic"></i> <span data-i18n="btn_detect_key">Detect Key</span>
+                </button>
+                <div id="keyDetectResult" style="display: none; text-align: center; font-weight: bold; margin-top: 8px; font-size: 1.1rem; color: #28a745;">
+                </div>
+            </div>
+
+            <div class="audio-list-container" style="background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 10px;">
+                <label class="list-label" data-i18n="lbl_tracks" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px; display: block; letter-spacing: 1px;">TRACKS:</label>
+                <div id="sideRecList" class="compact-list">
+                    <div class="empty-state" data-i18n="msg_no_recordings" style="text-align: center; color: #666; font-size: 0.85rem; padding: 10px 0; font-style: italic;">No recordings yet</div> 
+                </div>
+            </div>
+        </div>
+
+        <hr class="sep">
+
+        <details id="filesGroup" class="tool-group">
+            <summary><i class="fas fa-folder-open" style="color:var(--accent);"></i> <span data-i18n="sum_files">FILES & SHEETS</span></summary>
+            <div class="group-content">
+                <div id="list-sheets" class="file-list compact" style="margin-bottom: 10px;">
+                    <div class="empty-state" data-i18n="msg_no_attachments">No attachments</div>
+                </div>
+                <button class="add-mini-btn" onclick="openAssetManager('document')" style="width: 100%; justify-content: center; padding: 8px;">
+                    <i class="fas fa-folder-open"></i> <span data-i18n="btn_manage_files">Files Library</span>
+                </button>
+            </div>
+        </details>
+        
+             
+            
+        <hr class="sep">
+        <details class="tool-group" id="rhythmsMetronomeGroup" open>
+                <summary><i class="fas fa-drum"></i> <span data-i18n="sum_rhythms">RHYTHMS & METRONOME</span></summary>
+                <div class="group-content">
+                    
+                    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px; gap: 20px; padding-top: 5px;">
+                        <button id="btnPlayRhythm" onclick="toggleMasterRhythm()" class="action-btn-circle" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: var(--accent); color: #000; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer; transition: 0.2s transform;">
+                            <i class="fas fa-play" id="iconPlayRhythm"></i>
+                        </button>
+                        <div class="bpm-display" style="text-align: center;">
+                            <span id="dispBpm" style="font-size: 2.2rem; font-weight: bold; color: var(--text-main);">100</span> 
+                            <span style="font-size:0.85rem; color: var(--text-muted); font-weight: bold; display: block; margin-top: -5px;" data-i18n="lbl_bpm">BPM</span>
+                        </div>
+                    </div>
+            
+                    <div class="bpm-row" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 15px;">
+                        
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);">
+                                <span><i class="fas fa-tachometer-alt"></i> Ταχύτητα</span>
+                            </div>
+                            <input type="range" id="rngBpm" min="40" max="250" value="100" class="compact-range" style="width: 100%; accent-color: var(--accent);" oninput="changeRhythmBpm(this.value)">
+                        </div>
+            
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);">
+                                <span><i class="fas fa-volume-up"></i> Ένταση</span>
+                            </div>
+                            <input type="range" id="rngVolume" min="0" max="100" value="80" class="compact-range" style="width: 100%; accent-color: #4db6ac;" oninput="changeRhythmVolume(this.value)">
+                        </div>
+            
+                        <div style="display: flex; flex-direction: column; gap: 5px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);">
+                                <span><i class="fas fa-wave-square"></i> Συχνότητα Tick</span>
+                            </div>
+                            <input type="range" id="rngPitch" min="400" max="1500" value="800" class="compact-range" style="width: 100%; height: 3px; accent-color: #888;" oninput="BasicMetronome.setPitch(this.value)" title="Ρύθμιση Συχνότητας (Pitch)">
+                        </div>
+            
+                    </div>
+            
+                    <div id="activeRhythmBox" style="position: relative; background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); border-radius: 6px; padding: 10px; text-align: center; margin-bottom: 12px;">
+                        <button onclick="clearActiveRhythm()" style="position: absolute; top: 5px; right: 8px; background: transparent; border: none; color: #ff4757; font-size: 1.1rem; cursor: pointer; transition: 0.2s;" title="Επιστροφή σε Μετρονόμο">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.75rem; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;">Ενεργος Ρυθμος:</span>
+                        <span id="seq-current-name" style="font-weight: bold; color: var(--text-main); font-size: 0.95rem;">Απλός Μετρονόμος (Tick)</span>
+                    </div>
+                    
+                    <div id="list-rhythms" class="file-list compact" style="margin-bottom: 15px;"></div>
+                    
+                    <button onclick="openAssetManager('rhythm')" class="add-mini-btn" style="width: 100%; justify-content: center; padding: 10px; font-size: 0.85rem; margin-bottom: 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--accent);">
+                        <i class="fas fa-drum" style="color: var(--accent);"></i> 
+                        <span data-i18n="btn_manage_rhythms" style="margin-left: 8px;">Rhythms Library (.mnr)</span>
+                    </button>
+            
+                    <button onclick="openMStudio()" 
+                            style="width: 100%; padding: 12px; margin-bottom: 5px; font-size: 1.05rem; font-weight: bold; background: var(--bg-panel); color: var(--text-main); border: 2px solid var(--accent); border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; transition: 0.2s transform; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fas fa-sliders-h" style="color: var(--accent);"></i> 
+                        <span>mStudio</span> 
+                        <i class="fas fa-lock" id="lockStudioIcon" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+                    </button>
+            
+                </div>
+            </details>
+                    
+         <hr class="sep" id="guitarChordsSep">
+         <details class="tool-group" id="guitarChordsGroup">
+            <summary><i class="fas fa-guitar"></i> <span data-i18n="lbl_show_chords">GUITAR CHORDS</span></summary>
+            <div class="group-content">
+                <div id="chord-charts-container" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding-top:10px;">
+                    <div class="empty-state" data-i18n="msg_no_chords">Δεν βρέθηκαν συγχορδίες...</div>
+                </div>
+            </div>
+         
+         </details> 
+        
+          <div class="tools-footer">
+                <button class="footer-btn" onclick="openSettings()" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button id="btnAuthBottom" class="footer-btn" onclick="document.getElementById('authModal').style.display='flex'">
+                    <i class="fas fa-user"></i> <span data-i18n="btn_account">Account</span> 
+                </button>
+            </div>
+        </aside>
+ 
+
+    <div id="importChoiceModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h3 data-i18n="title_import">Import Song</h3>
+            <button onclick="selectImport('url')" class="modal-btn">
+                <i class="fas fa-link"></i> <span data-i18n="btn_import_url">From URL</span>
+            </button>
+            <button onclick="selectImport('file')" class="modal-btn">
+                <i class="fas fa-file-upload"></i> <span data-i18n="btn_import_file">From File</span>
+            </button>
+            <button onclick="document.getElementById('importChoiceModal').style.display='none'" class="modal-btn cancel" data-i18n="btn_cancel">Cancel</button>
+        </div>
+    </div>
+
+    <div id="assetManagerModal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 500px; width: 95%;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3 style="margin:0;"><i class="fas fa-photo-video"></i> <span data-i18n="title_media_library">My Media Library</span></h3>
+                <button onclick="closeAssetManager()" class="text-btn"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div style="margin-bottom: 15px; text-align: center;">
+                <input type="file" id="inpGlobalUpload" style="display:none;" accept=".mp3, .wav, .m4a, .webm, audio/mpeg, audio/wav, audio/mp4, audio/webm, .pdf, application/pdf, .png, .jpg, .jpeg, image/png, image/jpeg, .mnr, .mnrythm, .nmr" onchange="handleGlobalUpload(this)">
+                <button onclick="document.getElementById('inpGlobalUpload').click()" class="highlight-btn" style="width:100%; padding:10px; font-size:1rem;">
+                    <i class="fas fa-cloud-upload-alt"></i> <span data-i18n="btn_upload_new">Upload New File</span>
+                </button>
+            </div>
+            
+            <label class="list-label" data-i18n="lbl_my_files">MY UPLOADED FILES:</label>
+            <div class="asset-list-container" style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; background: rgba(0,0,0,0.05);">
+                <div id="assetManagerList" class="compact-list">
+                    </div>
+            </div>
+            
+            <input type="hidden" id="assetManagerCurrentType" value="audio">
+        </div>
+    </div> 
+    
+    <div id="settingsModal" class="modal" style="display:none;">
+    <div class="modal-content settings-content">
+        <h3 data-i18n="title_settings" style="margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid var(--accent); padding-bottom: 10px;">Settings</h3>
+
+        <div class="settings-group">
+            <h4 style="color: var(--accent); margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; opacity: 0.9;">Γενικά & Εμφάνιση</h4>
+            
+            <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span data-i18n="lbl_theme">Theme:</span> 
+                <select id="setTheme" class="set-control" onchange="applyTheme()">
+                    <option value="theme-dark">Deep Night</option>
+                    <option value="theme-slate">Slate Gray</option>
+                    <option value="theme-light">Paper Light</option>
+                </select>
+            </label>
+        
+            <label class="setting-checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" id="setDisableSplit">
+                <span data-i18n="opt_disable_split">Ενιαία προβολή κειμένου (Όχι Split)</span>
+            </label>
+
+            <label class="setting-checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" id="setWakeLock"> 
+                <span data-i18n="lbl_keep_screen">Keep Screen On</span>
+            </label>
+
+            <label class="setting-checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" id="setHideDemo"> 
+                <span data-i18n="lbl_hide_demo">Hide Demo Songs</span>
+            </label>
+        </div>
+
+        <div class="settings-group" style="margin-top: 20px; border-top: 1px solid rgba(150,150,150,0.2); padding-top: 15px;">
+            <h4 style="color: var(--accent); margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; opacity: 0.9;" data-i18n="lbl_chord_appearance">Σκηνή & Συγχορδίες</h4>
+            
+            <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span data-i18n="lbl_chord_size">Μέγεθος:</span> 
+                <input type="range" id="setChordSize" min="0.5" max="2" step="0.1" value="1" style="width: 50%;">
+            </label>
+            
+            <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span data-i18n="lbl_chord_dist">Απόσταση (Ύψος):</span> 
+                <input type="range" id="setChordDist" min="-10" max="20" step="1" value="0" style="width: 50%;">
+            </label>
+
+            <label class="setting-checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" id="setShowChords" checked onchange="GuitarChordsUI.toggleVisibility(this.checked)"> 
+                <span data-i18n="lbl_show_chords">🎸 Εμφάνιση Συγχορδιών (Κιθάρα)</span>
+            </label>
+
+            <label class="setting-checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" id="setOnlySharps">
+                <span data-i18n="opt_only_sharps">Χρήση μόνο διέσεων (Sharps)</span>
+            </label>
+
+            <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span data-i18n="lbl_max_capo">Max Capo:</span> 
+                <input type="number" id="setMaxCapo" value="12" class="inp" style="width: 60px; padding: 4px; text-align: center;">
+            </label>
+
+            <label class="setting-checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" id="chkAutoSaveCapo">
+                <span style="color: var(--accent);">Απομνημόνευση Capo (Auto-Save)</span>
+            </label>
+        </div>
+
+        <div class="settings-group" style="margin-top: 20px; border-top: 1px solid rgba(150,150,150,0.2); padding-top: 15px;">
+            <h4 style="color: var(--accent); margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; opacity: 0.9;">Auto-Scroll</h4>
+
+            <label class="setting-checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" id="setShowScrollBtn" checked>
+                <span data-i18n="opt_show_scroll">Εμφάνιση κουμπιού Scroll</span>
+            </label>   
+            
+            <div style="margin-bottom: 10px;">
+                <span data-i18n="lbl_scroll_speed" style="display: block; margin-bottom: 5px;">Ταχύτητα (Speed):</span>
+                <input type="range" id="setScrollSpeed" min="10" max="200" style="width: 100%;">
+            </div>
+        </div>
+
+        <div class="settings-group" style="margin-top: 20px; border-top: 1px solid rgba(150,150,150,0.2); padding-top: 15px;">
+            <h4 style="color: var(--accent); margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; opacity: 0.9;">Εκτύπωση & Εξαγωγή</h4>
+            
+            <label class="setting-checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" id="setPrintLyricsOnly">
+                <span data-i18n="opt_print_lyrics">Εκτύπωση μόνο στίχων (PDF)</span>
+            </label>
+        </div>
+        
+        <div style="margin-top:25px; text-align:center;">
+              <button onclick="redeemGiftCode()" class="modal-btn" style="width:100%; padding: 10px; background:var(--bg-panel); border:1px dashed var(--accent); color:var(--accent); cursor: pointer; border-radius: 6px;">
+                  <i class="fas fa-gift"></i> Έχετε Κωδικό Δώρου;
+              </button>
+        </div>
+        
+        <div style="margin-top:20px; display:flex; gap:10px;">
+            <button onclick="saveSettings()" class="modal-btn accent" data-i18n="btn_save" style="flex: 1; padding: 12px; font-weight: bold;">Save</button>
+            <button onclick="document.getElementById('settingsModal').style.display='none'" class="modal-btn cancel" data-i18n="btn_cancel" style="flex: 1; padding: 12px;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+  <input type="file" id="hiddenFileInput" style="display:none;" accept=".json, .mnote, .mnotes" onchange="processFileDirectly(this)" >
+    
+    <div id="authModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+             <h3 data-i18n="title_login"><i class="fas fa-sign-in-alt"></i> Login / Sign Up</h3>
+             
+             <div style="background: rgba(255, 193, 7, 0.1); border: 1px solid #ffc107; color: #ffbc00; padding: 10px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 15px; text-align: center; line-height: 1.4;">
+                 <i class="fas fa-info-circle"></i> <b data-i18n="lbl_beta_title">BETA VERSION</b><br>
+                 <span data-i18n="lbl_beta_desc">Η εφαρμογή βρίσκεται σε δοκιμαστική φάση. Προς το παρόν υποστηρίζονται μόνο δωρεάν εγγραφές.</span>
+             </div>
+             
+             <button onclick="loginWithGoogle()" class="google-btn">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20"> 
+                <span data-i18n="btn_google_login">Sign in with Google</span>
+             </button>
+             <div class="auth-sep"><div class="sep-line"></div><span data-i18n="lbl_or_email">OR EMAIL</span><div class="sep-line"></div></div>
+             <input type="email" id="authEmail" class="inp" data-i18n="ph_email" placeholder="Email">
+             <input type="password" id="authPass" class="inp" data-i18n="ph_password" placeholder="Password">
+             <button onclick="doLogin()" class="modal-btn accent" data-i18n="btn_login"><i class="fas fa-sign-in-alt"></i> Login</button>
+             <button onclick="doSignUp()" class="modal-btn" data-i18n="btn_signup"><i class="fas fa-user-plus"></i> Sign Up</button>
+             <button onclick="document.getElementById('authModal').style.display='none'" class="modal-btn cancel" data-i18n="btn_close"><i class="fas fa-times"></i> Close</button>
+             <div id="authMsg" class="auth-error-msg"></div>
+        </div>
+    </div>
+
+    <div id="drawerHandle" onclick="toggleRightDrawer()"><i class="fas fa-bars"></i></div>
+
+    <aside id="rightDrawer" class="right-drawer">
+        <div class="drawer-header">
+            <span style="font-weight:bold; color:var(--accent);" data-i18n="title_menu">MENU</span>
+            <button onclick="toggleRightDrawer()" class="drawer-close"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <div class="drawer-section">
+            <label data-i18n="lbl_navigation">NAVIGATION</label>
+            <button class="drawer-btn active" onclick="switchDrawerTab('library')">
+                <i class="fas fa-list"></i> <span data-i18n="tab_library">Library</span>
+            </button>
+            <button class="drawer-btn" onclick="switchDrawerTab('stage')">
+                <i class="fas fa-microphone-alt"></i> <span data-i18n="mob_stage">Stage</span>
+            </button>
+            <button class="drawer-btn" onclick="switchDrawerTab('tools')">
+                <i class="fas fa-drum"></i> <span data-i18n="mob_rhythm">Rhythm & Tools</span>
+            </button>
+        </div>
+
+        <div id="drawer-player-controls" class="drawer-section" style="display:none;">
+            <label data-i18n="lbl_controls">CONTROLS</label>
+            <button class="drawer-btn" onclick="toggleLyricsMode()">
+                <i class="fas fa-scroll"></i> <span data-i18n="btn_lyrics_mode">Lyrics Mode</span>
+            </button>
+            
+            <div class="drawer-row">
+                <span data-i18n="lbl_transpose">Transpose:</span>
+                <div class="stepper">
+                    <button onclick="transDown()"><i class="fas fa-minus"></i></button>
+                    <span id="drawer-val-t">0</span>
+                    <button onclick="transUp()"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            
+            <div class="drawer-row">
+                <span data-i18n="lbl_capo_simple">Capo:</span>
+                <div class="stepper">
+                    <button onclick="capoDown()"><i class="fas fa-minus"></i></button>
+                    <span id="drawer-val-c">0</span>
+                    <button onclick="capoUp()"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            
+            <button class="drawer-btn" onclick="autoCapo()">
+                <i class="fas fa-lightbulb"></i> <span data-i18n="btn_smart_capo">Smart Capo</span>
+            </button>
+            <button class="drawer-btn" onclick="switchToEditor()">
+                <i class="fas fa-pen"></i> <span data-i18n="btn_edit_song">Edit Song</span>
+            </button>
+        </div>
+
+        <div class="drawer-section" style="margin-top:auto; border-top:1px solid #333; padding-top:10px;">
+            <button class="drawer-btn" onclick="openSettings()">
+                <i class="fas fa-cog"></i> <span data-i18n="title_settings">Settings</span>
+            </button>
+            <button id="btnAuthDrawer" class="drawer-btn" onclick="document.getElementById('authModal').style.display='flex'">
+                <i class="fas fa-user"></i> <span data-i18n="btn_account">Account</span>
+            </button>
+        </div>
+    </aside>
+
+    <div id="mediaOverlay" class="media-overlay" style="display:none;" onclick="closeMediaOverlay()">
+        <button class="close-overlay-btn" onclick="closeMediaOverlay()">&times;</button>
+        <div class="overlay-content" onclick="event.stopPropagation()">
+            <h3 id="overlayTitle">Document View</h3>
+            <div id="overlayBody"></div>
+        </div>
+    </div>
+    <div id="rhythmLoadModal" class="modal" style="display:none; z-index:2500 !important;">
+        <div class="modal-content" style="max-width: 450px;">
+            <h3 data-i18n="title_load_rhythm">Load Rhythm</h3>
+            
+            <div style="display:flex; gap:5px; margin-bottom:15px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+                <button id="tabRhythmSystem" class="modal-btn active" onclick="loadRhythmTab('presets')" style="flex:1; padding:8px; font-size:0.85rem;">
+                    <i class="fas fa-server"></i> <span data-i18n="tab_sys">System</span>
+                </button>
+                <button id="tabRhythmPersonal" class="modal-btn" onclick="loadRhythmTab('personal')" style="flex:1; padding:8px; font-size:0.85rem;">
+                    <i class="fas fa-cloud"></i> <span data-i18n="tab_cloud">My Cloud</span>
+                </button>
+                <button id="tabRhythmBand" class="modal-btn" onclick="loadRhythmTab('band')" style="flex:1; padding:8px; font-size:0.85rem; display:none;">
+                    <i class="fas fa-users"></i> <span data-i18n="tab_band">Band</span>
+                </button>
+            </div>
+
+            <input id="searchRhythm" class="inp" data-i18n="ph_search_rhythm" oninput="AudioEngine.searchRhythms()" placeholder="Αναζήτηση..." style="margin-bottom:10px;">
+            
+            <div id="rhythmResults" class="rhythm-results-box" style="min-height:250px; max-height:400px; overflow-y:auto; border:1px solid var(--border-color); border-radius:6px; padding:10px; margin-bottom:15px; background:var(--bg-main);">
+            </div>
+            
+            <button onclick="document.getElementById('rhythmLoadModal').style.display='none'" class="modal-btn cancel" style="width:100%;">
+                <i class="fas fa-times"></i> <span data-i18n="btn_close">Close</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="rhythmSaveModal" class="modal" style="display:none; z-index:2500 !important; ">
+        <div class="modal-content">
+            <h3 data-i18n="title_save_rhythm">Save Rhythm</h3>
+            <input id="saveRhythmName" class="inp" data-i18n="ph_rhythm_name">
+            <input id="saveRhythmTags" class="inp" data-i18n="ph_rhythm_tags">
+            <div style="margin-top:15px; display:flex; gap:10px;">
+                <button onclick="AudioEngine.saveRhythm()" class="modal-btn accent">
+                    <i class="fas fa-save"></i> <span data-i18n="btn_save">Save</span>
+                </button>
+                <button onclick="document.getElementById('rhythmSaveModal').style.display='none'" class="modal-btn cancel">
+                    <i class="fas fa-times"></i> <span data-i18n="btn_cancel">Cancel</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+  <div id="pricingModal" class="modal" style="display:none;">
+    <div class="modal-content pricing-content" style="max-width: 1200px !important;">
+        <button onclick="document.getElementById('pricingModal').style.display='none'" class="close-pricing">&times;</button>
+        
+        <h2 style="text-align:center; margin-bottom:5px;">Choose your Stage 🎸</h2>
+        <p style="text-align:center; color:#ffc107; margin-bottom:20px; font-size:0.9rem;">
+            <i class="fas fa-tools"></i> <b data-i18n="lbl_early_access">Early Access:</b> Τα Premium πακέτα ξεκλειδώνονται μόνο με Κωδικούς Δώρου!
+        </p>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="p-header">
+                    <h3>Solo Free</h3>
+                    <div class="price">€0<span>/mo</span></div>
+                </div>
+                <ul class="p-features">
+                    <li><i class="fas fa-check"></i> Απεριόριστα Τραγούδια</li>
+                    <li><i class="fas fa-check"></i> Τοπική Αποθήκευση Μόνο</li>
+                    <li class="disabled"><i class="fas fa-times"></i> Ήχος & Επισυνάψεις</li>
+                    <li class="disabled"><i class="fas fa-times"></i> Συγχρονισμός Cloud</li>
+                    <li class="disabled"><i class="fas fa-times"></i> Λειτουργίες Μπάντας</li>
+                </ul>
+                <button class="p-btn current" disabled data-i18n="btn_current_plan">Current Plan</button>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="badge-pop">POPULAR</div>
+                <div class="p-header">
+                    <h3>Solo Plus</h3>
+                    <div class="price">Εφάπαξ</div>
+                </div>
+                <ul class="p-features">
+                    <li><i class="fas fa-check"></i> <b>50MB Cloud Sync</b></li>
+                    <li><i class="fas fa-check"></i> <b>Πλήρες Drum Machine</b></li>
+                    <li><i class="fas fa-check"></i> Ήχος & Επισυνάψεις</li>
+                    <li class="disabled"><i class="fas fa-times"></i> Δημιουργία Μπάντας</li>
+                </ul>
+                <button onclick="document.getElementById('pricingModal').style.display='none'; openSettings();" class="p-btn accent" data-i18n="btn_req_gift">Requires Gift Code</button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="p-header">
+                    <h3>Band Mate</h3>
+                    <div class="price">Τριμηνιαία</div>
+                </div>
+                <ul class="p-features">
+                    <li><i class="fas fa-check"></i> <b>500MB Cloud Sync</b></li>
+                    <li><i class="fas fa-check"></i> <b>Συμμετοχή Παντού</b></li>
+                    <li><i class="fas fa-check"></i> 50 Setlists</li>
+                    <li><i class="fas fa-check"></i> Πλήρη Εργαλεία Ήχου</li>
+                </ul>
+                <button onclick="document.getElementById('pricingModal').style.display='none'; openSettings();" class="p-btn" data-i18n="btn_req_gift">Requires Gift Code</button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="p-header">
+                    <h3>Band Leader</h3>
+                    <div class="price">Τριμηνιαία</div>
+                </div>
+                <ul class="p-features">
+                    <li><i class="fas fa-check"></i> <b>1.5GB Cloud Sync</b></li>
+                    <li><i class="fas fa-check"></i> <b>1 Μπάντα (Ιδιοκτήτης)</b></li>
+                    <li><i class="fas fa-check"></i> 150 Setlists</li>
+                    <li><i class="fas fa-check"></i> Πλήρη Εργαλεία Ήχου</li>
+                </ul>
+                <button onclick="document.getElementById('pricingModal').style.display='none'; openSettings();" class="p-btn" data-i18n="btn_req_gift">Requires Gift Code</button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="p-header">
+                    <h3>Maestro</h3>
+                    <div class="price">Τριμηνιαία</div>
+                </div>
+                <ul class="p-features">
+                    <li><i class="fas fa-check"></i> <b>4.5GB Cloud Sync</b></li>
+                    <li><i class="fas fa-check"></i> <b>Έως 5 Μπάντες</b></li>
+                    <li><i class="fas fa-check"></i> 500 Setlists</li>
+                    <li><i class="fas fa-check"></i> Οργάνωση & Στατιστικά</li>
+                </ul>
+                <button onclick="document.getElementById('pricingModal').style.display='none'; openSettings();" class="p-btn" data-i18n="btn_req_gift">Requires Gift Code</button>
+            </div>
+
+            <div class="pricing-card" style="border: 2px solid #9c27b0;">
+                <div class="badge-pop" style="background:#9c27b0; color:#fff;">ENTERPRISE</div>
+                <div class="p-header">
+                    <h3>Ensemble</h3>
+                    <div class="price">Ετήσια</div>
+                </div>
+                <ul class="p-features">
+                    <li><i class="fas fa-check"></i> <b>10 Μπάντες</b></li>
+                    <li><i class="fas fa-check"></i> <b>9 Προπληρωμένα Μέλη</b></li>
+                    <li><i class="fas fa-check"></i> <b style="color:#9c27b0;">Free Viewers Allowed</b></li>
+                    <li><i class="fas fa-check"></i> Assigned Admins</li>
+                </ul>
+                <button onclick="document.getElementById('pricingModal').style.display='none'; openSettings();" class="p-btn" style="background:rgba(156, 39, 176, 0.2); border-color:#9c27b0; color:#fff;" data-i18n="btn_req_gift">Contact for Setup</button>
+            </div>
+        </div>
+
+        <h3 style="color:#fff; text-align:left; border-bottom:1px solid #444; padding-bottom:5px; margin-top:20px; margin-bottom:15px; font-size: 1.1rem;">Επεκτάσεις (Add-ons)</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px;">
+            <button onclick="document.getElementById('pricingModal').style.display='none'; openSettings();" style="background:#222; border:1px solid #444; color:#fff; padding:15px; border-radius:8px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='#444'">
+                <i class="fas fa-users" style="font-size:1.8rem; color:var(--accent);"></i>
+                <span style="font-weight:bold; font-size:0.9rem;">+1 Μπάντα</span>
+                <span style="font-size:0.7rem; color:#888;">Για Leaders & Maestros</span>
+            </button>
+            <button onclick="document.getElementById('pricingModal').style.display='none'; openSettings();" style="background:#222; border:1px solid #444; color:#fff; padding:15px; border-radius:8px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#4db6ac'" onmouseout="this.style.borderColor='#444'">
+                <i class="fas fa-user-plus" style="font-size:1.8rem; color:#4db6ac;"></i>
+                <span style="font-weight:bold; font-size:0.9rem;">+1 Θέση Μέλους</span>
+                <span style="font-size:0.7rem; color:#888;">Προπληρωμένη θέση</span>
+            </button>
+            <button onclick="document.getElementById('pricingModal').style.display='none'; openSettings();" style="background:#222; border:1px solid #444; color:#fff; padding:15px; border-radius:8px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#ffb74d'" onmouseout="this.style.borderColor='#444'">
+                <i class="fas fa-database" style="font-size:1.8rem; color:#ffb74d;"></i>
+                <span style="font-weight:bold; font-size:0.9rem;">+1GB Storage</span>
+                <span style="font-size:0.7rem; color:#888;">Χώρος για ηχητικά</span>
+            </button>
+        </div>
 
     </div>
-  </div>
-
-  <script src="./js/common.js?v=20"></script>
-  <script src="./js/menu.js?v=20"></script>
-  <script>
-    const lang = getLang();
-
-    const T = {
-      el: {
-        desc: "Μια εκπαιδευτική εφαρμογή για το CO2.",
-        quizTitle: "QUIZ",
-        quizSub: "Γνωρίζεις πραγματικά ποιοι παράγοντες αυξάνουν το CO2;",
-        quizBadge: "10 ερωτήσεις",
-        footTitle: "Υπολογισμός CO₂",
-        footSub: "Κάνε μια εκτίμηση για τη δική σου συμβολή στην αύξηση του CO₂ στην ατμόσφαιρα.",
-        footBadge: "4 κατηγορίες",
-        docs: "Τεκμηρίωση",
-        lang: "Αλλαγή γλώσσας",
-        about: "Πληροφορίες",
-        install: "Εγκατάσταση σε κινητό"
-      },
-      en: {
-        desc: "An educational app about CO₂ and climate, featuring a knowledge quiz and a carbon footprint calculator.",
-        quizTitle: "QUIZ",
-        quizSub: "Do you really know what rising CO₂ means and how it affects the climate?",
-        quizBadge: "10 questions",
-        footTitle: "CO₂ Calculator",
-        footSub: "Estimate your own contribution to the rise of CO₂ in the atmosphere.",
-        footBadge: "4 categories",
-        docs: "Documentation",
-        lang: "Switch language",
-        about: "About",
-        install: "Install on phone"
-      }
-    }[lang];
-
-    document.getElementById("homeDesc").textContent = T.desc;
-    document.getElementById("homeQuizTitle").textContent = T.quizTitle;
-    document.getElementById("homeQuizSub").textContent = T.quizSub;
-    document.getElementById("homeQuizBadge").textContent = T.quizBadge;
-
-    document.getElementById("homeFootTitle").textContent = T.footTitle;
-    document.getElementById("homeFootSub").textContent = T.footSub;
-    document.getElementById("homeFootBadge").textContent = T.footBadge;
-
-    document.getElementById("chipDocsText").textContent = T.docs;
-    document.getElementById("chipInstallText").textContent = T.install;
-    document.getElementById("chipLangText").textContent = T.lang;
-    document.getElementById("chipAboutText").textContent = T.about;
-
-    // Πλοήγηση
-    document.getElementById("btnQuiz").addEventListener("click", ()=>go("./pages/quiz.html"));
-    document.getElementById("btnFoot").addEventListener("click", ()=>go("./pages/footprint.html"));
-
-    // ΔΙΟΡΘΩΣΗ: Το Docs πάει στο model.html
-    document.getElementById("chipDocs").addEventListener("click", ()=>go("./pages/model.html"));
+</div> 
+  <div id="debugPanel" class="debug-panel" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1a1a1a; padding:25px; border-radius:12px; z-index:2147483647; color:#fff; box-shadow:0 15px 40px rgba(0,0,0,0.8); border:2px solid #28a745; width:90%; max-width:400px; max-height:90vh; overflow-y:auto; flex-direction:column; gap:10px;">
+    <h4 style="margin:0 0 10px 0; text-align:center; color:#28a745; font-size:1.2rem; border-bottom:1px solid #444; padding-bottom:10px;">🛠️ GOD MODE</h4>
     
-    document.getElementById("chipInstall").addEventListener("click", ()=>go("./pages/install.html"));
-    
-    // ΔΙΟΡΘΩΣΗ: Το About πάει πλέον στο info.html
-    document.getElementById("chipAbout").addEventListener("click", ()=>go("./pages/info.html"));
-    
-    document.getElementById("chipLang").addEventListener("click", ()=>{
-      const next = (lang === "el") ? "en" : "el";
-      setLang(next);
-      location.reload();
-    });
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
-    }
-  </script>
-
-  <div aria-hidden="true" class="drawerBackdrop" id="drawerBackdrop"></div>
-  <nav aria-hidden="true" class="drawer" id="drawer">
-    <div class="drawerHeader">
-      <div class="drawerTitle">CO2app</div>
-      <button aria-label="Close menu" class="iconBtn" id="drawerClose">×</button>
+    <div style="margin-bottom:10px;">
+        <label style="display:block; font-size:0.8rem; color:#aaa; margin-bottom:3px;">Subscription Tier:</label>
+        <select id="debugTier" style="width:100%; padding:8px; border-radius:6px; background:#000; color:#fff; border:1px solid #555;">
+            <option value="solo_free">Solo Free</option>
+            <option value="solo_pro">Solo Plus</option>
+            <option value="band_mate">Band Mate</option>
+            <option value="band_leader">Band Leader</option>
+            <option value="band_maestro">Band Maestro</option>
+            <option value="ensemble">Ensemble</option>
+        </select>
     </div>
-    <div class="drawerSection" id="drawerNav"></div>
-    <div class="drawerSection" id="drawerLang"></div>
-  </nav>
+
+    <div style="margin-bottom:15px; padding:10px; background:rgba(0, 255, 0, 0.05); border:1px dashed #28a745; border-radius:6px;">
+        <label style="color:#28a745; font-size:0.8rem; font-weight:bold; display:block; margin-bottom:8px;">ADD-ONS (SIMULATION)</label>
+        <div style="display:flex; gap:10px; margin-bottom:8px;">
+            <div style="flex:1;">
+                <span style="font-size:0.7rem; color:#aaa;">+ Bands</span>
+                <input type="number" id="simExtraBands" class="inp" value="0" min="0" style="width:100%; padding:6px; font-size:0.9rem; background:#111; color:#fff; border:1px solid #444;">
+            </div>
+            <div style="flex:1;">
+                <span style="font-size:0.7rem; color:#aaa;">+ Mates</span>
+                <input type="number" id="simExtraMates" class="inp" value="0" min="0" style="width:100%; padding:6px; font-size:0.9rem; background:#111; color:#fff; border:1px solid #444;">
+            </div>
+        </div>
+        <div>
+            <span style="font-size:0.7rem; color:#aaa;">+ Storage (MB)</span>
+            <input type="number" id="simExtraStorage" class="inp" value="0" min="0" style="width:100%; padding:6px; font-size:0.9rem; background:#111; color:#fff; border:1px solid #444;">
+        </div>
+    </div>
+
+    <div style="margin-bottom:15px;">
+        <label style="display:block; font-size:0.8rem; color:#aaa; margin-bottom:3px;">Current Role (Context):</label>
+        <select id="debugRole" style="width:100%; padding:8px; border-radius:6px; background:#000; color:#fff; border:1px solid #555;">
+            <option value="owner">Owner (Personal / Band)</option>
+            <option value="admin">Band Admin</option>
+            <option value="member">Band Member</option>
+            <option value="viewer">Viewer (Read Only)</option>
+        </select>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin-bottom:10px; border:1px dashed #666;">
+        <h5 style="margin:0 0 10px 0; color:#bb86fc; text-align:center; font-size:1rem;"><i class="fas fa-gift"></i> PROMO GENERATOR</h5>
+        
+        <input type="text" id="adminPromoCode" placeholder="Όνομα (άστο κενό)" style="margin-bottom:10px; width:100%; padding:8px; border-radius:6px; background:#111; color:#fff; border:1px solid #444; text-align:center;">
+        
+        <label style="display:block; font-size:0.75rem; color:#aaa; margin-bottom:3px;">Κατηγορία:</label>
+        <select id="adminPromoType" style="margin-bottom:10px; width:100%; padding:8px; border-radius:6px; background:#222; color:#fff; border:1px solid #444;" onchange="updatePromoPlaceholder()">
+            <option value="tier_upgrade">Αναβάθμιση Πακέτου</option>
+            <option value="extra_bands">Επιπλέον Μπάντες</option>
+            <option value="extra_band_mates">Επιπλέον Θέσεις Μελών</option>
+            <option value="extra_storage">Επιπλέον Χώρος (MB)</option>
+            <option value="rhythm_credits">Μονάδες Ρυθμών</option>
+        </select>
+        
+        <label style="display:block; font-size:0.75rem; color:#aaa; margin-bottom:3px;">Αξία:</label>
+        <input type="text" id="adminPromoValue" placeholder="solo_pro, band_mate, band_leader..." style="margin-bottom:10px; width:100%; padding:8px; border-radius:6px; background:#000; color:#bb86fc; border:1px solid #bb86fc; text-align:center; font-weight:bold;">
+        
+        <button onclick="generatePromoCode()" style="width:100%; padding:10px; border-radius:6px; border:none; background:#bb86fc; color:#000; font-weight:bold; cursor:pointer;">ΔΗΜΙΟΥΡΓΙΑ</button>
+    </div>
+
+    <div style="display:flex; gap:10px;">
+        <button onclick="applySimulation()" style="flex:1; padding:10px; border-radius:6px; border:none; background:#007bff; color:#fff; font-weight:bold; cursor:pointer;">APPLY</button>
+        <button onclick="document.getElementById('debugPanel').style.display='none'" style="flex:1; padding:10px; border-radius:6px; border:none; background:#dc3545; color:#fff; font-weight:bold; cursor:pointer;">CLOSE</button>
+    </div>
+</div>
+        <div id="bandManagerModal" class="modal-overlay" style="display: none; z-index: 4000;">
+    <div class="modal-content" style="max-width: 600px; width: 90%; background: var(--bg-main);">
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+            <h3 style="margin:0;"><i class="fas fa-users-cog"></i> Διαχείριση Μπάντας</h3>
+            <button class="close-btn" onclick="document.getElementById('bandManagerModal').style.display='none'" style="background:transparent; border:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto; padding: 5px;">
+            <div id="bandManagerContent"></div> 
+        </div>
+    </div>
+</div>
+
+    <script src="js/sortable.min.js"></script>
+    <script src="js/config.js?v=0.50.0"></script>
+    <script src="js/supabase.min.js"></script>
+    <script src="js/data.js?v=0.28.0"></script>
+    <script src="js/translations.js?v=0.28.0"></script>
+    <script src="js/storage.js?v=0.28.0"></script>
+    
+    
+    <script src="js/sample-kit-data.js"></script>
+    <script src="js/universal-percussion-engine.js"></script>
+    <script src="js/drum-machine.js"></script>
+    <script src="js/mnr-loader.js"></script>
+    <script src="js/mnotes-rhythm-runtime.js"></script>
+
+    <script src="js/supabase-client.js?v=0.55.0"></script> 
+    <script src="js/basicmetronome.js?v=0.50.0"></script> 
+    <script src="js/logic.js?v=0.50.0"></script>
+    <script src="js/bandManager.js?v=0.55.0"></script>
+    <script src="js/asset-manager.js?v=0.55.0"></script>
+    <script src="js/floating-tools.js?v=0.55.0"></script>
+    <script src="js/ui.js?v=0.55.0"></script>
+    <script src="js/chords.js?v=0.27.0"></script> 
+    
+    <script src="js/app.js?v=0.50.0"></script>
+    
 </body>
 </html>
 
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
