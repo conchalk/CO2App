@@ -1,0 +1,541 @@
+{
+  "meta": {
+    "schemaVersion": 2,
+    "region": "GR",
+    "defaultYear": 2024,
+    "lastUpdated": "2025-12-27",
+    "notes": "Greece today. Electricity-related factors should be updated annually (or more frequently) when new grid intensity data are available."
+  },
+  "base": {
+    "heatingKgPerYear": {
+      "value": 930,
+      "unit": "kgCO2e_per_year",
+      "notes": "Baseline reference; scale factors apply."
+    },
+    "homeUseKgPerYear": {
+      "value": 900,
+      "unit": "kgCO2e_per_year",
+      "notes": "Baseline reference; scale factors apply."
+    },
+    "foodKgPerYear": {
+      "value": 1400,
+      "unit": "kgCO2e_per_year",
+      "notes": "Baseline reference; scale factors apply."
+    },
+    "goodsKgPerYear": {
+      "value": 2500,
+      "unit": "kgCO2e_per_year",
+      "notes": "Baseline reference; scale factors apply."
+    }
+  },
+  "targets": {
+    "euTargetTonsPerYear": {
+      "value": 2.5,
+      "unit": "tCO2e_per_year",
+      "notes": "Comparative reference (not a Greek average)."
+    }
+  },
+  "constants": {
+    "weeklyToTonsFactor": {
+      "value": 0.052,
+      "unit": "(weeks_per_year)/(kg_per_ton)",
+      "notes": "52/1000; converts weekly km * (kg/km) to annual tons."
+    },
+    "flightKgPerKmPerPassenger": {
+      "value": 0.2,
+      "unit": "kgCO2e_per_passenger_km",
+      "notes": "To be revised using literature (short-haul)."
+    },
+    "flightTripDistanceKm": {
+      "value": 500,
+      "unit": "km",
+      "notes": "Defined by the app as a typical medium-distance trip."
+    },
+    "carPoolFactor": {
+      "value": 0.5,
+      "unit": "dimensionless",
+      "notes": "Assumes carpool splits emissions across ~2 passengers when not travelling alone."
+    }
+  },
+  "ui": {
+    "homeType": {
+      "order": [
+        "detached",
+        "apartment",
+        "semi_detached"
+      ],
+      "labels": {
+        "en": {
+          "detached": "Detached",
+          "apartment": "Apartment",
+          "semi_detached": "Semi-detached"
+        },
+        "el": {
+          "detached": "Μονοκατοικία",
+          "apartment": "Διαμέρισμα",
+          "semi_detached": "Διπλοκατοικία"
+        }
+      }
+    },
+    "homeCondition": {
+      "order": [
+        "good",
+        "medium",
+        "poor"
+      ],
+      "labels": {
+        "en": {
+          "good": "Good",
+          "medium": "Medium",
+          "poor": "Poor"
+        },
+        "el": {
+          "good": "Καλή",
+          "medium": "Μέτρια",
+          "poor": "Κακή"
+        }
+      }
+    },
+    "heatingType": {
+      "order": [
+        "heat_pump",
+        "natural_gas",
+        "heating_oil",
+        "wood",
+        "electric_resistance",
+        "air_conditioning"
+      ],
+      "labels": {
+        "en": {
+          "heat_pump": "Heat pump",
+          "natural_gas": "Natural gas",
+          "heating_oil": "Oil",
+          "wood": "Wood",
+          "electric_resistance": "Electric",
+          "air_conditioning": "Air conditioning"
+        },
+        "el": {
+          "heat_pump": "Αντλία θερμότητας",
+          "natural_gas": "Φυσικό αέριο",
+          "heating_oil": "Πετρέλαιο",
+          "wood": "Ξύλο",
+          "electric_resistance": "Ηλεκτρική θέρμανση",
+          "air_conditioning": "Κλιματιστικά"
+        }
+      }
+    },
+    "carType": {
+      "order": [
+        "petrol",
+        "diesel",
+        "hybrid",
+        "electric",
+        "motorcycle",
+        "bicycle_walking"
+      ],
+      "labels": {
+        "en": {
+          "petrol": "Petrol",
+          "diesel": "Diesel",
+          "hybrid": "Hybrid",
+          "electric": "Electric",
+          "motorcycle": "Motorcycle",
+          "bicycle_walking": "Bicycle / Walking"
+        },
+        "el": {
+          "petrol": "Βενζίνη",
+          "diesel": "Πετρέλαιο",
+          "hybrid": "Υβριδικό",
+          "electric": "Ηλεκτρικό",
+          "motorcycle": "Μοτοσυκλέτα",
+          "bicycle_walking": "Ποδήλατο / Πόδια"
+        }
+      }
+    },
+    "publicTransport": {
+      "order": [
+        "bus",
+        "train"
+      ],
+      "labels": {
+        "en": {
+          "bus": "Bus",
+          "train": "Train"
+        },
+        "el": {
+          "bus": "Λεωφορείο",
+          "train": "Τρένο"
+        }
+      }
+    },
+    "goodsLevel": {
+      "order": [
+        "low",
+        "normal",
+        "high"
+      ],
+      "labels": {
+        "en": {
+          "low": "Low",
+          "normal": "Normal",
+          "high": "High"
+        },
+        "el": {
+          "low": "Μικρή",
+          "normal": "Κανονική",
+          "high": "Μεγάλη"
+        }
+      }
+    },
+    "foodLevel": {
+      "order": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "labels": {
+        "en": {
+          "low": "Frugal",
+          "medium": "Average",
+          "high": "High"
+        },
+        "el": {
+          "low": "Χαμηλή",
+          "medium": "Μέση",
+          "high": "Υψηλή"
+        }
+      }
+    },
+    "diet": {
+      "order": [
+        "vegan",
+        "vegetarian",
+        "mediterranean",
+        "standard",
+        "high_meat"
+      ],
+      "labels": {
+        "en": {
+          "vegan": "Vegan",
+          "vegetarian": "Vegetarian",
+          "mediterranean": "Mediterranean",
+          "standard": "Classic",
+          "high_meat": "Beef-heavy"
+        },
+        "el": {
+          "vegan": "Vegan",
+          "vegetarian": "Vegetarian",
+          "mediterranean": "Μεσογειακή",
+          "standard": "Κλασσική",
+          "high_meat": "Κρεατοφαγική"
+        }
+      }
+    }
+  },
+  "factors": {
+    "homeType": {
+      "detached": {
+        "value": 1.0,
+        "unit": "dimensionless"
+      },
+      "apartment": {
+        "value": 0.87,
+        "unit": "dimensionless"
+      },
+      "semi_detached": {
+        "value": 0.93,
+        "unit": "dimensionless"
+      }
+    },
+    "homeCondition": {
+      "good": {
+        "value": 0.8,
+        "unit": "dimensionless"
+      },
+      "medium": {
+        "value": 1.0,
+        "unit": "dimensionless"
+      },
+      "poor": {
+        "value": 1.2,
+        "unit": "dimensionless"
+      }
+    },
+    "heatingType": {
+      "heat_pump": {
+        "value": 0.058,
+        "unit": "tCO2_per_MWh_equivalent"
+      },
+      "natural_gas": {
+        "value": 0.202,
+        "unit": "tCO2_per_MWh_equivalent"
+      },
+      "heating_oil": {
+        "value": 0.265,
+        "unit": "tCO2_per_MWh_equivalent"
+      },
+      "wood": {
+        "value": 0.035,
+        "unit": "tCO2_per_MWh_equivalent"
+      },
+      "electric_resistance": {
+        "value": 0.2,
+        "unit": "tCO2_per_MWh_equivalent"
+      },
+      "air_conditioning": {
+        "value": 0.066,
+        "unit": "tCO2_per_MWh_equivalent"
+      }
+    },
+    "carType": {
+      "petrol": {
+        "value": 0.18,
+        "unit": "kgCO2e_per_vehicle_km"
+      },
+      "diesel": {
+        "value": 0.155,
+        "unit": "kgCO2e_per_vehicle_km"
+      },
+      "hybrid": {
+        "value": 0.11,
+        "unit": "kgCO2e_per_vehicle_km"
+      },
+      "electric": {
+        "value": 0.05,
+        "unit": "kgCO2e_per_vehicle_km"
+      },
+      "motorcycle": {
+        "value": 0.09,
+        "unit": "kgCO2e_per_vehicle_km"
+      },
+      "bicycle_walking": {
+        "value": 0.0,
+        "unit": "kgCO2e_per_vehicle_km"
+      }
+    },
+    "publicTransport": {
+      "bus": {
+        "value": 0.081,
+        "unit": "kgCO2e_per_passenger_km"
+      },
+      "train": {
+        "value": 0.04,
+        "unit": "kgCO2e_per_passenger_km"
+      }
+    },
+    "goodsLevel": {
+      "low": {
+        "value": 0.9,
+        "unit": "dimensionless"
+      },
+      "normal": {
+        "value": 1.0,
+        "unit": "dimensionless"
+      },
+      "high": {
+        "value": 1.2,
+        "unit": "dimensionless"
+      }
+    },
+    "foodLevel": {
+      "low": {
+        "value": 0.8,
+        "unit": "dimensionless"
+      },
+      "medium": {
+        "value": 1.0,
+        "unit": "dimensionless"
+      },
+      "high": {
+        "value": 1.3,
+        "unit": "dimensionless"
+      }
+    },
+    "diet": {
+      "vegan": {
+        "value": 0.5,
+        "unit": "dimensionless"
+      },
+      "vegetarian": {
+        "value": 0.65,
+        "unit": "dimensionless"
+      },
+      "mediterranean": {
+        "value": 0.85,
+        "unit": "dimensionless"
+      },
+      "standard": {
+        "value": 1.0,
+        "unit": "dimensionless"
+      },
+      "high_meat": {
+        "value": 1.14,
+        "unit": "dimensionless"
+      }
+    }
+  },
+  "legacy": {
+    "base": {
+      "heatingKgPerYear": 930,
+      "homeUseKgPerYear": 900,
+      "foodKgPerYear": 1400,
+      "goodsKgPerYear": 2500,
+      "euTargetTonsPerYear": 2.5
+    },
+    "constants": {
+      "weeklyToTonsFactor": 0.052,
+      "flightKgPerKmPerPassenger": 0.2,
+      "flightTripDistanceKm": 500,
+      "carPoolFactor": 0.5
+    },
+    "labels": {
+      "en": {
+        "homeType": [
+          "Detached",
+          "Apartment",
+          "Semi-detached"
+        ],
+        "homeCondition": [
+          "Good",
+          "Medium",
+          "Poor"
+        ],
+        "heatingType": [
+          "Heat pump",
+          "Natural gas",
+          "Oil",
+          "Wood",
+          "Electric",
+          "Air conditioning"
+        ],
+        "carType": [
+          "Petrol",
+          "Diesel",
+          "Hybrid",
+          "Electric",
+          "Motorcycle",
+          "Bicycle / Walking"
+        ],
+        "publicTransport": [
+          "Bus",
+          "Train"
+        ],
+        "goodsLevel": [
+          "Low",
+          "Normal",
+          "High"
+        ],
+        "foodLevel": [
+          "Frugal",
+          "Average",
+          "High"
+        ],
+        "diet": [
+          "Vegan",
+          "Vegetarian",
+          "Mediterranean",
+          "Classic",
+          "Beef-heavy"
+        ]
+      },
+      "el": {
+        "homeType": [
+          "Μονοκατοικία",
+          "Διαμέρισμα",
+          "Διπλοκατοικία"
+        ],
+        "homeCondition": [
+          "Καλή",
+          "Μέτρια",
+          "Κακή"
+        ],
+        "heatingType": [
+          "Αντλία θερμότητας",
+          "Φυσικό αέριο",
+          "Πετρέλαιο",
+          "Ξύλο",
+          "Ηλεκτρική θέρμανση",
+          "Κλιματιστικά"
+        ],
+        "carType": [
+          "Βενζίνη",
+          "Πετρέλαιο",
+          "Υβριδικό",
+          "Ηλεκτρικό",
+          "Μοτοσυκλέτα",
+          "Ποδήλατο / Πόδια"
+        ],
+        "publicTransport": [
+          "Λεωφορείο",
+          "Τρένο"
+        ],
+        "goodsLevel": [
+          "Μικρή",
+          "Κανονική",
+          "Μεγάλη"
+        ],
+        "foodLevel": [
+          "Χαμηλή",
+          "Μέση",
+          "Υψηλή"
+        ],
+        "diet": [
+          "Vegan",
+          "Vegetarian",
+          "Μεσογειακή",
+          "Κλασσική",
+          "Κρεατοφαγική"
+        ]
+      }
+    },
+    "factors": {
+      "homeType": [
+        1.0,
+        0.87,
+        0.93
+      ],
+      "homeCondition": [
+        0.8,
+        1.0,
+        1.2
+      ],
+      "heatingType": [
+        0.058,
+        0.202,
+        0.265,
+        0.035,
+        0.2,
+        0.066
+      ],
+      "carType": [
+        0.18,
+        0.155,
+        0.11,
+        0.05,
+        0.09,
+        0.0
+      ],
+      "publicTransport": [
+        0.081,
+        0.04
+      ],
+      "goodsLevel": [
+        0.9,
+        1.0,
+        1.2
+      ],
+      "foodLevel": [
+        0.8,
+        1.0,
+        1.3
+      ],
+      "diet": [
+        0.5,
+        0.65,
+        0.85,
+        1.0,
+        1.14
+      ]
+    }
+  }
+}

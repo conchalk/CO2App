@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>CO2 Quiz</title>
+  <link href="../manifest.webmanifest" rel="manifest"/>
+  <meta content="#74a974" name="theme-color"/>
+  <meta content="yes" name="apple-mobile-web-app-capable"/>
+  <link href="../assets/icons/icon-192.png" rel="apple-touch-icon"/>
+  <link href="../styles.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="panel" id="mainPanel">
+      <div class="topbar">
+        <button aria-label="Menu" class="iconBtn" id="menuBtn"><span class="hamburger"><span></span></span></button>
+        <div class="topbarSpacer"></div>
+      </div>
+    </div>
+
+    <div class="card quizShell">
+      <div class="statsBar">
+        <div id="qLabel" class="statPill"></div>
+        <div id="scoreLabel" class="statPill"></div>
+      </div>
+
+      <div class="quizNavTop">
+        <button class="pillBtn quizNavBtn" id="btnPrev" aria-label="Previous">◀</button>
+        <div class="quizNavMid" id="navMid"></div>
+        <button class="pillBtn quizNavBtn" id="btnNext" aria-label="Next">▶</button>
+      </div>
+
+      <div class="card quizCard">
+        <div class="questionText" id="question"></div>
+        <div class="optionText" id="opt1"></div>
+        <div class="optionText" id="opt2"></div>
+        <div class="optionText" id="opt3"></div>
+        <div class="hint" id="hint"></div>
+      </div>
+
+      <div class="choicesRow" id="choicesRow">
+        <button class="choiceBtn" data-choice="1">A</button>
+        <button class="choiceBtn" data-choice="2">B</button>
+        <button class="choiceBtn" data-choice="3">Γ</button>
+      </div>
+
+      <div class="answerCard" id="answerCard" style="display:none;">
+        <div class="answerHead">
+          <div id="answerTitle" class="answerTitle"></div>
+          <button class="iconBtn answerClose" id="btnAnswerClose" aria-label="Close">×</button>
+        </div>
+        <div class="explain" id="answerExplain"></div>
+        <div class="small" id="answerSource" style="margin-top:10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="../js/menu.js"></script>
+  <script src="../js/quiz.js"></script>
+  
+  <div aria-hidden="true" class="drawerBackdrop" id="drawerBackdrop"></div>
+  <nav aria-hidden="true" class="drawer" id="drawer">
+    <div class="drawerHeader">
+      <div class="drawerTitle">CO2app</div>
+      <button aria-label="Close menu" class="iconBtn" id="drawerClose">×</button>
+    </div>
+    <div class="drawerSection" id="drawerNav"></div>
+    <div class="drawerSection" id="drawerLang"></div>
+  </nav>
+</body>
+</html>

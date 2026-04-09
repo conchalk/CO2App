@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CO2 Charts</title>
+  <link rel="manifest" href="../manifest.webmanifest">
+  <meta name="theme-color" content="#74a974">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="panel" id="mainPanel">
+      <div class="topbar">
+        <button class="iconBtn" id="menuBtn" aria-label="Menu"><span class="hamburger"><span></span></span></button>
+        <div class="topbarSpacer"></div>
+      </div>
+
+      <div class="card chartCard">
+        <h2 class="pageTitle" id="dashTitle" style="margin:0 0 10px 0;"></h2>
+
+        <div class="kpiRow" id="dashKpiRow">
+          <div class="kpiBox kpiUser">
+            <div class="kpiLabel" id="kpiUserLbl"></div>
+            <div class="kpiValue"><span id="kpiUserVal">—</span><span class="kpiUnit unitYear" data-unit="tco2_year"></span></div>
+          </div>
+          <div class="kpiBox kpiEu">
+            <div class="kpiLabel" id="kpiTargetLbl"></div>
+            <div class="kpiValue"><span id="kpiTargetVal">—</span><span class="kpiUnit unitYear" data-unit="tco2_year"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chartRow">
+        <div class="chartBox">
+          <div class="sectionTitle" id="homeTitle"></div>
+          <div class="chartWrap" id="pieHome"></div>
+        </div>
+        <div class="chartBox">
+          <div class="sectionTitle" id="transportTitle"></div>
+          <div class="chartWrap" id="pieTransport"></div>
+        </div>
+        <div class="chartBox">
+          <div class="sectionTitle" id="lifeTitle"></div>
+          <div class="chartWrap" id="pieLife"></div>
+        </div>
+      </div>
+
+      <div class="bottomRow">
+        <button class="pillBtn" id="toFootprintBtn"></button>
+        <button class="pillBtn" id="backBtn">←</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="../js/menu.js"></script>
+  <script src="../assets/vendor/echarts.min.js"></script>
+  <script src="../js/dashboard.js"></script>
+
+  <div class="drawerBackdrop" id="drawerBackdrop" aria-hidden="true"></div>
+  <nav class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawerHeader">
+      <div class="drawerTitle">CO2app</div>
+      <button class="iconBtn" id="drawerClose" aria-label="Close menu">×</button>
+    </div>
+    <div class="drawerSection" id="drawerNav"></div>
+    <div class="drawerSection" id="drawerLang"></div>
+  </nav>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>CO2 Footprint</title>
+  <link href="../manifest.webmanifest" rel="manifest"/>
+  <meta content="#74a974" name="theme-color"/>
+  <meta content="yes" name="apple-mobile-web-app-capable"/>
+  <link href="../assets/icons/icon-192.png" rel="apple-touch-icon"/>
+  <link href="../styles.css" rel="stylesheet"/>
+</head>
+<body>
+  <div class="container">
+    <div class="panel" id="mainPanel">
+      <div class="topbar">
+        <button aria-label="Menu" class="iconBtn" id="menuBtn"><span class="hamburger"><span></span></span></button>
+        <div class="topbarSpacer"></div>
+      </div>
+    </div>
+    
+    <div class="card" id="cardIntro">
+      <h2 id="title" style="margin:0 0 8px 0;"></h2>
+      <div class="small" id="subtitle"></div>
+    </div>
+
+    <div class="card" id="cardNav">
+      <div class="footNavRow">
+        <button class="footNavBtn" id="navHome" type="button"></button>
+        <button class="footNavBtn" id="navTransport" type="button"></button>
+        <button class="footNavBtn" id="navLifestyle" type="button"></button>
+      </div>
+
+      <div class="mobileStepper" id="mobileStepper" style="display:none;">
+        <button class="pillBtn" id="stepPrev" type="button" aria-label="Previous section">‹</button>
+        <div class="stepInfo">
+          <div class="stepTitle" id="stepTitle"></div>
+          <div class="stepKpi" id="stepKpi"></div>
+        </div>
+        <button class="pillBtn" id="stepNext" type="button" aria-label="Next section">›</button>
+      </div>
+    </div>
+
+    <div class="cardsCarousel" id="cardsCarousel">
+      
+      <div class="card" id="cardHome">
+        <div class="cardHeader">
+          <h3 id="homeTitle" style="margin:0;"></h3>
+          <div class="catKpi"><span id="homeKpi">—</span><span class="small unitYear" data-unit="tco2_year"></span></div>
+        </div>
+        <div class="formGrid">
+          <div class="field">
+            <label for="homeType" id="lblHomeType"></label>
+            <select id="homeType"></select>
+          </div>
+          <div class="field">
+            <label for="homeCond" id="lblHomeCond"></label>
+            <input type="range" id="homeCond" min="0" max="2" step="1" value="1" class="rangeInput"/>
+            <div class="rangeLabel" id="homeCondLabel"></div>
+          </div>
+          <div class="field">
+            <label for="heatingType" id="lblHeating"></label>
+            <select id="heatingType"></select>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <div class="row2">
+              <div class="field" style="flex:1; margin:0;">
+                <label for="occupants" id="lblOccupants"></label>
+                <select id="occupants"></select>
+              </div>
+              <label class="checkLine" style="flex:1; margin:0; padding-top: 22px;">
+                <input id="solarDHW" type="checkbox"/>
+                <span id="lblSolarDHW"></span>
+              </label>
+            </div>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <label for="homeUseLevel" id="lblHomeUse"></label>
+            <input type="range" id="homeUseLevel" min="0" max="100" step="1" value="50" class="rangeInput"/>
+            <div class="rangeLabel" id="homeUseLabel"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="cardTransport">
+        <div class="cardHeader">
+          <h3 id="trTitle" style="margin:0;"></h3>
+          <div class="catKpi"><span id="trKpi">—</span><span class="small unitYear" data-unit="tco2_year"></span></div>
+        </div>
+        <div class="formGrid">
+          <div class="field" style="grid-column: 1 / -1;">
+            <label for="weeklyKm" id="lblWeeklyKm"></label>
+            <input id="weeklyKm" type="number" min="0" step="1" value="40"/>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <label for="publicPct" id="lblPublicPct"></label>
+            <div class="rangeRow">
+              <input id="publicPct" type="range" min="0" max="200" step="1" value="0"/>
+              <div class="rangeValue" id="publicKmVal">0 km</div>
+            </div>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <div class="row2" style="align-items:flex-end;">
+              <div class="field" style="flex:1; margin:0;">
+                <label for="carType" id="lblCarType"></label>
+                <select id="carType"></select>
+              </div>
+              <label class="checkRow" style="flex:0 0 auto; margin:0; padding-bottom:6px;">
+                <input id="alone" type="checkbox"/>
+                <span id="lblAlone"></span>
+              </label>
+            </div>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <label for="publicType" id="lblPublicTransport"></label>
+            <select id="publicType"></select>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <div class="row2" style="align-items:flex-end;">
+              <div class="field" style="flex:1; margin:0;">
+                <label for="flightTripsDomestic" id="lblFlightsDomestic"></label>
+                <input id="flightTripsDomestic" type="number" min="0" step="1" value="0"/>
+              </div>
+              <div class="field" style="flex:1; margin:0;">
+                <label for="flightTripsEurope" id="lblFlightsEurope"></label>
+                <input id="flightTripsEurope" type="number" min="0" step="1" value="0"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="cardLifestyle">
+        <div class="cardHeader">
+          <h3 id="lifeTitle" style="margin:0;"></h3>
+          <div class="catKpi"><span id="lifeKpi">—</span><span class="small unitYear" data-unit="tco2_year"></span></div>
+        </div>
+        <div class="formGrid">
+          <div class="field">
+            <label for="diet" id="lblDiet"></label>
+            <select id="diet"></select>
+          </div>
+          <div class="field">
+            <label for="goodsLevel" id="lblGoodsProfile"></label>
+            <input type="range" id="goodsLevel" min="0" max="100" step="1" value="33" class="rangeInput"/>
+            <div class="rangeLabel" id="goodsLabel"></div>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <label for="digitalLevel" id="lblDigitalLevel"></label>
+            <div class="rangeRow">
+              <input id="digitalLevel" type="range" min="0" max="100" step="1" value="50"/>
+              <div class="rangeValue" id="digitalVal"></div>
+            </div>
+            <div class="small" id="digitalLabel"></div>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <div class="fixedLine">
+              <span id="lblSocialShare"></span>
+              <strong><span id="socialShareVal"></span></strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><div class="card" id="cardSummary" style="margin-top:22px;">
+      <div class="kpiRow kpiColumn" style="margin-bottom:0;">
+        <div class="kpi user">
+          <div class="kpiLabel" id="lblTotal"></div>
+          <div class="kpiValue"><span id="totalVal">—</span><span class="small"> <span class="unitYear" data-unit="tco2_year"></span></span></div>
+        </div>
+        <div class="small" id="reducePct" style="text-align:center; margin-top:6px;"></div>
+      </div>
+      <div class="bottomRow" style="margin-top:18px; gap:10px;">
+        <button class="pillBtn" id="btnCalc" type="button"></button>
+        <button class="pillBtn" id="btnDash" type="button"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="../js/menu.js"></script>
+  <script src="../js/footprint.js"></script>
+  <div aria-hidden="true" class="drawerBackdrop" id="drawerBackdrop"></div>
+  <nav aria-hidden="true" class="drawer" id="drawer">
+    <div class="drawerHeader">
+      <div class="drawerTitle">CO2app</div>
+      <button aria-label="Close menu" class="iconBtn" id="drawerClose">×</button>
+    </div>
+    <div class="drawerSection" id="drawerNav"></div>
+    <div class="drawerSection" id="drawerLang"></div>
+  </nav>
+</body>
+</html>

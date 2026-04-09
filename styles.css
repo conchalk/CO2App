@@ -1,0 +1,1186 @@
+
+@font-face{
+  font-family:"Comfortaa";
+  src:url("./assets/fonts/Comfortaa-SemiBold.ttf") format("truetype");
+  font-weight:600;
+  font-style:normal;
+}
+@font-face{
+  font-family:"Comfortaa";
+  src:url("./assets/fonts/Comfortaa-Bold.ttf") format("truetype");
+  font-weight:700;
+  font-style:normal;
+}
+:root{
+  --bg:#74a974;
+  --bg-dark:#5e9b67;
+  --card:#ffffff;
+  --text:#244237;
+  --muted:#5a6b62;
+  --shadow: 0 4px 16px rgba(0,0,0,.08);
+  --radius:24px;
+  --btn:#ffffff;
+  --btnText:#244237;
+  --btnShadow: 0 2px 10px rgba(0,0,0,.12);
+  --accent:#2f4a31;
+  --accent2:#f59e0b;
+  --accent3:#3b82f6;
+  --accent4:#ef4444;
+  --danger: var(--accent4);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a{color:inherit}
+.container{
+  width: 100%;
+  margin: 0 auto;
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  padding: 18px 14px 22px;
+  gap: 14px;
+}
+
+.topbar{
+  width:100%;
+  max-width: 980px;
+  margin: 0 auto;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  padding: 6px 4px;
+}
+
+.iconBtn{
+  border:none;
+  background: rgba(255,255,255,.85);
+  width:44px;
+  height:44px;
+  border-radius: 14px;
+  box-shadow: var(--btnShadow);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.card{
+  width:100%;
+  max-width: 980px;
+  margin: 0 auto;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px 16px;
+}
+
+.centerCard{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:14px;
+}
+
+.logoBox{
+  width: 78%;
+  max-width: 360px;
+  background:#fff;
+  border-radius: 18px;
+  padding: 14px;
+  display:flex;
+  justify-content:center;
+  align-items:stretch;
+}
+
+.logoBox img{width:100%; height:auto; display:block}
+
+.bigBtn{
+  width: 92%;
+  max-width: 980px;
+  border:none;
+  background: #f2f2f2;
+  color: var(--text);
+  border-radius: 18px;
+  padding: 20px 18px;
+  font-size: 1.22rem;
+  font-weight: 900;
+  letter-spacing: .6px;
+  box-shadow: var(--btnShadow);
+  cursor:pointer;
+  text-transform: uppercase;
+  min-height: 72px;
+}
+
+.bottomRow{
+  width:100%;
+  max-width: 980px;
+  margin: 0 auto;
+  display:flex;
+  justify-content:center;
+  gap: 10px;
+  margin-top: 6px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pillBtn{
+  border:none;
+  background: rgba(255,255,255,.85);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: var(--btnShadow);
+  cursor:pointer;
+  min-width: 60px;
+  font-weight: 600;
+}
+
+.pillBtn.active{
+  background: rgba(47,74,49,.15);
+  outline: 2px solid rgba(47,74,49,.25);
+}
+
+.statsBar{
+  width:100%;
+  max-width: 980px;
+  margin: 0 auto;
+  display:flex;
+  justify-content:center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(255,255,255,.85);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  font-size: 1.05rem;
+}
+
+.questionText{
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+}
+
+.optionText{
+  font-size: 1.06rem;
+  line-height: 1.35;
+  margin: 10px 0;
+  white-space: pre-wrap;
+}
+
+.hint{
+  margin-top: 8px;
+  color: var(--muted);
+  font-style: italic;
+  font-size: .95rem;
+}
+
+.choicesRow{
+  width:100%;
+  max-width: 980px;
+  margin: 0 auto;
+  display:flex;
+  justify-content:center;
+  gap: 14px;
+  margin-top: 4px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.choicesRow .choiceBtn{
+  width: 92px;
+  flex: 0 0 auto;
+  padding: 12px 0;
+  margin-top: 0;
+  text-align:center;
+}
+
+
+.choiceBtn{
+  width: 78px;
+  height: 54px;
+  border:none;
+  background: rgba(255,255,255,.85);
+  border-radius: 14px;
+  box-shadow: var(--btnShadow);
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor:pointer;
+}
+
+.modalBackdrop{
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,.25);
+  display:none;
+  align-items:stretch;
+  justify-content:center;
+  padding: 18px;
+}
+
+.modal{
+  width: min(560px, 96vw);
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.25);
+  padding: 16px;
+}
+
+.modal h3{margin:0 0 8px 0}
+.modal .explain{
+  max-height: 55vh;
+  overflow:auto;
+  white-space: pre-wrap;
+  line-height: 1.35;
+  color: var(--text);
+}
+.modal .modalActions{
+  display:flex;
+  justify-content:center;
+  margin-top: 10px;
+}
+
+.formGrid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap: 6px;
+}
+
+label{font-weight: 700}
+select, input[type="number"], input[type="range"]{
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.15);
+  font-size: 1rem;
+  background:#fff;
+}
+
+.rangeRow{
+  display:flex;
+  align-items:stretch;
+  gap: 10px;
+}
+
+.rangeValue{
+  min-width: 64px;
+  text-align:right;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpiRow{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content:center;
+  margin-bottom: 12px;
+}
+
+.kpiRow.kpiColumn{
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.kpi{
+  background:#f5f5f5;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 14px 18px;
+  min-width: 160px;
+  text-align:center;
+}
+.kpi.eu{border-bottom: 4px solid var(--accent)}
+.kpi.user{border-bottom: 4px solid var(--accent2)}
+.kpiLabel{color:#666; font-weight:700}
+.kpiValue{font-size: 2.1rem; font-weight: 900}
+.small{color:#666; font-size: .95rem}
+
+.chartRow{
+  display:flex;
+  gap:12px;
+  flex-wrap: wrap;
+  justify-content:space-around;
+}
+.chartBox{
+  width: 32%;
+  min-width: 160px;
+  background:#fff;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 12px;
+}
+@media (max-width: 900px){
+  .chartBox{width: 48%;}
+}
+@media (max-width: 600px){
+  .chartRow{flex-direction:column;}
+  .chartBox{width:100%; min-width:0;}
+}
+
+.legend{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap: 6px;
+}
+.legendItem{display:flex; align-items:stretch; gap:8px; font-size:.98rem}
+.swatch{width:14px; height:14px; border-radius:4px;}
+
+
+/* ===== Update 2: Side drawer menu ===== */
+.panel{
+  width:100%;
+  max-width: 560px;
+  background: rgba(255,255,255,.16);
+  border-radius: 26px;
+  padding: 10px 10px 14px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.10);
+}
+
+.topbarSpacer{ width:44px; height:44px; }
+
+.hamburger{
+  display:block;
+  width: 18px;
+  height: 12px;
+  position: relative;
+}
+.hamburger::before,
+.hamburger::after,
+.hamburger span{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  height:2px;
+  background: rgba(36,66,55,.85);
+  border-radius:2px;
+}
+.hamburger::before{top:0}
+.hamburger span{top:5px}
+.hamburger::after{bottom:0}
+
+.drawerBackdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.30);
+  display:none;
+  z-index: 999;
+}
+
+.drawer{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: min(320px, 88vw);
+  background: #ffffff;
+  box-shadow: 14px 0 40px rgba(0,0,0,.22);
+  transform: translateX(-105%);
+  transition: transform .22s ease;
+  z-index: 1000;
+  padding: 12px;
+  display:flex;
+  flex-direction:column;
+  gap: 12px;
+}
+
+.drawer.open{
+  transform: translateX(0);
+}
+
+.drawerHeader{
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  gap: 10px;
+}
+
+.drawerTitle{
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.drawerSection{
+  display:flex;
+  flex-direction:column;
+  gap: 8px;
+}
+
+.drawerItem{
+  display:flex;
+  align-items:stretch;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  cursor:pointer;
+  background: rgba(0,0,0,.03);
+  user-select:none;
+}
+
+.drawerItem:hover{
+  background: rgba(47,74,49,.10);
+}
+
+.drawerItem.active{
+  background: rgba(47,74,49,.14);
+  outline: 2px solid rgba(47,74,49,.18);
+}
+
+.drawerIcon{
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  background: rgba(47,74,49,.10);
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  font-weight: 900;
+  color: var(--accent);
+  overflow:hidden;
+}
+
+.drawerIcon img{width:26px; height:26px; object-fit:contain; display:block;}
+.drawerText{ font-weight: 800; color: var(--text); }
+
+/* Quiz: avoid "choking" text inside buttons (especially restart / long lines) */
+.choiceBtn{
+  white-space: normal !important;
+  line-height: 1.2;
+  height: auto;
+  min-height: 54px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+#opt1, #opt2, #opt3{
+  white-space: normal;
+}
+
+
+/* Two items on the same line (stacks on small screens) */
+.row2{display:flex; gap:12px; flex-wrap:wrap; align-items:flex-start;}
+.row2 > .field{flex:1 1 260px;}
+.row2 > .checkRow{min-width:0; flex:1 1 260px;}
+/* Prevent selects/inputs from forcing overflow in flex rows */
+.row2 .field{min-width:0;}
+
+/* Category card header with KPI */
+.cardHeader{display:flex; align-items:stretch; justify-content:space-between; gap:12px; margin:0 0 10px 0;}
+.catKpi{background:#fff; border:1px solid rgba(49,78,78,.18); border-bottom:4px solid var(--accent); box-shadow: var(--shadow); border-radius:999px; padding:8px 12px; font-weight:800; font-size:1.05rem; white-space:nowrap;}
+
+/* Horizontal carousel (mobile) */
+.cardsCarousel{display:block;}
+.cardsCarousel > .card{margin-bottom:18px;}
+.cardsCarousel > .card:last-child{margin-bottom:0;}
+
+@media (max-width: 700px){
+  .cardsCarousel{display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:14px; -webkit-overflow-scrolling:touch; padding:0 14px 4px;}
+  .cardsCarousel > .card{flex:0 0 calc(100% - 28px); max-width:calc(100% - 28px); scroll-snap-align:start;}
+  /* Hide desktop top navigation buttons on phones, keep stepper */
+  .footNavRow{display:none !important;}
+  #mobileStepper{display:flex !important;}
+  .row2{flex-wrap:wrap;}
+  .row2 > .checkRow{width:100%; justify-content:flex-start; padding-bottom:0;}
+}
+.checkLine{display:flex; align-items:stretch; gap:10px; font-weight:700; padding:10px 12px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff;}
+.checkLine input{width:auto;}
+/* Compact inline checkbox row (used in transport: "Μετακινούμαι μόνος") */
+.checkRow{display:flex; align-items:stretch; gap:8px; font-weight:700; padding:8px 10px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff; white-space:nowrap;}
+.checkRow input{width:auto;}
+.fixedLine{display:flex; justify-content:space-between; align-items:stretch; gap:10px; padding:10px 12px; border:1px solid rgba(0,0,0,.15); border-radius:14px; background:#fff;}
+@media (max-width: 600px){
+  .row2{flex-direction:column; align-items:stretch;}
+  .checkLine{padding:10px 12px;}
+}
+
+
+/* Menu: quiz score badge */
+.quizBadge{ margin-left: 10px; color: var(--accent2); font-weight: 900; }
+
+/* Home: larger primary buttons */
+.heroBtn{
+  font-size: 1.25rem;
+  padding: 18px 18px;
+  min-height: 64px;
+}
+@media (max-width: 600px){
+  .heroBtn{font-size: 1.2rem; min-height: 62px;}
+}
+
+/* Quiz: keep everything inside a single framed card */
+.quizShell{
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.quizShell .statsBar{
+  margin: 0;
+  border-radius: 16px;
+}
+.quizShell .quizCard{
+  margin: 0;
+}
+.quizShell .choicesRow{
+  margin-top: 0;
+}
+
+
+/* Home redesign */
+body.homeNoDrawer #menuBtn,
+body.homeNoDrawer #drawer,
+body.homeNoDrawer #drawerBackdrop{
+  display:none !important;
+}
+
+.homeCard{
+  padding: 18px;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap: 14px;
+  text-align:center;
+}
+.homeLogo{
+  width: min(320px, 78vw);
+  margin: 4px auto 0;
+  align-self: center;
+}
+.homeLogo img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+.homeDesc{
+  font-weight: 600;
+  color: rgba(0,0,0,.62);
+  line-height: 1.35;
+  max-width: 34ch;
+}
+
+.homePrimary{
+  width:100%;
+  border: 1px solid rgba(0,0,0,.10);
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  padding: 18px 16px;
+  text-align:left;
+}
+.homePrimaryTitle{
+  font-size: 1.25rem;
+  font-weight: 700;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  gap: 10px;
+}
+.homePrimarySub{
+  margin-top: 6px;
+  font-size: .98rem;
+  font-weight: 600;
+  color: rgba(0,0,0,.60);
+  line-height: 1.35;
+}
+.badge{
+  font-size: .82rem;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.7);
+}
+.badge.orange{ color:#9a4b00; background: rgba(255,167,38,.18); border-color: rgba(255,167,38,.35); }
+.badge.blue{ color:#0b4aa8; background: rgba(59,130,246,.14); border-color: rgba(59,130,246,.30); }
+
+.homeChips{
+  width:100%;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top: 4px;
+}
+.homeChip{
+  display:inline-flex;
+  align-items:stretch;
+  gap:8px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.75);
+  border-radius: 16px;
+  padding: 10px 12px;
+  font-weight: 700;
+  cursor: default;
+  box-shadow: 0 10px 22px rgba(0,0,0,.14);
+}
+.homeChip:active{transform:translateY(1px); box-shadow:0 7px 16px rgba(0,0,0,.16);} 
+.homeChipIconImg{
+  width: 20px;
+  height: 20px;
+  display:block;
+}
+.homeChipIcon{
+  width:22px;
+  height:22px;
+  border-radius: 10px;
+  display:inline-flex;
+  align-items:stretch;
+  justify-content:center;
+  font-weight: 900;
+  background: rgba(0,0,0,.06);
+}
+@media (max-width: 420px){
+  .homePrimaryTitle{ font-size: 1.15rem; }
+  .homePrimarySub{ font-size: .95rem; }
+}
+
+
+
+/* === Typography: Comfortaa only for menus + headings + key UI (not for quiz Q/A bodies) === */
+:root{
+  --uiFont:"Comfortaa", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --bodyFont: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+body{ font-family: var(--bodyFont); }
+
+/* Menu */
+.drawerTitle, .drawerText{ font-family: var(--uiFont); }
+
+/* Headings across the app */
+h1, h2, h3, .homePrimaryTitle, .homePrimarySub, .homeChip, .statsBar{
+  font-family: var(--uiFont);
+}
+
+/* Footprint: titles (h2/h3) are already Comfortaa; body remains default. */
+
+/* Desktop width: slightly wider column */
+@media (min-width: 900px){
+  .card{ max-width: 640px; }
+  .topbar{ max-width: 640px; }
+}
+
+/* Footprint horizontal section chips (desktop) */
+.footNavRow{
+  width:100%;
+  max-width: 980px;
+  margin: 0 auto;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+@media (min-width: 900px){
+  .footNavRow{ max-width: 640px; justify-content:center; }
+}
+.footNavBtn{
+  flex:1;
+  min-width: 140px;
+  border:none;
+  border-radius: 16px;
+  padding: 12px 12px;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  font-family: var(--uiFont);
+  font-weight: 700;
+  cursor:pointer;
+}
+.footNavBtn:active{ transform: translateY(1px); }
+
+/* === Quiz typography refinements === */
+.questionText{
+  font-family: var(--bodyFont) !important;
+  font-weight: 700; /* Bold question */
+}
+.optionText{
+  font-family: var(--bodyFont) !important;
+  font-weight: 500; /* normal-ish for answers */
+  line-height: 1.35;
+}
+.optLetter{
+  font-family: var(--uiFont);
+  font-weight: 700;
+  margin-right: 10px;
+  display:inline-block;
+  min-width: 26px;
+}
+.optAns{
+  font-family: var(--bodyFont);
+  font-weight: 500;
+}
+
+/* A/B/Γ buttons stay Comfortaa */
+.choiceBtn{
+  font-family: var(--uiFont) !important;
+  font-weight: 700;
+}
+
+/* Correct / wrong styling (temporary colors) */
+.optionText.answerCorrect .optAns{
+  font-weight: 700;
+  color: var(--accent);
+}
+.optionText.answerWrong .optAns{
+  font-weight: 700;
+  color: var(--danger);
+}
+
+
+/* === iOS color fixes for buttons/selects (prevent default blue text) === */
+button, .choiceBtn, .optLetter{
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+}
+select, input[type="number"], input[type="range"]{
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+}
+select option{
+  color: var(--text);
+}
+
+/* Keep correct/wrong overrides stronger */
+.optionText.answerCorrect .optAns{
+  -webkit-text-fill-color: var(--accent);
+}
+.optionText.answerWrong .optAns{
+  -webkit-text-fill-color: var(--danger);
+}
+
+/* Info/About slightly wider on desktop */
+@media (min-width: 900px){
+  .infoWide .card{ max-width: 760px; }
+  .infoWide .topbar{ max-width: 760px; }
+}
+
+
+/* Dashboard (donut charts) */
+.pageTitle{
+  margin: 0 0 14px;
+  font-size: 28px;
+  line-height: 1.15;
+}
+.sectionTitle{
+  margin: 0 0 8px;
+  font-size: 22px;
+  text-align: center;
+
+  color: #314e4e;
+  font-weight: 700;
+  font-family: Comfortaa, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+.chartCard{padding-top: 18px;}
+.chartWrap{
+  display:flex;
+  justify-content:center;
+  align-items:stretch;
+  padding: 6px 0 2px;
+  width: 100%;
+  height: 280px;
+}
+
+@media (min-width: 900px){
+  .chartWrap{ height: 300px; }
+}
+
+/* KPI boxes (compatible with older .kpi styles) */
+.kpiBox{
+  background:#f5f5f5;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 14px 18px;
+  min-width: 170px;
+  text-align:center;
+}
+.kpiBox.kpiEu{border-bottom: 4px solid var(--accent)}
+.kpiBox.kpiUser{border-bottom: 4px solid var(--accent2)}
+.kpiUnit{color:#666; font-size: 1.05rem; font-weight:700; margin-left: 6px;}
+
+/* Donut labels */
+.donutLabel{
+  font-size: 14px;
+  font-weight: 800;
+  fill: #2b2b2b;
+}
+.donutValue{
+  font-size: 14px;
+  font-weight: 900;
+  fill: #2b2b2b;
+}
+.donutLeader{
+  stroke: rgba(0,0,0,.25);
+  stroke-width: 2;
+  fill: none;
+}
+
+@media (min-width: 980px){
+  .container{max-width: 780px;}
+  .pageTitle{font-size: 32px;}
+}
+
+
+/* ===== Update 16: Desktop centering + wider pages + dashboard charts row ===== */
+
+/* Keep container full width (avoid narrow max-width rules on desktop) */
+.container{ max-width: none !important; }
+
+/* Constrain main blocks so centering actually works on wide screens */
+.card, .panel, .topbar, .footNavRow, .homePrimary, .quizShell, .homeCard{
+  width: 100%;
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 900px){
+  .container{ padding-top: 30px; }
+
+  .card, .panel, .topbar, .footNavRow, .homePrimary, .quizShell, .homeCard{
+    max-width: 960px;
+  }
+
+  .homeLogo{ max-width: 400px !important; }
+}
+
+/* Dashboard charts: stack on mobile, single row on desktop */
+.chartRow{
+  display:flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  width: 100%;
+}
+
+@media (min-width: 900px){
+  .chartRow{
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .chartBox{
+    width: 32%;
+    min-width: 0;
+  }
+}
+
+/* Donut SVG: allow leader lines/labels to extend */
+.chartWrap svg{
+  overflow: visible;
+}
+
+
+/* ===== Update 17: Fix centering of Quiz buttons & Dashboard actions + clearer answer colors ===== */
+
+/* Center narrow rows inside wide cards */
+.choicesRow,
+.bottomRow{
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+}
+
+/* Quiz choice buttons: compact by default, wide only for Restart */
+.choiceBtn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 78px;
+  height: 54px;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.choiceBtn.choiceWide{
+  width: 100%;
+  max-width: 980px;
+  height: auto;
+  padding: 14px 16px;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+/* Make A/B/Γ badge inside answers look centered */
+.optLetter{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  background: rgba(0,0,0,.06);
+  margin-right: 10px;
+}
+
+/* Stronger feedback: highlight the correct option (light green) and the chosen wrong option (light red) */
+.optionText{
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.optionText.answerCorrect{
+  background: rgba(116,169,116,.25);
+  border-color: rgba(47,74,49,.35);
+}
+
+.optionText.answerWrong{
+  background: rgba(239,68,68,.14);
+  border-color: rgba(239,68,68,.35);
+}
+
+/* Keep text colors explicit (also for iOS) */
+.optionText.answerCorrect .optAns{
+  color: var(--accent);
+  -webkit-text-fill-color: var(--accent);
+  font-weight: 700;
+}
+.optionText.answerWrong .optAns{
+  color: var(--danger);
+  -webkit-text-fill-color: var(--danger);
+  font-weight: 700;
+}
+.optionText.answerCorrect .optLetter{
+  color: var(--accent);
+  -webkit-text-fill-color: var(--accent);
+}
+.optionText.answerWrong .optLetter{
+  color: var(--danger);
+  -webkit-text-fill-color: var(--danger);
+}
+
+/* Dashboard: center chart boxes and keep titles aligned */
+.chartBox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.chartWrap{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+
+/* --- Install on phone page --- */
+.muted{ color: var(--muted); }
+
+.installQrWrap{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin: 6px 0 6px;
+}
+.installQr{
+  width: min(320px, 82vw);
+  height:auto;
+  display:block;
+  border-radius: 18px;
+  background:#fff;
+  box-shadow: var(--shadow);
+}
+
+.installColumns{
+  display:flex;
+  flex-direction:column;
+  gap: 14px;
+}
+.installSection{ width:100%; }
+.installList{
+  margin: 0;
+  padding-left: 1.15rem;
+  line-height: 1.35;
+}
+.installList li{ margin: 6px 0; }
+
+@media (min-width: 900px){
+  .installColumns{
+    flex-direction: row;
+    gap: 18px;
+    align-items:flex-start;
+  }
+  .installSection{ flex:1; }
+  .installQr{ width: 300px; }
+}
+
+
+/* Quiz stats pills */
+.statPill{padding:8px 12px; border-radius:999px; background: rgba(255,255,255,.92); box-shadow: var(--btnShadow); font-family: var(--uiFont); font-weight: 800; min-width: 140px; text-align:center;}
+
+/* Quiz navigation (review) */
+.quizNavTop{
+  width:100%;
+  max-width: 980px;
+  margin: 0 auto;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  gap: 12px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.quizNavMid{
+  font-family: var(--uiFont);
+  font-weight: 800;
+  opacity: .75;
+}
+.quizNavBtn{
+  min-width: 64px;
+}
+.quizNavBtn:disabled{
+  opacity: .45;
+  cursor: default;
+}
+
+/* Correct/Wrong highlighting (only correct option + user's wrong choice) */
+.optionText.answerCorrect{
+  background: rgba(47,74,49,.14);
+  border-color: rgba(47,74,49,.30);
+}
+.optionText.answerWrong{
+  background: rgba(239,68,68,.14);
+  border-color: rgba(239,68,68,.30);
+}
+.optionText.answerChosen{
+  outline: 2px solid rgba(0,0,0,.08);
+}
+
+/* Inline explanation card (turns into bottom sheet on mobile) */
+.answerCard{
+  width:100%;
+  max-width: 980px;
+  margin-left:auto;
+  margin-right:auto;
+  background: rgba(255,255,255,.95);
+  border-radius: 18px;
+  box-shadow: 0 10px 26px rgba(0,0,0,.14);
+  padding: 14px 14px 12px;
+}
+.answerHead{
+  display:flex;
+  align-items:stretch;
+  justify-content:space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.answerTitle{
+  font-family: var(--uiFont);
+  font-weight: 900;
+}
+.answerClose{
+  width:38px;
+  height:38px;
+  border-radius: 14px;
+}
+@media (max-width: 760px){
+  .answerCard{
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 12px;
+    width: min(520px, calc(100% - 28px));
+    max-height: 38vh;
+    overflow:auto;
+    z-index: 50;
+  }
+  body.answerOpen{ padding-bottom: 42vh; }
+}
+
+
+/* === Footprint: chip KPI + mobile stepper === */
+.chipTitle{ font-family: var(--uiFont); font-weight: 800; }
+.chipKpi{ margin-top: 4px; font-size: .86rem; opacity: .75; font-weight: 800; }
+
+.mobileStepper{
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.mobileStepper .pillBtn{
+  min-width: 56px;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.stepInfo{
+  flex: 1;
+  text-align: center;
+}
+.stepTitle{
+  font-family: var(--uiFont);
+  font-weight: 900;
+}
+.stepKpi{
+  margin-top: 2px;
+  font-weight: 800;
+  opacity: .75;
+}
+
+@media (max-width: 760px){
+  /* On phones/tablets we use the stepper instead of the chips row */
+  #cardNav .footNavRow{ display: none; }
+}
+
+/* === Drawer footer language row (fix mobile layout on all pages) === */
+.drawerFooter{
+  display:flex;
+  align-items:stretch;
+  justify-content:space-between;
+  gap:10px;
+}
+.drawerFooter .version{ opacity:.75; font-weight:700; }
+.drawerLang{
+  display:flex;
+  gap:10px;
+  align-items:stretch;
+}
+.drawerLang .pillBtn{
+  min-width: 64px;
+  -webkit-text-fill-color: var(--text);
+}
+
+
+@media (max-width: 420px){
+  .drawerFooter{ justify-content:center; flex-wrap:wrap; }
+  .drawerLang{ width:100%; justify-content:space-between; }
+}
+
+
+/* Range controls (mobile-friendly) */
+.rangeInput{width:100%;}
+.rangeTicks4{display:flex; justify-content:space-between; font-size:12px; opacity:0.8; margin-top:4px;}
+.rangeLabel{margin-top:6px; font-size:13px; line-height:1.35; opacity:0.9;}
+
+.chartCard .pageTitle{margin-bottom:14px;}
+
+.sectionTitle{margin-bottom:10px;}
+.chartRow{margin-top:8px;}
+
+
+/* v18 UI polish: hide numeric ticks under sliders (labels are shown separately) */
+.rangeTicks, .rangeTicks3, .rangeTicks4 { display:none !important; }
+/* Increase readability of slider labels on mobile */
+.rangeLabel, .rangeValue, .small, .rangeLabel4 { font-size: 1rem; }
+@media (max-width: 520px){
+  .rangeLabel, .rangeValue, .small, .rangeLabel4 { font-size: 1.05rem; }
+}

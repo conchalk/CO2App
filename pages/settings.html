@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CO2App – Settings</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* Διατηρούμε το layout, αλλά αφαιρούμε τα στυλ των κουμπιών για να πάρουν αυτά του styles.css */
+    .setting-row { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+    .setting-row label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .setting-controls { display: flex; align-items: center; gap: 10px; }
+    /* Προσθήκη κενού ανάμεσα στα κουμπιά */
+    .btn-group { margin-top: 20px; display: flex; gap: 10px; }
+    input[type="number"] { padding: 5px; width: 80px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="panel">
+      <div class="topbar">
+        <button class="iconBtn" id="menuBtn" aria-label="Menu"><span class="hamburger"><span></span></span></button>
+        <div class="topbarSpacer"></div>
+      </div>
+      
+      <div class="card">
+        <h2 id="pageTitle" style="margin-top:0;">Settings</h2>
+        <p id="pageSubtitle" class="small">Scenario parameters (Overrides)</p>
+        
+        <div id="settingsContainer" style="margin-top: 20px;">
+          
+          <div class="setting-row">
+            <label id="lblGrid">Grid CI (kgCO2/kWh)</label>
+            <div class="setting-controls">
+              <input type="checkbox" id="ciEnable">
+              <label for="ciEnable" id="lblEn1" style="font-weight:normal; margin:0;">Enable</label>
+              <input type="number" id="ciValue" step="0.01" placeholder="0.25">
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <label id="lblSocial">Social Share Goal (tCO2/year)</label>
+            <div class="setting-controls">
+              <input type="checkbox" id="socialEnable">
+              <label for="socialEnable" id="lblEn2" style="font-weight:normal; margin:0;">Enable</label>
+              <input type="number" id="socialValue" step="0.1" placeholder="1.2">
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <label id="lblMetro">Metro/Tram Energy (kWh/pkm)</label>
+            <div class="setting-controls">
+              <input type="checkbox" id="metroEnergyEnable">
+              <label for="metroEnergyEnable" id="lblEn3" style="font-weight:normal; margin:0;">Enable</label>
+              <input type="number" id="metroEnergyValue" step="0.01" placeholder="0.05">
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button id="saveBtn" class="pillBtn">Save</button>
+            <button id="resetBtn" class="pillBtn" style="background-color: #ccc; color: #333;">Reset</button>
+          </div>
+
+        </div> 
+      </div>
+    </div>
+  </div>
+
+  <div class="drawerBackdrop" id="drawerBackdrop"></div>
+  <nav class="drawer" id="drawer">
+    <div class="drawerHeader">
+      <div class="drawerTitle">CO2App</div>
+      <button class="iconBtn" id="drawerClose">×</button>
+    </div>
+    <div class="drawerSection" id="drawerNav"></div>
+    <div class="drawerSection" id="drawerLang"></div>
+  </nav>
+
+  <script src="../js/common.js"></script>
+  <script src="../js/menu.js"></script>
+  <script src="../js/settings.js"></script>
+</body>
+</html>
